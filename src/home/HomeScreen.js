@@ -1,14 +1,11 @@
+
+import Header from "./Header"
 import MyPet from "./MyPet"
 
 export default function HomeScreen() {
     return <div>
-        <Header />
+        <Header/>
         <MyPet />
     </div>
 }
 
-function Header() {
-    return <div>
-        <p>Header</p>
-    </div>
-}
