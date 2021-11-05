@@ -36,7 +36,8 @@ function MyPetItem(props) {
         genderImg = femaleLogo
     }
 
-    return <div style={AppStyle(flexHori(),marginHori(6), paddingVerti(16), paddingStart(16), paddingEnd(54), flexCenter(), border("#EEEFF4"), radius(8), shadow())}>
+    return <div style={AppStyle(flexHori(),marginHori(6), paddingVerti(16), paddingStart(16), paddingEnd(54), flexCenter(), border("#EEEFF4"), 
+    radius(8), shadow(8))}>
         <img style={AppStyle(
             width(42), height(42), radius(21), background('#000000')
         )}  src={props.img}></img>

@@ -43,9 +43,15 @@ function radius(value) {
     }
 }
 
-function shadow() {
+function fitContain(){
     return {
-        boxShadow: '0px 0px 8px rgba(0, 0, 0, 0.1)'
+        objectFit: 'contain'
+    }
+}
+
+function shadow(value) {
+    return {
+        boxShadow: '0px 0px ' + value + 'px rgba(0, 0, 0, 0.1)'
     }
 }
 
@@ -85,6 +91,19 @@ function paddingVerti(value) {
         paddingBottom: value
     }
 }
+
+function paddingTop(value) {
+    return {
+        paddingTop: value
+    }
+}
+
+function paddingBottom(value) {
+    return {
+        paddingBottom: value
+    }
+}
+
 
 function paddingHori(value) {
     return {
@@ -209,6 +228,14 @@ function border(color) {
         border: '1px solid ' + color
     }
 }
+function circleImage(value){
+    return {
+        width: value,
+        height: value,
+        borderRadius :value/2
+
+    }
+}
 
 export {
     AppStyle,
@@ -235,6 +262,8 @@ export {
     paddingVerti,
     paddingStart,
     paddingEnd,
+    paddingTop,
+    paddingBottom,
 
 
     // flex-box css
@@ -252,5 +281,9 @@ export {
     textWeight,
 
     // border
-    border
+    border,
+
+    //image util
+    circleImage,
+    fitContain
 }
