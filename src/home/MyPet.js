@@ -1,4 +1,4 @@
-import { AppStyle, background, bold, border, flexCenter, flexHori, flexVerti, height, margin, marginHori, marginStart, marginTop, padding, paddingEnd, paddingStart, paddingVerti, radius, regular, semiBold, shadow, textColor, textWeight, weightItem, width } from '../AppStyle'
+import { AppStyle, background, bold, border, flexCenter, flexHori, flexVerti, height, margin, marginHori, marginStart, marginTop, padding, paddingEnd, paddingStart, paddingVerti, radius, regular, semiBold, setOverFlowX, shadow, textColor, textWeight, weightItem, width } from '../AppStyle'
 
 import maleLogo from '../asset/ic_male.svg' 
 import femaleLogo from '../asset/ic_female.svg' 
@@ -18,7 +18,7 @@ export default function MyPet() {
             <p style={AppStyle(textColor('#00C181'))}>Xem tất cả</p>
         </div>
 
-        <div style={AppStyle(flexHori(), margin(0))}>
+        <div style={AppStyle(flexHori(), margin(0), setOverFlowX())}>
             {
                 myPets.map(function (pet) { return <MyPetItem name = {pet.name} age = {pet.age} img = {pet.avatar} gender = {pet.gender} />})
             }

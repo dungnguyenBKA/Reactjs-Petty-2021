@@ -13,6 +13,20 @@ function AppStyle(params) {
     return res;
 }
 
+function setOverFlowY() {
+    return {
+        overflow: 'hidden',
+        overflowY: 'scroll',
+    }
+}
+
+function setOverFlowX() {
+    return {
+        overflow: 'hidden',
+        overflowX: 'scroll'
+    }
+}
+
 function background(value) {
     return {
         background : value
@@ -252,5 +266,9 @@ export {
     textWeight,
 
     // border
-    border
+    border,
+
+    // list utils
+    setOverFlowY,
+    setOverFlowX
 }
