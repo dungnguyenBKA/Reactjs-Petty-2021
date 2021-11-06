@@ -1,4 +1,4 @@
-import { AppStyle, background, border, borderWidth, fitContain, flexCenter, flexCenterInParent, flexHori, flexVerti, height, marginBottom, marginEnd, paddingBottom, paddingHori, paddingStart, paddingTop, paddingVerti, radius, regular, textColor, width } from "../../AppStyle";
+import { AppStyle, background, border, borderWidth, cursorPointer, fitContain, flexCenter, flexCenterInParent, flexHori, flexVerti, height, marginBottom, marginEnd, paddingBottom, paddingHori, paddingStart, paddingTop, paddingVerti, radius, regular, textColor, width } from "../../AppStyle";
 
 export default function LoginScreen(){
     return <div style={AppStyle(flexHori(), flexCenterInParent(),
@@ -19,7 +19,7 @@ export default function LoginScreen(){
 
 function LoginButton(props) {
     return <button
-    style={AppStyle(flexHori(), marginBottom(20), width(300),
+    style={AppStyle( cursorPointer(), flexHori(), marginBottom(20), width(300),
     paddingVerti(12), flexCenterInParent(), radius(24), borderWidth(0), background(props.backgroundColor))}>
         <img src={props.imgLink} style={AppStyle(width(24), height(24), marginEnd(10))}/>
         <span style={AppStyle(regular(15), textColor(props.textColor))}>{props.text}</span>

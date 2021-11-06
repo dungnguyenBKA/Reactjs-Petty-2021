@@ -258,6 +258,12 @@ function circleImage(value){
     }
 }
 
+function cursorPointer(){
+  return {
+    cursor: 'pointer'
+  }
+}
+
 export {
     AppStyle,
 
@@ -310,5 +316,11 @@ export {
     setOverFlowX,
     //image util
     circleImage,
-    fitContain
+    fitContain, 
+
+    //cursor
+    cursorPointer
+
+
+
 }
