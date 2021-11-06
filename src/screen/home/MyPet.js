@@ -1,8 +1,8 @@
-import { AppStyle, background, bold, border, flexCenter, flexHori, flexVerti, height, margin, marginHori, marginStart, marginTop, padding, paddingEnd, paddingStart, paddingVerti, radius, regular, semiBold, setOverFlowX, shadow, textColor, textWeight, weightItem, width } from '../AppStyle'
+import { AppStyle, background, bold, border, flexCenter, flexHori, flexVerti, height, margin, marginHori, marginStart, marginTop, padding, paddingEnd, paddingStart, paddingVerti, radius, regular, semiBold, setOverFlowX, shadow, textColor, textWeight, weightItem, width } from '../../AppStyle'
 
-import maleLogo from '../asset/ic_male.svg' 
-import femaleLogo from '../asset/ic_female.svg' 
-import ic_add from '../asset/ic_add.png' 
+import maleLogo from '../../asset/ic_male.svg' 
+import femaleLogo from '../../asset/ic_female.svg' 
+import ic_add from '../../asset/ic_add.png' 
 
 export default function MyPet() {
     let myPets = [

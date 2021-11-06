@@ -1,11 +1,11 @@
-import { AppStyle, background, bold, border, circleImage, fitContain, flexCenter, flexHori, flexVerti, height, margin, marginEnd, marginHori, marginStart, marginTop, marginVertical, padding, paddingBottom, paddingTop, radius, regular, semiBold, shadow, textColor, weightItem, width } from "../AppStyle"
+import { AppStyle, background, bold, border, circleImage, fitContain, flexCenter, flexHori, flexVerti, height, margin, marginEnd, marginHori, marginStart, marginTop, marginVertical, padding, paddingBottom, paddingTop, radius, regular, semiBold, shadow, textColor, weightItem, width } from "../../AppStyle"
 
-import icScan from '../asset/ic_qr_scan.png'
-import icAddFriend from '../asset/ic_add_friend.png'
-import icPetAdd from '../asset/ic_pet_add.png'
-import icPetCard from '../asset/ic_pet_card.png'
-import icCoin from '../asset/ic_coin.svg'
-import bgHome from '../asset/bg_home.png'
+import icScan from '../../asset/ic_qr_scan.png'
+import icAddFriend from '../../asset/ic_add_friend.png'
+import icPetAdd from '../../asset/ic_pet_add.png'
+import icPetCard from '../../asset/ic_pet_card.png'
+import icCoin from '../../asset/ic_coin.svg'
+import bgHome from '../../asset/bg_home.png'
 
 
 

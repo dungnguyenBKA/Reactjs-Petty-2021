@@ -242,6 +242,13 @@ function border(color) {
         border: '1px solid ' + color
     }
 }
+
+function borderWidth(_width){
+    return {
+        borderWidth: _width
+    }
+}
+
 function circleImage(value){
     return {
         width: value,
@@ -296,6 +303,7 @@ export {
 
     // border
     border,
+    borderWidth,
 
     // list utils
     setOverFlowY,
