@@ -16,7 +16,7 @@ interface PostProp {
 }
 
 export default function Post(props: PostProp) {
-    return <Card style={AppStyle(width(500), marginVertical(20), radius(8), shadow(2))}>
+    return <Card style={AppStyle(marginVertical(20), radius(8), shadow(2))}>
         <Card.Body>
             <Header avatarUrl={props.avatarURL} petName={props.petName} />
 

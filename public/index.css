@@ -1,16 +1,14 @@
 body{
     padding: 0px;
     margin: 0px;
-    
+    min-height: 100vh;
 }
 
 #root{
-    height: 100%;
-    background-color: rgb(229, 229, 229);
+    min-height: 100vh;
+    background: rgb(229, 229, 229);
 }
 
-
-
-body, html {
-    height: 100%;
+.class-app {
+    min-height: inherit;
 }

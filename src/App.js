@@ -3,6 +3,7 @@ import AddPetScreen from './screen/add-pet/AddPetScreen'
 import DiscoveryScreen from './screen/community/DiscoveryScreen'
 import HomeScreen from './screen/home/HomeScreen'
 import LoginScreen from './screen/login/LoginScreen'
+//import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function App() {
     return (
