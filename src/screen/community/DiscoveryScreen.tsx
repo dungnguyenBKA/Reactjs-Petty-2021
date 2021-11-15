@@ -1,4 +1,6 @@
 import { Col, Container, Row } from "react-bootstrap"
+import { flexCenter } from "../../AppStyle"
+import Column from "../../components/Column"
 import Post from "./Post"
 
 
@@ -13,14 +15,14 @@ let posts = [
 ]
 
 export default function DiscoveryScreen(prop: DiscoveryScreenProp) {
-    return <Container fluid>
+    return <Column style={flexCenter()}>
         {
-            posts.map((postItem) => 
-            <Post 
-            petName={postItem.petName} avatarURL={postItem.avatarUrl} 
-            imgURL={postItem.imgUrl} content={postItem.content}
-            />
+            posts.map((postItem) =>
+                <Post
+                    petName={postItem.petName} avatarURL={postItem.avatarUrl}
+                    imgURL={postItem.imgUrl} content={postItem.content}
+                />
             )
         }
-    </Container>
+    </Column>
 }
