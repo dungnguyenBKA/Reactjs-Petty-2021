@@ -6,12 +6,12 @@ import Row from "../../components/Row";
 
 
 interface SearchProp {
-
+    onInputListener: (name: string) => void
 }
 export default function Search(prop: SearchProp) {
 
     let takeDataFromSearch=()=>{
-        console.log(input);
+        prop.onInputListener(input);
     }
 
     let [input, setInput] = useState('')
