@@ -2,6 +2,7 @@ import { Col, Container, Row } from "react-bootstrap"
 import { flexCenter } from "../../AppStyle"
 import Column from "../../components/Column"
 import Post from "./Post"
+import Search from "./Search"
 
 
 interface DiscoveryScreenProp {
@@ -16,6 +17,7 @@ let posts = [
 
 export default function DiscoveryScreen(prop: DiscoveryScreenProp) {
     return <Column style={flexCenter()}>
+        <Search/>
         {
             posts.map((postItem) =>
                 <Post
