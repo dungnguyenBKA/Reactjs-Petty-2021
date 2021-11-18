@@ -5,12 +5,9 @@ import App from './App'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Colors } from './AppColor';
 
-
-
 ReactDOM.render(
-  // height:'100vh',
   <React.StrictMode>
-    <div style= {{maxWidth: '1080px',  margin: 'auto', minHeight: "100vh"}}>
+    <div style= {{maxWidth: '768px',  margin: 'auto', minHeight: "100vh", background: Colors.color_white}}>
       <App/>
     </div>
 
