@@ -7,6 +7,8 @@ import Column from "../../components/Column";
 import icHotLike from "../../asset/ic_hot_like.svg";
 import icComment from "../../asset/ic_comment.svg";
 import icMessagefrom from "../../asset/ic_message.svg";
+import { useState } from "react";
+import Like from "./Like";
 
 interface PostProp {
     petName: string,
@@ -15,7 +17,17 @@ interface PostProp {
     imgURL: string
 }
 
+
 export default function Post(props: PostProp) {
+
+    const [isValid, setIsValid] = useState(false);
+
+    const likeHandler = () => {
+        setIsValid(true);
+        console.log('Liked');
+
+    }
+
     return <Card style={AppStyle(marginVertical(20), radius(8), shadow(2))}>
         <Card.Body>
             <Header avatarUrl={props.avatarURL} petName={props.petName} />
@@ -32,7 +44,9 @@ export default function Post(props: PostProp) {
             <Column>
                 <hr style={marginVertical(12)} />
                 <Rows >
-                    <Reaction name={"Like"} />
+                    {/* <Reaction name={"Like"} onC /> */}
+
+                    <Like />
                     <Reaction name={"Comment"} />
                     <Reaction name={"Message"} />
                 </Rows>
