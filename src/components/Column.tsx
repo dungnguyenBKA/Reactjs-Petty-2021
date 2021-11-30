@@ -3,8 +3,8 @@ import { AppStyle, flexHori, flexVerti } from "../AppStyle";
 import { ElementProps } from "./Props";
 
 
-const Column:FC<ElementProps> = (props) => {
-    return <div style={AppStyle(flexVerti(), props.style)}>
+const Column:FC<React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>> = (props) => {
+    return <div {...props} style={AppStyle(flexVerti(), props.style)}>
         {props.children}
     </div>
 }

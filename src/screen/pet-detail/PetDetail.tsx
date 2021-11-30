@@ -21,7 +21,7 @@ interface HeaderProps {
 
 }
 const Header: FC<HeaderProps> = (props) => {
-    return <Column style={flexCenter()}>
+    return <Column style={AppStyle(flexCenter())}>
         <ImageView style={AppStyle(width('100%'), maxHeight(300), radius(8))} src={petAvatar} />
         <Rows >
 
