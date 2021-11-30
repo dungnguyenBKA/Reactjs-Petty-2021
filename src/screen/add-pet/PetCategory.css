@@ -1,0 +1,32 @@
+
+
+
+
+.petList {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 16px;
+    padding: 12px;
+}
+
+.item{
+    flex-basis: 45%;
+    flex-grow: 1;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    border: 1px solid #EEEFF4;
+    border-radius: 8px;
+    padding: 12px 16px;
+    max-width: 45%;
+}
+
+.item img {
+    width: 40px;
+    height: 40px;
+}
+
+.item > :nth-child(2) {
+    margin: 0 0 0 14px;
+}
