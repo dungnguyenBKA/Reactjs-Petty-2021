@@ -1,7 +1,7 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { ButtonGroup, Dropdown } from "react-bootstrap";
 import { Colors } from "../../AppColor";
-import { AppStyle, background, border, borderWidth, cursorPointer, flexCenterInParent, height, margin, marginEnd, marginHori, marginVertical, padding, radius, regular, semiBold, setOverFlowX, setOverFlowY, shadow, textColor, weightItem, width } from "../../AppStyle";
+import { AppStyle, border, borderWidth, cursorPointer, flexCenterInParent, height, margin, marginEnd, marginHori, marginVertical, padding, radius, regular, semiBold, setOverFlowX, shadow, textColor, weightItem, width } from "../../AppStyle";
 import Column from "../../components/Column";
 import { ButtonImageView, ImageView } from "../../components/ImageView";
 import Rows from "../../components/Row";
@@ -70,11 +70,11 @@ function AddImage() {
 
 }
 
-interface AddImageItem {
+interface AddImageItemProps {
     onClick: () => void
 }
 
-const AddImageItem: FC<AddImageItem> = (props) => {
+const AddImageItem: FC<AddImageItemProps> = (props) => {
     return <Column
         onClick={() => {
             props.onClick()

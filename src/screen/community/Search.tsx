@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { FloatingLabel, Form, FormControl } from "react-bootstrap";
-import { AppStyle, borderWidth, cursorPointer, flexCenter, flexHori, marginStart, marginTop, padding, paddingHori, paddingVerti, radius, weightItem, width } from "../../AppStyle";
+import { AppStyle, borderWidth, cursorPointer, flexCenter, flexHori, marginStart, marginTop, paddingHori, paddingVerti, radius, weightItem } from "../../AppStyle";
 import icPetSearch from "../../asset/ic_pet_search.svg";
 import Rows from "../../components/Row";
 

@@ -1,5 +1,5 @@
-import { FC, useEffect } from "react";
-import { AppStyle, background, border, borderWidth, circleImage, flexCenter, height, margin, marginHori, marginTop, maxHeight, padding, radius, regular, semiBold, shadow, textColor, weightItem, width } from "../../AppStyle";
+import { FC } from "react";
+import { AppStyle, border, borderWidth, circleImage, flexCenter, margin, marginHori, marginTop, maxHeight, padding, radius, regular, semiBold, shadow, textColor, weightItem, width } from "../../AppStyle";
 import Column from "../../components/Column";
 import { ButtonImageView, ImageView } from "../../components/ImageView";
 import Rows from "../../components/Row";

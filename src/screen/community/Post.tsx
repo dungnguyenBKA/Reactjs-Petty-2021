@@ -1,12 +1,9 @@
-import { ButtonGroup, ButtonToolbar, Card, Col, Container, Image } from "react-bootstrap";
-import { AppStyle, background, borderWidth, flexCenter, flexCenterInParent, flexHori, flexVerti, height, margin, marginBottom, marginEnd, marginStart, marginTop, marginVertical, radius, regular, semiBold, shadow, textColor, weightItem, width } from "../../AppStyle";
+import { Card, Image } from "react-bootstrap";
+import { AppStyle, background, borderWidth, flexCenter, flexCenterInParent, flexHori, height, marginEnd, marginTop, marginVertical, radius, semiBold, shadow, weightItem, width } from "../../AppStyle";
 import { Colors } from "../../AppColor";
 import TextView from "../../components/Text";
 import Rows from "../../components/Row";
 import Column from "../../components/Column";
-import icHotLike from "../../asset/ic_hot_like.svg";
-import icComment from "../../asset/ic_comment.svg";
-import icMessagefrom from "../../asset/ic_message.svg";
 
 interface PostProp {
     petName: string,

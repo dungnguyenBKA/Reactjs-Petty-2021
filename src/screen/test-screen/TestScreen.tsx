@@ -1,7 +1,6 @@
-import { FC, useEffect, useState } from "react"
+import { FC } from "react"
 
 import Column from "../../components/Column";
-import Rows from "../../components/Row";
 import TextView from "../../components/Text";
 import { createStore } from "redux";
 
