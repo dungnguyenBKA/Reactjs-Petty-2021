@@ -202,6 +202,12 @@ function flexHori() {
     }
 }
 
+function flexShrink(value) {
+    return {
+        flexShrink: value
+    }
+}
+
 function flexVerti() {
     return {
         display: 'flex',
@@ -324,6 +330,7 @@ export {
     flexCenter,
     flexCenterInParent,
     weightItem,
+    flexShrink,
 
     // text
     semiBold,

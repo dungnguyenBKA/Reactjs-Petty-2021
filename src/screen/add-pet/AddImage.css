@@ -1,0 +1,13 @@
+.container{
+    position: relative;
+}
+
+.background-img{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.ic-delete{
+    position: absolute;
+}
