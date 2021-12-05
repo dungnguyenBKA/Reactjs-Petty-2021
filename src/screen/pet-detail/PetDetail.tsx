@@ -7,7 +7,7 @@ import TextView from "../../components/Text";
 
 import icMessageToOwner from '../../asset/ic_message_to_owner.svg'
 import { Colors } from "../../AppColor";
-import { ElementProps } from "../../components/Props";
+import { BaseHTMLProps } from "../../components/Props";
 import { useParams } from "react-router";
 
 interface PetDetailProp {
@@ -96,7 +96,7 @@ class User {
     avatar = url
 }
 
-interface ContactBoxProp extends ElementProps {
+interface ContactBoxProp extends BaseHTMLProps {
     user: User
 }
 
@@ -119,7 +119,7 @@ const ContactBox: FC<ContactBoxProp> = (props) => {
 
 
 
-const InfoBox: FC<ElementProps> = (props) => {
+const InfoBox: FC<BaseHTMLProps> = (props) => {
     return <div style={AppStyle(weightItem(1), margin(12), radius(8), borderWidth(1), border(Colors.color_E5E5E5), padding(12), shadow(8))}>
         {props.children}
     </div>

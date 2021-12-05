@@ -3,6 +3,10 @@ import { FC } from "react"
 import Column from "../../components/Column";
 import TextView from "../../components/Text";
 import { createStore } from "redux";
+import ButtonView from "../../components/ButtonView";
+import { ImageView } from "../../components/ImageView";
+import { AppStyle, background } from "../../AppStyle";
+import Rows from "../../components/Row";
 
 interface TestScreenProp {
 
@@ -22,41 +26,15 @@ function counterReducer(state = { value: 0 }, action: any) {
 let store = createStore(counterReducer)
 
 const TestScreen: FC<TestScreenProp> = (props) => {
-
-    // useEffect(() => {
-
-    //     let storeListener = store.subscribe( () => {
-    //         console.log(store.getState())
-    //     })
-
-    //     return () => {
-    //         storeListener()
-    //     }
-    // }, [])
-
-    let storeListener = store.subscribe( () => {
-        console.log(store.getState())
-    })
-
-    
-    return <Column>
-        <TextView>Test</TextView>
-        <button onClick={
-            () => {
-                store.dispatch({
-                    type : "counter/incremented"
-                })
-            }
-        }>+1</button>
-
-        <button onClick={
-            () => {
-                store.dispatch({
-                    type : "counter/decremented"
-                })
-            }
-        }>-1</button>
-    </Column>
+    return <Rows>
+    <TextView>OK</TextView>
+    <TextView>O2</TextView>
+    </Rows>
 }
+
+// function merge(...args: any[]) {
+//     let filteredArgs = args.filter(item => item !== undefined && item !== null)
+//     let res = 
+// }
 
 export default TestScreen

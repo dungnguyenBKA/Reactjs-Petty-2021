@@ -5,7 +5,6 @@ import HomeScreen from './screen/home/HomeScreen'
 import LoginScreen from './screen/login/LoginScreen'
 import PetDetail from './screen/pet-detail/PetDetail'
 import TestScreen from './screen/test-screen/TestScreen'
-//import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function App() {
     return (

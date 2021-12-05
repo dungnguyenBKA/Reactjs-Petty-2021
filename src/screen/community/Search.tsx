@@ -1,14 +1,15 @@
-import { useState } from "react";
+import { FC, useState } from "react";
 import { AppStyle, borderWidth, cursorPointer, flexCenter, flexHori, marginStart, marginTop, paddingHori, paddingVerti, radius, weightItem } from "../../AppStyle";
 import icPetSearch from "../../asset/ic_pet_search.svg";
+import { BaseHTMLProps } from "../../components/Props";
 import Rows from "../../components/Row";
 
 
-interface SearchProp {
+interface SearchProp extends BaseHTMLProps {
     onInputListener: (name: string) => void
 }
-export default function Search(prop: SearchProp) {
-
+ 
+const Search:FC<SearchProp> = (prop) => {
     let takeDataFromSearch=()=>{
         prop.onInputListener(input);
     }
@@ -33,3 +34,5 @@ export default function Search(prop: SearchProp) {
         </Rows>
     )
 }
+
+export default Search

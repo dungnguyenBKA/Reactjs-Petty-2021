@@ -2,6 +2,7 @@ import { FC, useState } from "react";
 import { ButtonGroup, Dropdown } from "react-bootstrap";
 import { Colors } from "../../AppColor";
 import { AppStyle, border, borderWidth, cursorPointer, flexCenterInParent, flexShrink, height, margin, marginEnd, marginHori, marginVertical, padding, radius, regular, semiBold, setOverFlowX, shadow, textColor, weightItem, width } from "../../AppStyle";
+import ButtonView from "../../components/ButtonView";
 import Column from "../../components/Column";
 import Rows from "../../components/Row";
 import TextView from "../../components/Text";
@@ -40,7 +41,9 @@ const AddPetScreen: FC = () => {
 function AddPetHeader() {
     return <Rows style={margin(16)}>
         <TextView style={AppStyle(semiBold(17), weightItem(1))}>Báo danh Boss</TextView>
-        <TextView style={AppStyle(semiBold(17), textColor(Colors.color_primary))}>Lưu</TextView>
+        <ButtonView>
+            <TextView style={AppStyle(semiBold(17), textColor(Colors.color_primary))}>Lưu</TextView>
+        </ButtonView>
     </Rows>
 }
 
