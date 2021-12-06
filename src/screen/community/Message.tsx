@@ -17,16 +17,15 @@ import {
   width,
   marginVertical,
 } from "../../AppStyle";
-import TextView from "../../components/Text";
 import icBack from "../../asset/ic_back.svg";
 import icSend from "../../asset/ic_send.png";
-import { time } from "console";
 
 interface MessageProp {
   name: string;
 }
 
 const Message = (props: MessageProp) => {
+
   let today = new Date(),
     date =
       today.getFullYear() +
@@ -89,8 +88,9 @@ const Message = (props: MessageProp) => {
             marginHori(5)
           )}
         />
+    
+          <img alt="" src={icSend} width="50px" height="50px" />
      
-         <img alt= "" src = {icSend} width = "50px" height = "50px"/>
       </footer>
     </div>
   );
