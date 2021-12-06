@@ -35,8 +35,7 @@ const Header: FC<HeaderProps> = (props) => {
 }
 
 const PetDetail: FC<PetDetailProp> = () => {
-    const petId = useParams()
-    const id = `${petId}`
+    const params = useParams()
 
     return <Column style={AppStyle(border(Colors.color_E5E5E5))}>
         <Header />
@@ -83,7 +82,7 @@ const PetDetail: FC<PetDetailProp> = () => {
         <InfoBox>
             <Column>
                 <TextView style={AppStyle(regular(12), textColor(Colors.color_8A8A8F))}>Pet ID</TextView>
-                <TextView style={AppStyle(semiBold(14), textColor(Colors.color_primary))}>Hello {name}</TextView>
+                <TextView style={AppStyle(semiBold(14), textColor(Colors.color_primary))}>Hello {params.petId}</TextView>
             </Column>
         </InfoBox>
         <ContactBox user={new User()} />

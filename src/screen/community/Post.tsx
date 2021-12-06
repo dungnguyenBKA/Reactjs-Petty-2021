@@ -4,7 +4,7 @@ import { Colors } from "../../AppColor";
 import TextView from "../../components/Text";
 import Rows from "../../components/Row";
 import Column from "../../components/Column";
-import Message from "./Message";
+import MessengerScreen from "../messenger/MessengerScreen";
 
 
 interface PostProp {
@@ -18,7 +18,7 @@ export default function Post(props: PostProp) {
 
 
     const messageHandler = () => {
-        return <Message name = {props.petName}/>
+        return <MessengerScreen name = {props.petName}/>
 
     }
     return <Card style={AppStyle(marginVertical(20), radius(8), shadow(2))}>
