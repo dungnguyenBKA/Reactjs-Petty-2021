@@ -14,6 +14,7 @@ import {
   flexCenterInParent,
   flexHori,
   marginHori,
+  padding,
 } from "../../AppStyle";
 import Column from "../../components/Column";
 import { ButtonImageView, ImageView } from "../../components/ImageView";
@@ -114,7 +115,7 @@ const ImageItem: FC<ImageItemProps> = (props) => {
     <div
       className="container"
 
-      style = {AppStyle(width(150), height(200), margin(12), radius(10))}
+      style = {AppStyle(width(150), height(200), margin(12), padding(0),radius(8), borderWidth(1), border(Colors.color_E5E5E5))}
    
       onClick={() => {}}>
       <ImageView className="background-img" src={props.item} />
