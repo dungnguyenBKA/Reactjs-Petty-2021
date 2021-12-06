@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { AppStyle, background, borderWidth } from "../AppStyle";
 import { Props } from "./Props";
+import TextView from "./Text";
 
 
 const ButtonView: FC<Props<HTMLButtonElement>> = (props) => {

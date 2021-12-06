@@ -7,13 +7,14 @@ import { FC, useState } from 'react'
 import { useNavigate } from 'react-router'
 import Pet from '../../models/Pet'
 
+import { BaseHTMLProps } from '../../components/Props';
+
 export default function MyPet() {
     const [pets, setPets] = useState<Pet[]>([]);
 
+    let navigate = useNavigate()
     const addPet = () => {
-        let newPets = [...pets]
-        newPets.push({ name: "Pinky", age: "3 thang", gender: "male", avatar: "https://images.dog.ceo/breeds/terrier-dandie/n02096437_1643.jpg" })
-        setPets(newPets)
+        navigate('../add-pet')
     }
 
     return <div style={AppStyle(margin(0), padding(0))}>
@@ -24,7 +25,7 @@ export default function MyPet() {
 
         <div style={AppStyle(flexHori(), margin(0), setOverFlowX())}>
             {
-                pets.map(function (pet) { return <MyPetItem name={pet.name} age={pet.age} img={pet.avatar} gender={pet.gender} /> })
+                pets.map(function (pet) { return <MyPetItem onClick={()=>{}} name={pet.name} age={pet.age} img={pet.avatar} gender={pet.gender} /> })
             }
             <CreatePetButton  eventClick={addPet}/>
         </div>
@@ -32,7 +33,7 @@ export default function MyPet() {
     </div>
 }
 
-interface MyPetItemProps{
+interface MyPetItemProps extends BaseHTMLProps{
     gender: string
     img: string
     name: string
