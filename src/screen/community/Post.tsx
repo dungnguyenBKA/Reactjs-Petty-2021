@@ -4,6 +4,8 @@ import { Colors } from "../../AppColor";
 import TextView from "../../components/Text";
 import Rows from "../../components/Row";
 import Column from "../../components/Column";
+import Message from "./Message";
+
 
 interface PostProp {
     petName: string,
@@ -13,6 +15,12 @@ interface PostProp {
 }
 
 export default function Post(props: PostProp) {
+
+
+    const messageHandler = () => {
+        return <Message name = {props.petName}/>
+
+    }
     return <Card style={AppStyle(marginVertical(20), radius(8), shadow(2))}>
         <Card.Body>
             <Header avatarUrl={props.avatarURL} petName={props.petName} />
@@ -31,7 +39,7 @@ export default function Post(props: PostProp) {
                 <Rows >
                     <Reaction name={"Like"} />
                     <Reaction name={"Comment"} />
-                    <Reaction name={"Message"} />
+                    <button onClick = {messageHandler}>Message</button>
                 </Rows>
                 <hr style={marginVertical(12)} />
             </Column>
