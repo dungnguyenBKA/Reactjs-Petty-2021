@@ -1,9 +1,12 @@
+import { getDownloadURL, ref, uploadBytesResumable } from "@firebase/storage";
 import { FC, useState } from "react";
 import { ButtonGroup, Dropdown } from "react-bootstrap";
+import toast from "react-hot-toast";
 import { Colors } from "../../AppColor";
-import { AppStyle, border, borderWidth, cursorPointer, flexCenterInParent, flexShrink, height, margin, marginEnd, marginHori, marginVertical, padding, radius, regular, semiBold, setOverFlowX, shadow, textColor, weightItem, width } from "../../AppStyle";
+import { AppStyle, border, borderWidth, margin, marginEnd, marginHori, marginVertical, padding, radius, regular, semiBold, shadow, textColor, weightItem } from "../../AppStyle";
 import ButtonView from "../../components/ButtonView";
 import Column from "../../components/Column";
+import { storage } from "../../components/firebase/FirebaseApp";
 import Rows from "../../components/Row";
 import TextView from "../../components/Text";
 import AddImage from "./AddImage";
@@ -18,10 +21,60 @@ let fromOptions = ["VN", "USD"]
 let statusOptions = ["Triệt sản", "No Triệt sản"]
 
 const AddPetScreen: FC = () => {
-    return <Column>
-        <AddPetHeader />
 
-        <AddImage />
+    let [listImage, setListImage] = useState<File[]>([])
+
+    const handleSave = () => {
+        uploadImages(listImage)
+    }
+
+    const uploadImages = (_listImage: File[]) => {
+        let promises: Promise<string>[] = _listImage.map(image => {
+            let refImg = ref(storage, `images/${image.name}`)
+            let uploadTask = uploadBytesResumable(refImg, image)
+            let promise = new Promise<string>((resolve, reject) => {
+                uploadTask.on(
+                    "state_changed",
+                    undefined,
+                    (error) => {
+                        reject(error)
+                    },
+                    () => {
+                        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                            console.log(`File ${image.name} available at`, downloadURL);
+                            resolve(downloadURL)
+                        });
+                    }
+                )
+            })
+            return promise
+        })
+
+        let uploadAllPromise = Promise.all(promises)
+
+        toast.promise(uploadAllPromise, {
+            loading: 'Uploading',
+            success: 'Upload all images, links in console',
+            error: 'Error when upload image',
+        });
+    }
+
+    return <Column>
+        <Rows style={margin(16)}>
+            <TextView style={AppStyle(semiBold(17), weightItem(1))}>Báo danh Boss</TextView>
+            <ButtonView onClick={handleSave}>
+                <TextView style={
+                    AppStyle(
+                        semiBold(17),
+                        textColor(Colors.color_primary),
+                    )
+                }>
+                    Lưu
+                </TextView>
+            </ButtonView>
+        </Rows>
+
+        <AddImage listImage={listImage} setListImage={setListImage} />
 
         <Column style={AppStyle(marginHori(16))}>
             <TextView style={AppStyle(semiBold(17))}>THÔNG TIN CHUNG</TextView>
@@ -36,15 +89,6 @@ const AddPetScreen: FC = () => {
             <InfoInputFromKeyBoard isNecessary={false} title={"Số nhà, đường/phố"} />
         </Column>
     </Column>
-}
-
-function AddPetHeader() {
-    return <Rows style={margin(16)}>
-        <TextView style={AppStyle(semiBold(17), weightItem(1))}>Báo danh Boss</TextView>
-        <ButtonView>
-            <TextView style={AppStyle(semiBold(17), textColor(Colors.color_primary))}>Lưu</TextView>
-        </ButtonView>
-    </Rows>
 }
 
 
@@ -75,6 +119,8 @@ const InfoInputDropDown: FC<InfoInputDropDownProps<string>> = (props) => {
                 {
                     props.listOption.map((item) =>
                         <Dropdown.Item
+                            key = {item}
+
                             onClick={() => {
                                 setValue(item)
                             }}>{item}</Dropdown.Item>

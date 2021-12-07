@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { AppStyle,background, borderWidth, cursorPointer, flexCenterInParent, flexHori, flexVerti, height, marginBottom, marginEnd, minHeight, paddingVerti, radius, regular, textColor, width } from "../../AppStyle";
+import { AppStyle, background, borderWidth, cursorPointer, flexCenterInParent, flexHori, flexVerti, height, marginBottom, marginEnd, minHeight, paddingVerti, radius, regular, textColor, width } from "../../AppStyle";
 
 export default function LoginScreen(){
     return <div style={AppStyle(flexHori(), flexCenterInParent(),

@@ -14,7 +14,6 @@ import {
   flexCenterInParent,
   marginStart,
   semiBold,
-  width,
   marginVertical,
 } from "../../AppStyle";
 import icBack from "../../asset/ic_back.svg";
@@ -25,7 +24,7 @@ import { ButtonImageView } from "../../components/ImageView";
 import TextView from "../../components/Text";
 
 interface MessageProp {
-  name: string;
+  name?: string;
 }
 
 const MessengerScreen = (props: MessageProp) => {

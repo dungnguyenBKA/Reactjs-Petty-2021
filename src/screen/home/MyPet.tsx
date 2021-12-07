@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router'
 import Pet from '../../models/Pet'
 
 import { BaseHTMLProps } from '../../components/Props';
+import { ImageView } from '../../components/ImageView'
 
 export default function MyPet() {
     const [pets, setPets] = useState<Pet[]>([]);
@@ -25,7 +26,7 @@ export default function MyPet() {
 
         <div style={AppStyle(flexHori(), margin(0), setOverFlowX())}>
             {
-                pets.map(function (pet) { return <MyPetItem onClick={()=>{}} name={pet.name} age={pet.age} img={pet.avatar} gender={pet.gender} /> })
+                pets.map(function (pet) { return <MyPetItem key={pet.id} onClick={()=>{}} name={pet.name} age={pet.age} img={pet.avatar} gender={pet.gender} /> })
             }
             <CreatePetButton  eventClick={addPet}/>
         </div>
@@ -54,14 +55,14 @@ const MyPetItem: FC<MyPetItemProps> = (props) => {
         () => navigate('../pet-detail/1')
     } style={AppStyle(flexHori(), marginHori(6), paddingVerti(16), paddingStart(16), paddingEnd(54), flexCenter(), border("#EEEFF4"),
         radius(8), shadow(8))}>
-        <img style={AppStyle(
+        <ImageView style={AppStyle(
             width(42), height(42), radius(21), background('#000000')
-        )} src={props.img}></img>
+        )} src={props.img}/>
 
         <div style={AppStyle(flexVerti(), marginStart(12))}>
             <div style={AppStyle(flexHori(), margin(0))}>
                 <p style={AppStyle(margin(0), semiBold(14))}>{props.name}</p>
-                <img style={AppStyle(marginStart(3), width(18), height(18))} src={genderImg}></img>
+                <ImageView style={AppStyle(marginStart(3), width(18), height(18))} src={genderImg}/>
             </div>
             <p style={AppStyle(marginTop(2), regular(12), textColor('#969BAB'))}>{props.age}</p>
         </div>
@@ -74,9 +75,9 @@ interface CreatePetButtonProps{
 
 const CreatePetButton: FC<CreatePetButtonProps> = (props) => {
         return <div onClick={props.eventClick} style={AppStyle(flexHori(), padding(16), flexCenter(), border("#EEEFF4"), radius(8), shadow())}>
-            <img style={AppStyle(
+            <ImageView style={AppStyle(
                 width(42), height(42), radius(21)
-            )} src={ic_add}></img>
+            )} src={ic_add}/>
 
             <div style={AppStyle(flexVerti(), marginStart(12))}>
                 <div style={AppStyle(marginTop(2), semiBold(14), textColor('#969BAB'))}>

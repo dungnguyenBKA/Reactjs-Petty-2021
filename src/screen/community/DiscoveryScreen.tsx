@@ -1,7 +1,6 @@
 import { FC, useState } from "react"
 import { Container, Navbar, Tab, Tabs } from "react-bootstrap"
-import { Colors } from "../../AppColor"
-import { AppStyle, background, weightItem } from "../../AppStyle"
+import { AppStyle, weightItem } from "../../AppStyle"
 import Column from "../../components/Column"
 import Post from "./Post"
 import Search from "./Search"
@@ -59,7 +58,7 @@ export default function DiscoveryScreen(prop: DiscoveryScreenProp) {
 
 
 const DiscoveryTab: FC = () => {
-    let [listPostFilter, setListPostFilter] = useState(posts)
+    let [listPostFilter] = useState(posts)
     return (
         <Column>
             {

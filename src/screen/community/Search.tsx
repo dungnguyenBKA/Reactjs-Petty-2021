@@ -1,6 +1,7 @@
 import { FC, useState } from "react";
 import { AppStyle, borderWidth, cursorPointer, flexCenter, flexHori, marginStart, marginTop, paddingHori, paddingVerti, radius, weightItem } from "../../AppStyle";
 import icPetSearch from "../../asset/ic_pet_search.svg";
+import { ImageView } from "../../components/ImageView";
 import { BaseHTMLProps } from "../../components/Props";
 import Rows from "../../components/Row";
 
@@ -30,7 +31,7 @@ const Search:FC<SearchProp> = (prop) => {
                 setInput(inputText)
             }}
         />
-            <img onClick={() => takeDataFromSearch()} style ={AppStyle(marginStart(16), cursorPointer())} src={icPetSearch} />
+            <ImageView onClick={() => takeDataFromSearch()} style ={AppStyle(marginStart(16), cursorPointer())} src={icPetSearch} />
         </Rows>
     )
 }

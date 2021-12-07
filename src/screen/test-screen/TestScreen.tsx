@@ -1,11 +1,6 @@
 import { FC } from "react"
-
-import Column from "../../components/Column";
 import TextView from "../../components/Text";
 import { createStore } from "redux";
-import ButtonView from "../../components/ButtonView";
-import { ImageView } from "../../components/ImageView";
-import { AppStyle, background } from "../../AppStyle";
 import Rows from "../../components/Row";
 
 interface TestScreenProp {
