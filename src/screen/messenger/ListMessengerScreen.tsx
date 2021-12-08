@@ -1,0 +1,98 @@
+import { randomInt } from "crypto"
+import { FC } from "react"
+import { AppStyle, background, circle, circleImage, flexCenter, height, padding, paddingHori, paddingVerti, regular, semiBold, singleLine, weightItem, width } from "../../AppStyle"
+import Column from "../../components/Column"
+import { ImageView } from "../../components/ImageView"
+import Rows from "../../components/Row"
+import TextView from "../../components/Text"
+import User, { getRamdomFakeUser } from "../../models/User"
+
+import './ListMessengerScreen.css'
+
+interface ListMessengerScreenProps {
+
+}
+
+let lorem = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi debitis eos sunt veritatis maiores cupiditate optio suscipit quo? Sequi dolorum cum voluptate libero voluptatum quam recusandae eveniet minima consequuntur aliquam!"
+
+let fakeMessageUsers: MessageUser[] = Array.from(Array(10).keys()).map(() => {
+    return {
+        user: getRamdomFakeUser(),
+        lastMessage: lorem
+    }
+})
+
+const ListMessengerScreen: FC<ListMessengerScreenProps> = () => {
+    return <Column>
+        {
+            fakeMessageUsers.map((item) => {
+                return <MessengerItem user={item.user} lastMessage={item.lastMessage} />
+            })
+        }
+    </Column>
+}
+
+interface MessageUser {
+    user: User,
+    lastMessage: string
+}
+
+const MessengerItem: FC<MessageUser> = (props) => {
+    let user = props.user
+
+    let handleItemClick = () => {
+
+    }
+
+    return <Rows
+        style={
+            AppStyle(
+                paddingVerti(8),
+                paddingHori(12),
+                flexCenter(),
+                width('100%')
+            )
+        }
+        onClick={
+            handleItemClick
+        }
+    >
+        <div style={
+            AppStyle(width(60), height(60))
+        }>
+            <ImageView
+                style={
+                    AppStyle(circleImage(60))
+                }
+                src={user.avatar}
+            />
+        </div>
+
+
+        <Column
+            style={
+                AppStyle(
+                    background('red'),
+                    width('100%')
+                )
+            }>
+            <TextView style={
+                AppStyle(
+                    semiBold(17)
+                )
+            }>{user.name}</TextView>
+
+            <TextView
+            className="single-line-text"
+            style={
+                AppStyle(
+                    regular(14)
+                )
+            }>{props.lastMessage}</TextView>
+        </Column>
+
+        <p>OK</p>
+    </Rows>
+}
+
+export default ListMessengerScreen

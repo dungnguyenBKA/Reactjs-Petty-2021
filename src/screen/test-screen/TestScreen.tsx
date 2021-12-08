@@ -2,6 +2,7 @@ import { FC } from "react"
 import TextView from "../../components/Text";
 import { createStore } from "redux";
 import Rows from "../../components/Row";
+import { randomUUID } from "crypto";
 
 interface TestScreenProp {
 

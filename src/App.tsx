@@ -8,6 +8,7 @@ import PetDetail from './screen/pet-detail/PetDetail'
 import TestScreen from './screen/test-screen/TestScreen'
 import NotFoundScreen from './screen/not-found/NotFoundScreen'
 import { Toaster } from 'react-hot-toast'
+import ListMessengerScreen from './screen/messenger/ListMessengerScreen'
 
 export default function App() {
     return (
@@ -20,7 +21,8 @@ export default function App() {
                     <Route path="/add-pet" element={<AddPetScreen />} />
                     <Route path="/pet-detail/:petId" element={<PetDetail />} />
                     <Route path="/test" element={<TestScreen />} />
-                    <Route path="/message" element={<MessengerScreen />} />
+                    <Route path="/message" element={<ListMessengerScreen />} />
+                    <Route path="/message/:userId" element={<MessengerScreen />} />
 
                     {/* ! Not found route, alway in the end, do not change order */}
                     <Route path="*" element={<NotFoundScreen />} />

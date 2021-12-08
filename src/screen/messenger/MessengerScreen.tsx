@@ -1,3 +1,4 @@
+import { useParams } from "react-router";
 import {
   AppStyle,
   regular,
@@ -28,6 +29,9 @@ interface MessageProp {
 }
 
 const MessengerScreen = (props: MessageProp) => {
+  let params = useParams()
+
+  let userId = params.userId
 
   let today = new Date(),
     date =
@@ -53,27 +57,16 @@ const MessengerScreen = (props: MessageProp) => {
           ),
         )}
       >
-        <ButtonImageView
-          style={AppStyle(
-            marginStart(23),
-            borderWidth(0)
-          )}
-          onClick={backHandler}
-          src={icBack}
-          alt="Quay lại "
-        />
-
         <div
           style={AppStyle(
             flexVerti(),
             flexCenterInParent(),
-
             weightItem(1),
-            marginVertical(40),
+            marginVertical(20),
             textColor("#262A41")
           )}
         >
-          <p style={AppStyle(semiBold(20))}>Dat</p>
+          <p style={AppStyle(semiBold(20))}>{userId}</p>
           <p style={AppStyle(regular(15))}>{date}</p>
         </div>
       </header>

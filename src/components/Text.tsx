@@ -1,9 +1,9 @@
 import { FC } from "react";
 import { AppStyle, margin } from "../AppStyle";
-import { BaseHTMLProps } from "./Props";
+import { Props } from "./Props";
 
-const TextView:FC<BaseHTMLProps> = (props) => {
-    return <p style={AppStyle(margin(0), props.style)}>{props.children}</p>
+const TextView:FC<Props<HTMLParagraphElement>> = (props) => {
+    return <p {...props} style={AppStyle(margin(0), props.style)}>{props.children}</p>
 }
 
 export default TextView

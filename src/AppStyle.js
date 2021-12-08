@@ -266,6 +266,12 @@ function textWeight(_weight) {
     })
 }
 
+function singleLine() {
+    return {
+        whiteSpace: 'nowrap',
+    }
+}
+
 function border(color) {
     return {
         border: '1px solid ' + color
@@ -274,7 +280,8 @@ function border(color) {
 
 function borderWidth(_width){
     return {
-        borderWidth: _width
+        borderWidth: _width,
+        boxShadow: 'none'
     }
 }
 
@@ -339,6 +346,7 @@ export {
     regular,
     textColor,
     textWeight,
+    singleLine,
 
     // border
     border,
