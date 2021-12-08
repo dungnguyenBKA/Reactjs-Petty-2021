@@ -1,5 +1,6 @@
 import { randomInt } from "crypto"
 import { FC } from "react"
+import { Route, useNavigate } from "react-router"
 import { AppStyle, background, shadow,circle, circleImage, flexCenter, height, margin, padding, paddingHori, paddingVerti, regular, semiBold, singleLine, weightItem, width, radius, marginEnd } from "../../AppStyle"
 import Column from "../../components/Column"
 import { ImageView } from "../../components/ImageView"
@@ -8,6 +9,7 @@ import TextView from "../../components/Text"
 import User, { getRamdomFakeUser } from "../../models/User"
 
 import './ListMessengerScreen.css'
+import MessengerScreen from "./MessengerScreen"
 
 interface ListMessengerScreenProps {
 
@@ -18,11 +20,13 @@ let lorem = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi 
 let fakeMessageUsers: MessageUser[] = Array.from(Array(10).keys()).map(() => {
     return {
         user: getRamdomFakeUser(),
-        lastMessage: lorem
+        lastMessage: lorem, 
+        
     }
 })
 
 const ListMessengerScreen: FC<ListMessengerScreenProps> = () => {
+
     return <Column>
         {
             fakeMessageUsers.map((item) => {
@@ -34,14 +38,17 @@ const ListMessengerScreen: FC<ListMessengerScreenProps> = () => {
 
 interface MessageUser {
     user: User,
-    lastMessage: string
+    lastMessage: string,
+    // onClick: any
 }
 
 const MessengerItem: FC<MessageUser> = (props) => {
-    let user = props.user
+    let user = props.user;
+    let navigate = useNavigate();
+
 
     let handleItemClick = () => {
-
+        navigate('/message/1')
     }
 
     return <Rows
@@ -53,10 +60,11 @@ const MessengerItem: FC<MessageUser> = (props) => {
                 width('100%'), shadow(8)
             )
         }
-        onClick={
-            handleItemClick
-        }
-    >
+        onClick={ handleItemClick} >
+    
+            
+        
+    
         <div style={
             AppStyle(width(60), height(60), margin(15))
         }>
