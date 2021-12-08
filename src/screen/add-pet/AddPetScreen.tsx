@@ -8,6 +8,8 @@ import toast from "react-hot-toast";
 import { Colors } from "../../AppColor";
 import {
   AppStyle,
+  background,
+  bold,
   border,
   borderWidth,
   margin,
@@ -132,18 +134,59 @@ const AddPetScreen: FC = () => {
 };
 
 function AddDate() {
-  const [startDate, setStartDate] = useState<Date>(new Date());
+  const [startDate, setStartDate] = useState<Date|undefined>(undefined);
 
   return (
-    
+    <Column
+      style={AppStyle(
+        borderWidth(1),
+        shadow(8),
+        border(Colors.color_E5E5E5),
+        padding(8),
+        marginVertical(12),
+        radius(8)
+      )}
+    >
+      <Rows>
+        <TextView
+          style={AppStyle(
+            textColor(Colors.color_8A8A8F),
+            regular(12),
+            marginEnd(8)
+          )}
+        >
+          Sinh thần
+        </TextView>
+        <TextView style={textColor("red")}>*</TextView>
+
+      </Rows>
       <DatePicker
         selected={startDate}
         onChange={(date: Date) => setStartDate(date!)}
+        dateFormat="dd.MM.yyyy"
+
         onKeyDown={(e) => {
           e.preventDefault();
         }}
+
+        onChangeRaw={(e) => {
+          e.preventDefault();
+        }}
+
+        required
+        showYearDropdown
+        scrollableYearDropdown
+
+        customInput={<input
+          style={AppStyle(
+            semiBold(17),
+            textColor(Colors.color_primary),
+            borderWidth(0)
+          )}>
+
+        </input>}
       />
-    
+    </Column>
   );
 }
 export default AddPetScreen;
