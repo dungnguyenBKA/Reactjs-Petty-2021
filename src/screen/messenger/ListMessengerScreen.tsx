@@ -1,6 +1,6 @@
 import { randomInt } from "crypto"
 import { FC } from "react"
-import { AppStyle, background, circle, circleImage, flexCenter, height, padding, paddingHori, paddingVerti, regular, semiBold, singleLine, weightItem, width } from "../../AppStyle"
+import { AppStyle, background, shadow,circle, circleImage, flexCenter, height, margin, padding, paddingHori, paddingVerti, regular, semiBold, singleLine, weightItem, width, radius, marginEnd } from "../../AppStyle"
 import Column from "../../components/Column"
 import { ImageView } from "../../components/ImageView"
 import Rows from "../../components/Row"
@@ -50,7 +50,7 @@ const MessengerItem: FC<MessageUser> = (props) => {
                 paddingVerti(8),
                 paddingHori(12),
                 flexCenter(),
-                width('100%')
+                width('100%'), shadow(8)
             )
         }
         onClick={
@@ -58,7 +58,7 @@ const MessengerItem: FC<MessageUser> = (props) => {
         }
     >
         <div style={
-            AppStyle(width(60), height(60))
+            AppStyle(width(60), height(60), margin(15))
         }>
             <ImageView
                 style={
@@ -72,8 +72,8 @@ const MessengerItem: FC<MessageUser> = (props) => {
         <Column
             style={
                 AppStyle(
-                    background('red'),
-                    width('100%')
+                    background('#FFFFFF'),
+                    width('85%'), height(60)
                 )
             }>
             <TextView style={
@@ -91,7 +91,6 @@ const MessengerItem: FC<MessageUser> = (props) => {
             }>{props.lastMessage}</TextView>
         </Column>
 
-        <p>OK</p>
     </Rows>
 }
 

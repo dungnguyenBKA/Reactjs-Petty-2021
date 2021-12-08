@@ -72,7 +72,7 @@ const MessengerScreen = (props: MessageProp) => {
       </header>
 
       <div style={weightItem(1)}>
-        <TextView>OK</TextView>
+        <TextView></TextView>
       </div>
 
       <footer style={AppStyle(flexHori(), shadow(30))}>
