@@ -1,6 +1,10 @@
 import { getDownloadURL, ref, uploadBytesResumable } from "@firebase/storage";
 import { FC, useState } from "react";
 import { ButtonGroup, Dropdown } from "react-bootstrap";
+import DatePicker from "react-datepicker";
+
+
+import "react-datepicker/dist/react-datepicker.css";
 import toast from "react-hot-toast";
 import { Colors } from "../../AppColor";
 import { AppStyle, border, borderWidth, margin, marginEnd, marginHori, marginVertical, padding, radius, regular, semiBold, shadow, textColor, weightItem } from "../../AppStyle";
@@ -10,6 +14,7 @@ import { storage } from "../../components/firebase/FirebaseApp";
 import Rows from "../../components/Row";
 import TextView from "../../components/Text";
 import AddImage from "./AddImage";
+import "./styles.css";
 
 
 
@@ -79,6 +84,7 @@ const AddPetScreen: FC = () => {
         <Column style={AppStyle(marginHori(16))}>
             <TextView style={AppStyle(semiBold(17))}>THÔNG TIN CHUNG</TextView>
             <InfoInputFromKeyBoard isNecessary={true} title={"Tên Boss"} />
+            <AddDate/>
             <InfoInputDropDown isNecessary={true} title={"Giới tính"} listOption={genderOptions} />
             <InfoInputDropDown isNecessary={true} title={"Loài"} listOption={typeOptions} />
             <InfoInputDropDown isNecessary={true} title={"Bộ tộc"} listOption={botocOptions} />
@@ -92,6 +98,18 @@ const AddPetScreen: FC = () => {
 }
 
 
+function AddDate (){
+    const [startDate, setStartDate] = useState<Date>(new Date());
+    
+    return  <DatePicker
+    selected={startDate}
+    onChange={(date: Date) => setStartDate(date!)} onKeyDown={(e) => {
+        e.preventDefault();
+    }} 
+ />
+ 
+
+}
 export default AddPetScreen
 
 
