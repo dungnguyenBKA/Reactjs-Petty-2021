@@ -45,7 +45,7 @@ const CommentForm = (props: CommentFormProp) => {
       {fakeCommentUsers.map((item) => {
         return <CommentItem user={item.user} lastComment={item.lastComment} />;
       })}
-      <input type="text" style={AppStyle(width("auto"), borderWidth(0), radius(20), height(40), background("#F1F2F5"), minWidth(768))} />
+      <input type="text" style={AppStyle(width("auto"), borderWidth(0), radius(20), height(40), background("#F1F2F5"), width('100%'), maxWidth('100%'))} />
     </div>
   );
 };
