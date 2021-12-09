@@ -33,6 +33,7 @@ import MessengerScreen from "../messenger/MessengerScreen";
 import { useNavigate } from "react-router";
 import ButtonView from "../../components/ButtonView";
 import CommentForm from "./CommentForm";
+import { ImageView } from "../../components/ImageView";
 
 interface PostProp {
   petName: string;
@@ -42,8 +43,21 @@ interface PostProp {
 }
 
 export default function Post(props: PostProp) {
-
+  let navigate = useNavigate()
   let [showCommentForm, setShowCommentForm] = useState(false)
+  let [isLikeThisPost, setLikeThisPost] = useState(false)
+
+  let handleLikeClick = () => {
+    setLikeThisPost(!isLikeThisPost)
+  }
+
+  let handleCommentClick = () => {
+    setShowCommentForm(!showCommentForm)
+  }
+
+  let handleMessageClick = () => {
+    navigate('../message/123456')
+  }
 
   return (
     <Card style={AppStyle(marginVertical(20), radius(8), shadow(2))}>
@@ -59,16 +73,13 @@ export default function Post(props: PostProp) {
         <Column>
           <hr style={marginVertical(12)} />
           <Rows>
-            <Like />
 
-            {/* click comment => show  */}
-            <Comment setShowForm={setShowCommentForm} isShowForm={showCommentForm}/>
-            <Message/>
+            <ReactionItem title={isLikeThisPost ? "Liked" : "Like"} onClick={handleLikeClick} icon={isLikeThisPost ? icLiked : icLike}/>
+            <ReactionItem title="Comment" onClick={handleCommentClick} icon={icComment}/>
+            <ReactionItem title="Message" onClick={handleMessageClick} icon={icMessenger}/>
           </Rows>
-          { showCommentForm && <CommentForm/> }
-
+          {showCommentForm && <CommentForm />}
         </Column>
-        
       </Card.Body>
     </Card>
   );
@@ -92,113 +103,29 @@ function Header(props: HeaderProp) {
   );
 }
 
-// interface ReactionProp {
-//   name: string
-  
-// }
 
-// function Reaction(props: ReactionProp) {
-//   const [showComment, setShowComment] = useState(false);
 
-interface LikeProp {}
 
-const Like: FC<LikeProp> = () => {
-    const [isLike, setIsLike] = useState(false);
-    const clickHandler = () => {
-        if (isLike === true) {
-          setIsLike(false);
-        } else setIsLike(true);
-      };
-
-    
-
-  return (<div style={AppStyle(weightItem(1))}>
-  {!isLike && (
-    <ButtonView
-      style={AppStyle(
-        flexHori(),
-        background("#FFFFFF"),
-        borderWidth(0)
-      )}
-      onClick={clickHandler}
-    >
-      <img src={icLike} alt="" />
-      <TextView style={AppStyle(marginStart(15))}>
-        Like
-      </TextView>
-    </ButtonView>
-  )}
-  {isLike && (
-    <ButtonView
-      style={AppStyle(
-        flexHori(),
-        textColor("red"),
-        background("#FFFFFF"),
-        borderWidth(0)
-      )}
-      onClick={clickHandler}
-    >
-      <img src={icLiked} alt="" />
-      <TextView style={AppStyle(marginStart(15))}>Liked</TextView>
-    </ButtonView>
-  )}
-</div>
-
-  );
-};
-
-interface CommentProp {
-    isShowForm? : boolean
-  setShowForm? : (isShowForm: boolean) => void
-    
+interface ReactionProp {
+  title: string
+  icon: string
+  onClick: () => void
 }
 
-const Comment = (props: CommentProp) => {
-
-  return (<Column style = {AppStyle(flexVerti(),
-    weightItem(1))}>
-  <ButtonView
-    style={AppStyle(
-      background("#FFFFFF"),
-      flexHori(),
-      borderWidth(0)
-    )}
-    onClick={() => {
-      if(props.setShowForm !== undefined) {
-        props.setShowForm(!props.isShowForm)
-      }
-    }}
-  >
-    <img src={icComment} alt="" />
-    <TextView style={AppStyle(marginStart(15))}>Comment</TextView>
-  </ButtonView>
-</Column>
-
-  );
-};
-
-interface MessageProp {}
-
-const Message = (props: MessageProp) => {
-    let navigate = useNavigate();
-
-  const messageHandler = () => {
-    navigate("../message");
-  };
-
+const ReactionItem: FC<ReactionProp> = (props) => {
   return (
     <ButtonView
-    style={AppStyle(
-      background("#FFFFFF"),
-      flexHori(),
-      borderWidth(0),
-      weightItem(1)
-    )}
-    onClick={messageHandler}
-  >
-    <img src={icMessenger} alt="" />
-    <TextView style={AppStyle(marginStart(15))}>Message</TextView>
-  </ButtonView>
-
-  );
-};
+      style={AppStyle(
+        flexHori(),
+        background("#FFFFFF"),
+        borderWidth(0)
+      )}
+      onClick={props.onClick}
+    >
+      <ImageView src={props.icon}/>
+      <TextView style={AppStyle(marginStart(15))}>
+        {props.title}
+      </TextView>
+    </ButtonView>
+  )
+}
