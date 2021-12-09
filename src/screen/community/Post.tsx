@@ -31,6 +31,7 @@ import Column from "../../components/Column";
 import MessengerScreen from "../messenger/MessengerScreen";
 import { useNavigate } from "react-router";
 import ButtonView from "../../components/ButtonView";
+import CommentForm from "./CommentForm";
 
 interface PostProp {
   petName: string;
@@ -42,6 +43,9 @@ interface PostProp {
 export default function Post(props: PostProp) {
   let navigate = useNavigate();
 
+  const [showComment, setShowComment] = useState(false);
+
+ 
   const messageHandler = () => {
     navigate("../message");
   };
@@ -62,10 +66,14 @@ export default function Post(props: PostProp) {
           <Rows>
             {/* <Reaction name={"Like"} /> */}
             <Like />
-            <ButtonView  style={AppStyle(background("#FFFFFF"), flexHori(),borderWidth(0), weightItem(1))}>
+            <Column>
+            <ButtonView  style={AppStyle(background("#FFFFFF"), flexHori(),borderWidth(0), weightItem(1))} onClick = {() => {setShowComment(!showComment)}}>
                 <img src ={icComment} alt =""/>
                 <TextView style = {AppStyle(marginStart(15))}>Comment</TextView>
             </ButtonView>
+            {showComment && <CommentForm />}
+            </Column>
+           
            
             <ButtonView
               style={AppStyle(background("#FFFFFF"), flexHori(),borderWidth(0),weightItem(1))}
