@@ -42,6 +42,9 @@ interface PostProp {
 }
 
 export default function Post(props: PostProp) {
+
+  let [showCommentForm, setShowCommentForm] = useState(false)
+
   return (
     <Card style={AppStyle(marginVertical(20), radius(8), shadow(2))}>
       <Card.Body>
@@ -57,10 +60,12 @@ export default function Post(props: PostProp) {
           <hr style={marginVertical(12)} />
           <Rows>
             <Reaction name="Like" />
-            <Reaction name="Comment" />
+
+            {/* click comment => show  */}
+            <Reaction name="Comment" setShowForm={setShowCommentForm} isShowForm={showCommentForm}/>
             <Reaction name="Message" />
           </Rows>
-          <CommentForm/>
+          { showCommentForm && <CommentForm/> }
 
         </Column>
         
@@ -88,7 +93,9 @@ function Header(props: HeaderProp) {
 }
 
 interface ReactionProp {
-  name: string;
+  name: string
+  isShowForm? : boolean
+  setShowForm? : (isShowForm: boolean) => void
 }
 
 function Reaction(props: ReactionProp) {
@@ -151,13 +158,14 @@ function Reaction(props: ReactionProp) {
               weightItem(1)
             )}
             onClick={() => {
-              setShowComment(!showComment);
+              if(props.setShowForm !== undefined) {
+                props.setShowForm(!props.isShowForm)
+              }
             }}
           >
             <img src={icComment} alt="" />
             <TextView style={AppStyle(marginStart(15))}>{props.name}</TextView>
           </ButtonView>
-          {/* {showComment && <CommentForm />} */}
         </Column>
       )}
 
