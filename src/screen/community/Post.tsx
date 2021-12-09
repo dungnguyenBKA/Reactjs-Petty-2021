@@ -118,7 +118,7 @@ const ReactionItem: FC<ReactionProp> = (props) => {
       style={AppStyle(
         flexHori(),
         background("#FFFFFF"),
-        borderWidth(0)
+        borderWidth(0), weightItem(1)
       )}
       onClick={props.onClick}
     >
