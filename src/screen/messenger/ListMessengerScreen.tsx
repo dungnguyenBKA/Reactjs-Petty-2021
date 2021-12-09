@@ -39,7 +39,6 @@ const ListMessengerScreen: FC<ListMessengerScreenProps> = () => {
 interface MessageUser {
     user: User,
     lastMessage: string,
-    // onClick: any
 }
 
 const MessengerItem: FC<MessageUser> = (props) => {

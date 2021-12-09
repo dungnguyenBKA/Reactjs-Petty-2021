@@ -63,6 +63,16 @@ function maxHeight(value) {
         maxHeight: value
     }
 }
+function maxWidth(value) {
+    return {
+        maxWidth: value
+    }
+}
+function minWidth(value) {
+    return {
+        minWidth: value
+    }
+}
 
 function radius(value) {
     return {
@@ -300,6 +310,13 @@ function cursorPointer(){
   }
 }
 
+function overFlow(){
+
+    return {
+        overflow: 'auto'
+    }
+}
+
 export {
     AppStyle,
 
@@ -312,6 +329,8 @@ export {
     shadow,
     background,
     maxHeight,
+    maxWidth,
+    minWidth,
 
     // margin css
     margin,
@@ -361,7 +380,10 @@ export {
     fitImage,
 
     //cursor
-    cursorPointer
+    cursorPointer,
+
+    //overflow tu xuong dong
+    overFlow
 
 
 
