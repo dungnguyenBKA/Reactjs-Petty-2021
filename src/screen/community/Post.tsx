@@ -1,5 +1,9 @@
-import { Card, Image } from "react-bootstrap";
+import { Card, Image, Row } from "react-bootstrap";
 import { FC, useState } from "react";
+import icLike from "../../asset/ic_like.svg";
+import icLiked from "../../asset/ic_liked.svg";
+import icComment from "../../asset/ic_comment.svg";
+import icMessenger from "../../asset/ic_messenger.svg";
 
 import {
   AppStyle,
@@ -10,6 +14,7 @@ import {
   flexHori,
   height,
   marginEnd,
+  marginStart,
   marginTop,
   marginVertical,
   radius,
@@ -25,6 +30,7 @@ import Rows from "../../components/Row";
 import Column from "../../components/Column";
 import MessengerScreen from "../messenger/MessengerScreen";
 import { useNavigate } from "react-router";
+import ButtonView from "../../components/ButtonView";
 
 interface PostProp {
   petName: string;
@@ -56,8 +62,19 @@ export default function Post(props: PostProp) {
           <Rows>
             {/* <Reaction name={"Like"} /> */}
             <Like />
-            <Reaction name={"Comment"} />
-            <button onClick={messageHandler}>Message</button>
+            <ButtonView  style={AppStyle(background("#FFFFFF"), flexHori(),borderWidth(0), weightItem(1))}>
+                <img src ={icComment} alt =""/>
+                <TextView style = {AppStyle(marginStart(15))}>Comment</TextView>
+            </ButtonView>
+           
+            <ButtonView
+              style={AppStyle(background("#FFFFFF"), flexHori(),borderWidth(0),weightItem(1))}
+              onClick={messageHandler}
+            >
+                <img src = {icMessenger} alt =""/>
+                <TextView  style = {AppStyle(marginStart(15))}> Message</TextView>
+             
+            </ButtonView>
           </Rows>
           <hr style={marginVertical(12)} />
         </Column>
@@ -115,26 +132,34 @@ const Like: FC<LikeProp> = () => {
   };
 
   return (
-    <div>
+    <div style ={AppStyle(weightItem(1))}>
       {!isLike && (
-        <button
-          style={AppStyle(background("#FFFFFF"), borderWidth(0))}
+        <ButtonView
+          style={AppStyle(flexHori(), background("#FFFFFF"), borderWidth(0), )}
           onClick={clickHandler}
         >
-          Like
-        </button>
+            
+            <img src ={icLike} alt =""/>
+         <TextView style = {AppStyle(marginStart(15))}>Like</TextView>
+
+          
+        
+          
+        </ButtonView>
       )}
       {isLike && (
-        <button
-          style={AppStyle(
-            textColor("blue"),
+        <ButtonView
+          style={AppStyle(flexHori(),
+            textColor("red"),
             background("#FFFFFF"),
             borderWidth(0)
           )}
           onClick={clickHandler}
         >
-          Liked
-        </button>
+            <img src = {icLiked} alt=""/>
+            <TextView  style = {AppStyle(marginStart(15))}>Liked</TextView>
+        
+        </ButtonView>
       )}
     </div>
   );
