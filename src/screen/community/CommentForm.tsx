@@ -26,6 +26,7 @@ import {
   marginStart,
   marginEnd,
   marginHori,
+  minHeight,
 } from "../../AppStyle";
 import ButtonView from "../../components/ButtonView";
 import Column from "../../components/Column";
@@ -34,7 +35,9 @@ import Rows from "../../components/Row";
 import TextView from "../../components/Text";
 import User, { getRamdomFakeUser } from "../../models/User";
 import "../messenger/ListMessengerScreen.css";
-interface CommentFormProp {}
+interface CommentFormProp {
+  count?: any
+}
 
 const CommentForm = (props: CommentFormProp) => {
   let lorem =
@@ -48,6 +51,8 @@ const CommentForm = (props: CommentFormProp) => {
       };
     }
   );
+
+  props.count(fakeCommentUsers.length);
 
 
   return (
@@ -64,7 +69,7 @@ const CommentForm = (props: CommentFormProp) => {
           borderWidth(0),
           paddingHori(15),
           radius(20),
-          height(40),
+          minHeight(40),
           background("#F1F2F5"),
           width("100%"),
           maxWidth("100%")

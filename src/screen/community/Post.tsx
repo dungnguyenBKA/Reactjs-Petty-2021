@@ -45,10 +45,21 @@ interface PostProp {
 export default function Post(props: PostProp) {
   let navigate = useNavigate()
   let [showCommentForm, setShowCommentForm] = useState(false)
-  let [isLikeThisPost, setLikeThisPost] = useState(false)
+  let [isLikeThisPost, setLikeThisPost] = useState(false);
+  let [countLike, setCountLike] = useState(100);
+  let [countComment, setCountComment] = useState(100);
 
   let handleLikeClick = () => {
-    setLikeThisPost(!isLikeThisPost)
+    if(isLikeThisPost === false){
+      setLikeThisPost(true);
+      setCountLike(countLike+1);
+
+
+    }else {setLikeThisPost(false);
+    setCountLike(100);}
+
+
+    
   }
 
   let handleCommentClick = () => {
@@ -57,6 +68,12 @@ export default function Post(props: PostProp) {
 
   let handleMessageClick = () => {
     navigate('../message/123456')
+  }
+
+  let countCommentHandler = (count: number) => {
+    setCountComment(count)
+
+
   }
 
   return (
@@ -74,11 +91,11 @@ export default function Post(props: PostProp) {
           <hr style={marginVertical(12)} />
           <Rows>
 
-            <ReactionItem title={isLikeThisPost ? "Liked" : "Like"} onClick={handleLikeClick} icon={isLikeThisPost ? icLiked : icLike}/>
-            <ReactionItem title="Comment" onClick={handleCommentClick} icon={icComment}/>
+            <ReactionItem title={isLikeThisPost ? `You and ${countLike-1} people Liked` : `${countLike} people like`} onClick={handleLikeClick} icon={isLikeThisPost ? icLiked : icLike}/>
+            <ReactionItem title={`${countComment} people commented`} onClick={handleCommentClick} icon={icComment}/>
             <ReactionItem title="Message" onClick={handleMessageClick} icon={icMessenger}/>
           </Rows>
-          {showCommentForm && <CommentForm />}
+          {showCommentForm && <CommentForm count = {countCommentHandler}/>}
         </Column>
       </Card.Body>
     </Card>
@@ -107,7 +124,7 @@ function Header(props: HeaderProp) {
 
 
 interface ReactionProp {
-  title: string
+  title: any
   icon: string
   onClick: () => void
 }
