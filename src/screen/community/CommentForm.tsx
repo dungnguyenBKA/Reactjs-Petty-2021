@@ -28,7 +28,7 @@ import { ImageView } from "../../components/ImageView";
 import Rows from "../../components/Row";
 import TextView from "../../components/Text";
 import User, { getRamdomFakeUser } from "../../models/User";
-import '../messenger/ListMessengerScreen.css';
+import "../messenger/ListMessengerScreen.css";
 interface CommentFormProp {}
 
 const CommentForm = (props: CommentFormProp) => {
@@ -44,22 +44,27 @@ const CommentForm = (props: CommentFormProp) => {
     }
   );
 
-  let [input, setInput] = useState('')
-
 
   return (
     <div style={AppStyle(weightItem(1))}>
       {fakeCommentUsers.map((item) => {
         return <CommentItem user={item.user} lastComment={item.lastComment} />;
       })}
-      <input type="text"  
-            id="comment"
-            placeholder="Bình luận..." 
-            value = {input}
-            onInput={e => {
-                let inputText = e.currentTarget.value
-                setInput(inputText)
-            }} style={AppStyle(width("auto"), borderWidth(0), paddingHori(15),radius(20), height(40), background("#F1F2F5"), width('100%'), maxWidth('100%'))} />
+      <input
+        type="text"
+        id="comment"
+        placeholder="Bình luận..."
+        style={AppStyle(
+          width("auto"),
+          borderWidth(0),
+          paddingHori(15),
+          radius(20),
+          height(40),
+          background("#F1F2F5"),
+          width("100%"),
+          maxWidth("100%")
+        )}
+      />
     </div>
   );
 };
@@ -75,31 +80,31 @@ const CommentItem: FC<CommentItemProp> = (props) => {
   let user = props.user;
 
   return (
-    <Rows 
-    style={AppStyle(
-      paddingVerti(8),
-      paddingHori(12),
-      marginVertical(12),
-      flexCenter(),
-      maxWidth('100%'),
-      radius(30), background("#F1F2F5"), maxHeight('auto')
-    )}
+    <Rows
+      style={AppStyle(
+        paddingVerti(8),
+        paddingHori(12),
+        marginVertical(12),
+        flexCenter(),
+        maxWidth("100%"),
+        radius(30),
+        background("#F1F2F5"),
+        maxHeight("auto")
+      )}
     >
       <div style={AppStyle(width(60), height(60), margin(15))}>
         <ImageView style={AppStyle(circleImage(60))} src={user.avatar} />
       </div>
 
-      <Column style={AppStyle(background("#F1F2F5"), height('100%'), flexShrink())}>
+      <Column
+        style={AppStyle(background("#F1F2F5"), height("100%"), flexShrink())}
+      >
         <TextView style={AppStyle(semiBold(17))}>{user.name}</TextView>
 
-        <TextView style = {AppStyle(overFlow() )}
-        >
-          {props.lastComment}
-        </TextView>
+        <TextView style={AppStyle(overFlow())}>{props.lastComment}</TextView>
       </Column>
     </Rows>
   );
 };
 
 // className="single-line-text"
-
