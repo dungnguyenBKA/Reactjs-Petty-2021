@@ -44,12 +44,22 @@ const CommentForm = (props: CommentFormProp) => {
     }
   );
 
+  let [input, setInput] = useState('')
+
+
   return (
     <div style={AppStyle(weightItem(1))}>
       {fakeCommentUsers.map((item) => {
         return <CommentItem user={item.user} lastComment={item.lastComment} />;
       })}
-      <input type="text" style={AppStyle(width("auto"), borderWidth(0), radius(20), height(40), background("#F1F2F5"), width('100%'), maxWidth('100%'))} />
+      <input type="text"  
+            id="comment"
+            placeholder="Bình luận..." 
+            value = {input}
+            onInput={e => {
+                let inputText = e.currentTarget.value
+                setInput(inputText)
+            }} style={AppStyle(width("auto"), borderWidth(0), paddingHori(15),radius(20), height(40), background("#F1F2F5"), width('100%'), maxWidth('100%'))} />
     </div>
   );
 };
