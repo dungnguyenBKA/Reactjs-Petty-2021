@@ -1,6 +1,6 @@
 import { FC, useState } from "react"
 import { Container, Navbar, Tab, Tabs } from "react-bootstrap"
-import { AppStyle, weightItem } from "../../AppStyle"
+import { AppStyle, weightItem , flexHori, background} from "../../AppStyle"
 import Column from "../../components/Column"
 import Post from "./Post"
 import Search from "./Search"
@@ -38,7 +38,7 @@ export default function DiscoveryScreen(prop: DiscoveryScreenProp) {
     </Navbar>
         
 
-        <div style={AppStyle(weightItem(1))} >
+        <div style={AppStyle( weightItem(1) )} >
             <Tabs
                 defaultActiveKey={activeTab}
                 onSelect={(eventKey) => {
@@ -60,7 +60,7 @@ export default function DiscoveryScreen(prop: DiscoveryScreenProp) {
 const DiscoveryTab: FC = () => {
     let [listPostFilter] = useState(posts)
     return (
-        <Column>
+        <Column style ={background("#F1F2F5")}>
             {
                 listPostFilter.map((postItem) =>
                     <Post
