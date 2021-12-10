@@ -18,6 +18,7 @@ import {
   width,
   marginVertical,
   maxWidth,
+  fitContain,
   minWidth,
 } from "../../AppStyle";
 import Column from "../../components/Column";
@@ -25,6 +26,7 @@ import { ImageView } from "../../components/ImageView";
 import Rows from "../../components/Row";
 import TextView from "../../components/Text";
 import User, { getRamdomFakeUser } from "../../models/User";
+import '../messenger/ListMessengerScreen.css';
 interface CommentFormProp {}
 
 const CommentForm = (props: CommentFormProp) => {
@@ -68,7 +70,7 @@ const CommentItem: FC<CommentItemProp> = (props) => {
         marginVertical(12),
         flexCenter(),
         maxWidth(768),
-        width("auto"),
+        minWidth(500),
         radius(30), background("#F1F2F5")
       )}
     >
@@ -76,12 +78,11 @@ const CommentItem: FC<CommentItemProp> = (props) => {
         <ImageView style={AppStyle(circleImage(60))} src={user.avatar} />
       </div>
 
-      <Column style={AppStyle(background("#F1F2F5"), width("85%"), height(60))}>
+      <Column style={AppStyle(background("#F1F2F5"), height(60), width('85%'), fitContain(), minWidth(500))}>
         <TextView style={AppStyle(semiBold(17))}>{user.name}</TextView>
 
         <TextView
           className="single-line-text"
-          style={AppStyle(regular(14), overFlow())}
         >
           {props.lastComment}
         </TextView>
