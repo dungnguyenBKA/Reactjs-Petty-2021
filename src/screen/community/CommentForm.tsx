@@ -20,6 +20,8 @@ import {
   maxWidth,
   fitContain,
   minWidth,
+  flexShrink,
+  maxHeight,
 } from "../../AppStyle";
 import Column from "../../components/Column";
 import { ImageView } from "../../components/ImageView";
@@ -63,26 +65,24 @@ const CommentItem: FC<CommentItemProp> = (props) => {
   let user = props.user;
 
   return (
-    <Rows
-      style={AppStyle(
-        paddingVerti(8),
-        paddingHori(12),
-        marginVertical(12),
-        flexCenter(),
-        maxWidth(768),
-        minWidth(500),
-        radius(30), background("#F1F2F5")
-      )}
+    <Rows 
+    style={AppStyle(
+      paddingVerti(8),
+      paddingHori(12),
+      marginVertical(12),
+      flexCenter(),
+      maxWidth('100%'),
+      radius(30), background("#F1F2F5"), maxHeight('auto')
+    )}
     >
       <div style={AppStyle(width(60), height(60), margin(15))}>
         <ImageView style={AppStyle(circleImage(60))} src={user.avatar} />
       </div>
 
-      <Column style={AppStyle(background("#F1F2F5"), height(60), width('85%'), fitContain(), minWidth(500))}>
+      <Column style={AppStyle(background("#F1F2F5"), height('100%'), flexShrink())}>
         <TextView style={AppStyle(semiBold(17))}>{user.name}</TextView>
 
-        <TextView
-          className="single-line-text"
+        <TextView style = {AppStyle(overFlow() )}
         >
           {props.lastComment}
         </TextView>
@@ -90,3 +90,6 @@ const CommentItem: FC<CommentItemProp> = (props) => {
     </Rows>
   );
 };
+
+// className="single-line-text"
+
