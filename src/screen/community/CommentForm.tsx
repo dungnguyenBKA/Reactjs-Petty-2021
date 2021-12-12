@@ -59,8 +59,13 @@ const CommentForm = (props: CommentFormProp) => {
           borderWidth(0),
           paddingHori(15),
           radius(20),
+<<<<<<< Updated upstream
           height(40),
           background("#F1F2F5"),
+=======
+          minHeight(40),
+          background("#f4f4f8"),
+>>>>>>> Stashed changes
           width("100%"),
           maxWidth("100%")
         )}
@@ -97,7 +102,7 @@ const CommentItem: FC<CommentItemProp> = (props) => {
       </div>
 
       <Column
-        style={AppStyle(background("#F1F2F5"), height("100%"), flexShrink())}
+        style={AppStyle(background("#f4f4f8"), height("100%"), flexShrink())}
       >
         <TextView style={AppStyle(semiBold(17))}>{user.name}</TextView>
 

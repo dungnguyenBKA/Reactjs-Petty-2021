@@ -12,6 +12,7 @@ import {
   borderWidth,
   flexVerti,
   marginHori,
+  paddingStart,
   flexCenterInParent,
   marginStart,
   semiBold,
@@ -29,9 +30,9 @@ interface MessageProp {
 }
 
 const MessengerScreen = (props: MessageProp) => {
-  let params = useParams()
+  let params = useParams();
 
-  let userId = params.userId
+  let userId = params.userId;
 
   let today = new Date(),
     date =
@@ -41,20 +42,18 @@ const MessengerScreen = (props: MessageProp) => {
       "-" +
       today.getDate();
 
-  const sendHandler = () => { };
+  const sendHandler = () => {};
 
-  const backHandler = () => { };
+  const backHandler = () => {};
 
   return (
-    <Column style={AppStyle(
-      height('100vh'),
-    )}>
+    <Column style={AppStyle(height("100vh"))}>
       <header
         style={AppStyle(
           flexHori(),
           background(
             " linear-gradient(0deg, #FFFFDB 36%, #FBFEDB 47.5%, #EDFCDD 60.02%, #D8F7DF 73.04%, #B9F2E1 86.39%, #92EAE5 99.87%, #92EAE5 100%)"
-          ),
+          )
         )}
       >
         <div
@@ -75,21 +74,23 @@ const MessengerScreen = (props: MessageProp) => {
         <TextView></TextView>
       </div>
 
-      <footer style={AppStyle(flexHori(), shadow(30))}>
+      <footer style={AppStyle(flexHori())}>
         <input
+          type="text"
+          placeholder="Nhắn tin..."
           style={AppStyle(
             radius(12),
+            background("#f4f4f8"),
             weightItem(1),
-            borderWidth(1),
-            marginHori(5)
+            borderWidth(0),
+            marginHori(5),
+            paddingStart(15)
           )}
         />
 
         <ButtonView>
           <img alt="" src={icSend} width="50px" height="50px" />
         </ButtonView>
-
-
       </footer>
     </Column>
   );

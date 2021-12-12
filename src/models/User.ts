@@ -4,15 +4,9 @@ interface User {
     id: string
     name: string
     avatar: string
-
-    // constructor(id: string, name: string, avatar: string) {
-    //     this.id = id
-    //     this.name = name
-    //     this.avatar = avatar
-    // }
 }
 
-let fakeUserAvatarUrls = [
+let fakeAvatarUrls = [
     "https://i.scdn.co/image/78d984cb018f355126c426306677ce3fc5711593",
     "https://media-cdn.laodong.vn/storage/newsportal/2019/11/10/765130/Son-Tung-Mtp.jpg?w=720&crop=auto&scale=both",
     "https://upload.wikimedia.org/wikipedia/commons/9/99/Lee_Do-hyun_in_October_2020.jpg",
@@ -34,14 +28,18 @@ let getRamdomFakeUser = function (): User {
     let user: User = {
         id: getRandomString(8),
         name: getRandomString(10),
-        avatar: fakeUserAvatarUrls[Math.round(Math.random() * (fakeUserAvatarUrls.length-1))]
+        avatar: fakeAvatarUrls[Math.round(Math.random() * (fakeAvatarUrls.length-1))]
     }
     return user;
 };
 
 
+const textLorem = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." 
+
 export default User
 export {
     getRamdomFakeUser,
-    getRandomString
+    getRandomString,
+    textLorem,
+    fakeAvatarUrls
 }

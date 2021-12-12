@@ -42,6 +42,7 @@ interface PostProp {
   imgURL: string;
 }
 
+<<<<<<< Updated upstream
 export default function Post(props: PostProp) {
   let navigate = useNavigate()
   let [showCommentForm, setShowCommentForm] = useState(false)
@@ -50,15 +51,40 @@ export default function Post(props: PostProp) {
   let handleLikeClick = () => {
     setLikeThisPost(!isLikeThisPost)
   }
+=======
+export default function PostItem(props: PostProp) {
+  let navigate = useNavigate();
+  let [showCommentForm, setShowCommentForm] = useState(false);
+  let [isLikeThisPost, setLikeThisPost] = useState(false);
+  let [countLike, setCountLike] = useState(100);
+  let [countComment, setCountComment] = useState(100);
+
+  let handleLikeClick = () => {
+    if (isLikeThisPost === false) {
+      setLikeThisPost(true);
+      setCountLike(countLike + 1);
+    } else {
+      setLikeThisPost(false);
+      setCountLike(100);
+    }
+  };
+>>>>>>> Stashed changes
 
   let handleCommentClick = () => {
-    setShowCommentForm(!showCommentForm)
-  }
+    setShowCommentForm(!showCommentForm);
+  };
 
   let handleMessageClick = () => {
-    navigate('../message/123456')
-  }
+    navigate("../message/123456");
+  };
 
+<<<<<<< Updated upstream
+=======
+  let countCommentHandler = (count: number) => {
+    setCountComment(count);
+  };
+
+>>>>>>> Stashed changes
   return (
     <Card style={AppStyle(marginVertical(20), radius(8), shadow(2))}>
       <Card.Body>
@@ -73,12 +99,36 @@ export default function Post(props: PostProp) {
         <Column>
           <hr style={marginVertical(12)} />
           <Rows>
+<<<<<<< Updated upstream
 
             <ReactionItem title={isLikeThisPost ? "Liked" : "Like"} onClick={handleLikeClick} icon={isLikeThisPost ? icLiked : icLike}/>
             <ReactionItem title="Comment" onClick={handleCommentClick} icon={icComment}/>
             <ReactionItem title="Message" onClick={handleMessageClick} icon={icMessenger}/>
           </Rows>
           {showCommentForm && <CommentForm />}
+=======
+            <ReactionItem
+              title={
+                isLikeThisPost
+                  ? `You and ${countLike - 1} people Liked`
+                  : `${countLike} people like`
+              }
+              onClick={handleLikeClick}
+              icon={isLikeThisPost ? icLiked : icLike}
+            />
+            <ReactionItem
+              title={`${countComment} people commented`}
+              onClick={handleCommentClick}
+              icon={icComment}
+            />
+            <ReactionItem
+              title="Message"
+              onClick={handleMessageClick}
+              icon={icMessenger}
+            />
+          </Rows>
+          {showCommentForm && <CommentForm count={countCommentHandler} />}
+>>>>>>> Stashed changes
         </Column>
       </Card.Body>
     </Card>
@@ -103,13 +153,16 @@ function Header(props: HeaderProp) {
   );
 }
 
-
-
-
 interface ReactionProp {
+<<<<<<< Updated upstream
   title: string
   icon: string
   onClick: () => void
+=======
+  title: any;
+  icon: string;
+  onClick: () => void;
+>>>>>>> Stashed changes
 }
 
 const ReactionItem: FC<ReactionProp> = (props) => {
@@ -124,10 +177,8 @@ const ReactionItem: FC<ReactionProp> = (props) => {
       )}
       onClick={props.onClick}
     >
-      <ImageView src={props.icon}/>
-      <TextView style={AppStyle(marginStart(15))}>
-        {props.title}
-      </TextView>
+      <ImageView src={props.icon} />
+      <TextView style={AppStyle(marginStart(15))}>{props.title}</TextView>
     </ButtonView>
-  )
-}
+  );
+};
