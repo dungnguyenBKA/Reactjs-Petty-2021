@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import {
   AppStyle,
   background,
@@ -9,17 +9,14 @@ import {
   overFlow,
   paddingHori,
   paddingVerti,
-  regular,
   semiBold,
-  shadow,
+  minHeight,
   borderWidth,
   radius,
   weightItem,
   width,
   marginVertical,
   maxWidth,
-  fitContain,
-  minWidth,
   flexShrink,
   maxHeight,
 } from "../../AppStyle";
@@ -59,13 +56,9 @@ const CommentForm = (props: CommentFormProp) => {
           borderWidth(0),
           paddingHori(15),
           radius(20),
-<<<<<<< Updated upstream
-          height(40),
-          background("#F1F2F5"),
-=======
+
           minHeight(40),
           background("#f4f4f8"),
->>>>>>> Stashed changes
           width("100%"),
           maxWidth("100%")
         )}

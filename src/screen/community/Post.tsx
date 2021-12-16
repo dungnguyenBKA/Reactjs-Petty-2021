@@ -42,16 +42,7 @@ interface PostProp {
   imgURL: string;
 }
 
-<<<<<<< Updated upstream
-export default function Post(props: PostProp) {
-  let navigate = useNavigate()
-  let [showCommentForm, setShowCommentForm] = useState(false)
-  let [isLikeThisPost, setLikeThisPost] = useState(false)
 
-  let handleLikeClick = () => {
-    setLikeThisPost(!isLikeThisPost)
-  }
-=======
 export default function PostItem(props: PostProp) {
   let navigate = useNavigate();
   let [showCommentForm, setShowCommentForm] = useState(false);
@@ -68,7 +59,6 @@ export default function PostItem(props: PostProp) {
       setCountLike(100);
     }
   };
->>>>>>> Stashed changes
 
   let handleCommentClick = () => {
     setShowCommentForm(!showCommentForm);
@@ -78,13 +68,7 @@ export default function PostItem(props: PostProp) {
     navigate("../message/123456");
   };
 
-<<<<<<< Updated upstream
-=======
-  let countCommentHandler = (count: number) => {
-    setCountComment(count);
-  };
 
->>>>>>> Stashed changes
   return (
     <Card style={AppStyle(marginVertical(20), radius(8), shadow(2))}>
       <Card.Body>
@@ -99,14 +83,7 @@ export default function PostItem(props: PostProp) {
         <Column>
           <hr style={marginVertical(12)} />
           <Rows>
-<<<<<<< Updated upstream
 
-            <ReactionItem title={isLikeThisPost ? "Liked" : "Like"} onClick={handleLikeClick} icon={isLikeThisPost ? icLiked : icLike}/>
-            <ReactionItem title="Comment" onClick={handleCommentClick} icon={icComment}/>
-            <ReactionItem title="Message" onClick={handleMessageClick} icon={icMessenger}/>
-          </Rows>
-          {showCommentForm && <CommentForm />}
-=======
             <ReactionItem
               title={
                 isLikeThisPost
@@ -127,8 +104,7 @@ export default function PostItem(props: PostProp) {
               icon={icMessenger}
             />
           </Rows>
-          {showCommentForm && <CommentForm count={countCommentHandler} />}
->>>>>>> Stashed changes
+          {showCommentForm && <CommentForm  />}
         </Column>
       </Card.Body>
     </Card>
@@ -154,15 +130,10 @@ function Header(props: HeaderProp) {
 }
 
 interface ReactionProp {
-<<<<<<< Updated upstream
-  title: string
-  icon: string
-  onClick: () => void
-=======
+
   title: any;
   icon: string;
   onClick: () => void;
->>>>>>> Stashed changes
 }
 
 const ReactionItem: FC<ReactionProp> = (props) => {
