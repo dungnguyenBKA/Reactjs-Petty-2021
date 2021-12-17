@@ -47,157 +47,68 @@ export default function DiscoveryScreen(prop: DiscoveryScreenProp) {
   );
 }
 
-const DiscoveryTab: FC = () => {
-  return <App />;
-  //   let [isLoading, setLoading] = useState(true)
+const NUM_OF_POSTS = 5
 
-  //     const getFakeData = (page: number) : Post[] => {
-  //         console.log({page})
-  //         let fakePosts : Post[] = []
-  //         for (let index = 0; index < 5; index++) {
-  //             const ranPost = new Post(
-  //                 getRandomString(8),
-  //                 getRandomString(10),
-  //                 textLorem,
-  //                 fakeAvatarUrls[ Math.round(Math.random()*10)  %fakeAvatarUrls.length],
-  //                 fakeAvatarUrls[Math.round(Math.random()*10)%fakeAvatarUrls.length]
-  //             )
-  //             fakePosts.push(ranPost)
-  //         }
+const getFakeData = (page: number, len: number): Post[] => {
+  console.log({ page });
+  let fakePosts: Post[] = [];
+  for (let index = 0; index < len; index++) {
+    const ranPost = new Post(
+      page*NUM_OF_POSTS+index,
+      getRandomString(10),
+      textLorem,
+      fakeAvatarUrls[Math.round(Math.random() * 10) % fakeAvatarUrls.length],
+      fakeAvatarUrls[Math.round(Math.random() * 10) % fakeAvatarUrls.length]
+    );
+    fakePosts.push(ranPost);
+  }
 
-  //         return fakePosts
-  //       }
-  //   let [page, setPage] = useState(0);
-  //   let [listPostFilter, setListPostFilter] = useState<Post[]>(getFakeData(0));
-
-  //   const fetchData = () => {
-  //       setLoading(true)
-  //     setTimeout(() => {
-  //         setLoading(false)
-  //         setListPostFilter([...listPostFilter, ...getFakeData(page+1)]);
-  //         setPage(page + 1)
-  //         console.log('featch ', page)
-  //     }, 1000)
-  //   };
-
-  //   const refreshData = () => {
-  //     console.log('refresh')
-
-  //     setLoading(true)
-  //     setTimeout(() => {
-  //         setPage(0)
-  //         setLoading(false)
-  //         setListPostFilter(getFakeData(page));
-  //     }, 1000)
-
-  //   };
-
-  //   useEffect( () => {
-  //       fetchData()
-  //   }, [])
-
-  //   return (
-  //     <InfiniteScroll
-  //       dataLength={listPostFilter.length}
-  //       next={fetchData}
-  //       hasMore={true}
-  //       loader={<h4>Loading...</h4>}
-  //       endMessage={
-  //         <p style={{ textAlign: "center" }}>
-  //           <b>Yay! You have seen it all</b>
-  //         </p>
-  //       }
-
-  //       refreshFunction={refreshData}
-  //       pullDownToRefresh
-  //       pullDownToRefreshThreshold={50}
-  //       pullDownToRefreshContent={
-  //         <h3 style={{ textAlign: "center" }}>&#8595; Pull down to refresh</h3>
-  //       }
-  //       releaseToRefreshContent={
-  //         <h3 style={{ textAlign: "center" }}>&#8593; Release to refresh</h3>
-  //       }
-  //     >
-  //       {listPostFilter.map((postItem) => (
-  //         <PostItem
-  //           key={getRandomString(8)}
-  //           petName={postItem.petName}
-  //           avatarURL={postItem.avatarUrl}
-  //           imgURL={postItem.imgUrl}
-  //           content={postItem.content}
-  //         />
-  //       ))}
-  //     </InfiniteScroll>
-  //   );
+  return fakePosts;
 };
 
-function App() {
-  const [items, setItems] = useState<any>([]);
+const DiscoveryTab: FC = () => {
+  const FIRST_PAGE_INDEX = 0
+  const [items, setItems] = useState<Post[]>([]);
 
-  const [hasMore, sethasMore] = useState(true);
+  const [hasMore, setHasMore] = useState(true);
 
-  const [page, setpage] = useState(2);
-  const getFakeData = (page: number) => {
-    console.log({ page });
-    let fakePosts: Post[] = [];
-    for (let index = 0; index < 5; index++) {
-      const ranPost = new Post(
-        getRandomString(8),
-        getRandomString(10),
-        textLorem,
-        fakeAvatarUrls[Math.round(Math.random() * 10) % fakeAvatarUrls.length],
-        fakeAvatarUrls[Math.round(Math.random() * 10) % fakeAvatarUrls.length]
-      );
-      fakePosts.push(ranPost);
-    }
-
-    setItems(fakePosts);
+  const [page, setPage] = useState(FIRST_PAGE_INDEX);
+  
+  const getPostPaging = async(pageNum: number) => {
+    await new Promise(r => setTimeout(r, 2000));
+    return getFakeData(pageNum, NUM_OF_POSTS);
   };
 
-  // useEffect(() => {
-  //   const getComments = async () => {
-  //     const res = await fetch(
-  //       `https://jsonplaceholder.typicode.com/comments?_page=1&_limit=20`
-  //       // For json server use url below
-  //       // `http://localhost:3004/comments?_page=1&_limit=20`
-  //     );
-  //     const data = await res.json();
-  //     setItems(data);
-  //   };
-
-  //   getComments();
-  // }, []);
-
-  const fetchComments = (pageNum: number) => {
-   
-    const data = getFakeData(pageNum);
-    return data;
-  };
 
   const fetchData = async () => {
-    const commentsFormServer = await fetchComments(page);
-
-    setItems([...items, ...commentsFormServer]);
-    if (commentsFormServer.length < 20) {
-      sethasMore(false);
+    const postsFromServer = await getPostPaging(page);
+    
+    if(page == FIRST_PAGE_INDEX) {
+      // refresh
+      setItems(postsFromServer)
+    } else {
+      // append
+      setItems([...items, ...postsFromServer]);
     }
-    setpage(page + 1);
+    
+    if (postsFromServer.length < NUM_OF_POSTS) {
+      setHasMore(false);
+    }
+    setPage(page + 1);
   };
 
   const refreshData = async () => {
-    console.log("refresh");
-
-    const commentsFormServer = await fetchComments(1);
-
-    setItems(commentsFormServer);
-    if (commentsFormServer.length < 20) {
-      sethasMore(false);
-    }
-    setpage(2); //load more  tu p2
+    setPage(FIRST_PAGE_INDEX)
+    fetchData()
   };
+
+  useEffect(() => {
+    refreshData()
+  }, []);
+
   return (
     <InfiniteScroll
-      dataLength={items.length} //This is important field to render the next data
+      dataLength={items.length}
       next={fetchData}
       hasMore={hasMore}
       loader={<h4>Loading...</h4>}
@@ -218,12 +129,15 @@ function App() {
     >
       <div className="container">
         <div className="row m-2">
-          {items.map((item: { body: Key | null | undefined; id: number }) => {
+          {items.map((item) => {
             return (
-              <div key={item.id}>
-                <p>{item.id}</p>
-                <p>{item.body}</p>
-              </div>
+              <PostItem 
+                key={item.id}
+                content={item.content}
+                petName={item.petName}
+                imgURL={item.imgUrl}
+                avatarURL={item.avatarUrl}
+              />
             );
           })}
         </div>
