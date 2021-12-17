@@ -1,5 +1,3 @@
-import { randomInt, randomUUID } from "crypto"
-
 interface User {
     id: string
     name: string

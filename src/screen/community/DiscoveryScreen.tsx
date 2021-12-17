@@ -18,33 +18,17 @@ export default function DiscoveryScreen(prop: DiscoveryScreenProp) {
     console.log(search);
   };
 
-  let [activeTab, setActiveTab] = useState("tab_discovery");
-
-  return (
-    <Column>
+  return <Column>
       <Navbar>
-        <Container>
-          <Search onInputListener={onInputEditChange} />
-        </Container>
+          <Container>
+              <Search onInputListener={onInputEditChange} />
+          </Container>
       </Navbar>
 
-      <div style={AppStyle(weightItem(1))}>
-        <Tabs
-          defaultActiveKey={activeTab}
-          onSelect={(eventKey) => {
-            if (eventKey !== null) {
-              setActiveTab(eventKey);
-            }
-          }}
-        >
-          <Tab eventKey="tab_discovery" title="Khám phá">
-            <DiscoveryTab />
-          </Tab>
-          <Tab eventKey="tab_follow" title="Theo dõi"></Tab>
-        </Tabs>
-      </div>
-    </Column>
-  );
+
+      <DiscoveryTab />
+
+  </Column>
 }
 
 const NUM_OF_POSTS = 5

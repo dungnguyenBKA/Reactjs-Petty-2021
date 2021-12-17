@@ -15,15 +15,17 @@ export default function App() {
         <div>
             <Router>
                 <Routes>
-                    <Route path="/" element={<LoginScreen />} />
-                    <Route path="/home" element={<HomeScreen />} />
-                    <Route path="/community" element={<DiscoveryScreen />} />
+                    <Route path="/" element={<HomeScreen />} />
+                    <Route path="/login" element={<LoginScreen />} />
+
+
+
                     <Route path="/add-pet" element={<AddPetScreen />} />
                     <Route path="/pet-detail/:petId" element={<PetDetail />} />
-                    <Route path="/test" element={<TestScreen />} />
-                    <Route path="/message" element={<ListMessengerScreen />} />
+
                     <Route path="/message/:userId" element={<MessengerScreen />} />
 
+                    <Route path="/test" element={<TestScreen />} />
                     {/* ! Not found route, alway in the end, do not change order */}
                     <Route path="*" element={<NotFoundScreen />} />
                 </Routes>
