@@ -12,6 +12,7 @@ import {
   bold,
   border,
   borderWidth,
+  flexCenter,
   margin,
   marginEnd,
   marginHori,
@@ -32,14 +33,19 @@ import TextView from "../../components/Text";
 import AddImage from "./AddImage";
 import "./styles.css";
 
+import BackIcon from '@mui/icons-material/ArrowBackIosNew'
+import { useNavigate } from "react-router-dom";
+
 let genderOptions = ["Đực", "Cái", "Không xác định"];
 let typeOptions = ["Dog", "Cat", "Fish"];
 let botocOptions = ["SNSD", "BTS", "BIGBANG"];
 let fromOptions = ["VN", "USD"];
 let statusOptions = ["Triệt sản", "No Triệt sản"];
 
+
 const AddPetScreen: FC = () => {
   let [listImage, setListImage] = useState<File[]>([]);
+  let navigate = useNavigate()
 
   const handleSave = () => {
     uploadImages(listImage);
@@ -67,7 +73,11 @@ const AddPetScreen: FC = () => {
       return promise;
     });
 
-    let uploadAllPromise = Promise.all(promises);
+    let uploadAllPromise = Promise.all(promises).then(
+      (value) => {
+          navigate(-1)
+      }
+    );
 
     toast.promise(uploadAllPromise, {
       loading: "Uploading",
@@ -76,9 +86,24 @@ const AddPetScreen: FC = () => {
     });
   };
 
+ 
+
   return (
     <Column>
-      <Rows style={margin(16)}>
+      <Rows style={AppStyle(margin(16),flexCenter())}>
+      <ButtonView
+          style={
+            AppStyle(
+              padding(25)
+            )
+          }
+          onClick={() => {
+            navigate(-1)
+          }
+          }
+        >
+          <BackIcon />
+        </ButtonView>
         <TextView style={AppStyle(semiBold(17), weightItem(1))}>
           Báo danh Boss
         </TextView>

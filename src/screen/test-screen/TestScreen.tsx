@@ -1,31 +1,14 @@
-import { FC } from "react"
-import TextView from "../../components/Text";
-import { createStore } from "redux";
-import Rows from "../../components/Row";
-import { randomUUID } from "crypto";
+import { FC, useState } from "react"
+
+
+
 
 interface TestScreenProp {
 
 }
 
-function counterReducer(state = { value: 0 }, action: any) {
-    switch (action.type) {
-      case 'counter/incremented':
-        return { value: state.value + 1 }
-      case 'counter/decremented':
-        return { value: state.value - 1 }
-      default:
-        return state
-    }
-}
-
-let store = createStore(counterReducer)
-
 const TestScreen: FC<TestScreenProp> = (props) => {
-    return <Rows>
-    <TextView>OK</TextView>
-    <TextView>O2</TextView>
-    </Rows>
+    return <p>OK</p>
 }
 
 // function merge(...args: any[]) {

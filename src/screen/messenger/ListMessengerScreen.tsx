@@ -1,4 +1,3 @@
-import { randomInt } from "crypto"
 import { FC } from "react"
 import { Route, useNavigate } from "react-router"
 import { AppStyle, background, shadow,circle, circleImage, flexCenter, height, margin, padding, paddingHori, paddingVerti, regular, semiBold, singleLine, weightItem, width, radius, marginEnd } from "../../AppStyle"

@@ -1,4 +1,4 @@
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import {
   AppStyle,
   regular,
@@ -16,13 +16,16 @@ import {
   marginStart,
   semiBold,
   marginVertical,
+  padding,
 } from "../../AppStyle";
 import icBack from "../../asset/ic_back.svg";
 import icSend from "../../asset/ic_send.png";
 import ButtonView from "../../components/ButtonView";
 import Column from "../../components/Column";
-import { ButtonImageView } from "../../components/ImageView";
+import { ButtonImageView, ImageView } from "../../components/ImageView";
 import TextView from "../../components/Text";
+
+import BackIcon from '@mui/icons-material/ArrowBackIosNew'
 
 interface MessageProp {
   name?: string;
@@ -30,6 +33,7 @@ interface MessageProp {
 
 const MessengerScreen = (props: MessageProp) => {
   let params = useParams()
+  let navigate = useNavigate()
 
   let userId = params.userId
 
@@ -57,6 +61,25 @@ const MessengerScreen = (props: MessageProp) => {
           ),
         )}
       >
+
+        <ButtonView
+          style={
+            AppStyle(
+              padding(25),
+              {
+                position: 'absolute'
+              }
+            )
+          }
+          onClick={() => {
+            navigate(-1)
+          }
+          }
+        >
+          <BackIcon />
+        </ButtonView>
+
+
         <div
           style={AppStyle(
             flexVerti(),
