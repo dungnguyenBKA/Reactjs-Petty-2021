@@ -3,7 +3,7 @@ import AddPetScreen from './screen/add-pet/AddPetScreen'
 import DiscoveryScreen from './screen/community/DiscoveryScreen'
 import MessengerScreen from './screen/messenger/MessengerScreen'
 import HomeScreen from './screen/home/HomeScreen'
-import LoginScreen from './screen/login/LoginScreen'
+import Screen from './screen/login/Screen'
 import PetDetail from './screen/pet-detail/PetDetail'
 import TestScreen from './screen/test-screen/TestScreen'
 import NotFoundScreen from './screen/not-found/NotFoundScreen'
@@ -16,7 +16,7 @@ export default function App() {
             <Router>
                 <Routes>
                     <Route path="/" element={<HomeScreen />} />
-                    <Route path="/login" element={<LoginScreen />} />
+                    <Route path="/login" element={<Screen />} />
 
 
 
