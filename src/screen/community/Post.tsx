@@ -14,6 +14,7 @@ import {
   flexHori,
   flexVerti,
   height,
+  margin,
   marginEnd,
   marginStart,
   marginTop,
@@ -70,7 +71,7 @@ export default function PostItem(props: PostProp) {
 
 
   return (
-    <Card style={AppStyle(marginVertical(20), radius(8), shadow(2))}>
+    <Card style={AppStyle(margin(20), radius(8), shadow(2))}>
       <Card.Body>
         <Header avatarUrl={props.avatarURL} petName={props.petName} />
 
