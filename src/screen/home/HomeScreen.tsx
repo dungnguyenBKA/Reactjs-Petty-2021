@@ -2,8 +2,6 @@ import { useState } from "react";
 import TabPanel from "../../components/TabLayout";
 import Header from "./Header";
 import MyPet from "./MyPet";
-
-
 import Column from "../../components/Column";
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
