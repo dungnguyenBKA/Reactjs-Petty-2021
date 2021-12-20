@@ -9,6 +9,7 @@ import TestScreen from './screen/test-screen/TestScreen'
 import NotFoundScreen from './screen/not-found/NotFoundScreen'
 import { Toaster } from 'react-hot-toast'
 import ListMessengerScreen from './screen/messenger/ListMessengerScreen'
+import PersonalInfo from './screen/personal-info/PersonalInfo'
 
 export default function App() {
     return (
@@ -17,6 +18,7 @@ export default function App() {
                 <Routes>
                     <Route path="/" element={<HomeScreen />} />
                     <Route path="/login" element={<LoginScreen />} />
+                    <Route path="/personal" element={<PersonalInfo />} />
 
 
 
