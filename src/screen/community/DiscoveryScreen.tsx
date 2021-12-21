@@ -1,12 +1,10 @@
-import { async } from "@firebase/util";
+
 import CircularProgress from "@mui/material/CircularProgress";
-import { randomInt, randomUUID } from "crypto";
-import { FC, Key, useEffect, useState } from "react";
-import { Container, Navbar, Tab, Tabs } from "react-bootstrap";
+import { FC, useEffect, useState } from "react";
+import { Container, Navbar } from "react-bootstrap";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { AppStyle, weightItem, flexHori, background, flexCenterInParent } from "../../AppStyle";
+import { AppStyle, flexHori, flexCenterInParent } from "../../AppStyle";
 import Column from "../../components/Column";
-import Pet from "../../models/Pet";
 import Post from "../../models/Post";
 import { fakeAvatarUrls, getRandomString, textLorem } from "../../models/User";
 import PostItem from "./Post";
@@ -68,7 +66,7 @@ const DiscoveryTab: FC = () => {
   const fetchData = async () => {
     const postsFromServer = await getPostPaging(page);
 
-    if (page == FIRST_PAGE_INDEX) {
+    if (page === FIRST_PAGE_INDEX) {
       // refresh
       setItems(postsFromServer)
     } else {
@@ -86,10 +84,6 @@ const DiscoveryTab: FC = () => {
     setPage(FIRST_PAGE_INDEX)
     fetchData()
   };
-
-  useEffect(() => {
-    refreshData()
-  }, []);
 
   return (
     <InfiniteScroll

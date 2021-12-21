@@ -8,8 +8,6 @@ import toast from "react-hot-toast";
 import { Colors } from "../../AppColor";
 import {
   AppStyle,
-  background,
-  bold,
   border,
   borderWidth,
   flexCenter,

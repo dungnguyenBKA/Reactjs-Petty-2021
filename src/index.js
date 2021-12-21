@@ -1,13 +1,12 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
-import { Colors } from './AppColor';
-import { AppStyle, borderWidth } from './AppStyle';
+import { App } from './App';
+import './index.css';
 
 ReactDOM.render(
     <React.StrictMode>
-        <div style={AppStyle(borderWidth(1), { maxWidth: '768px', margin: 'auto', minHeight: "100vh", background: Colors.color_white })} >
+        <div >
             <App />
         </div>
     </React.StrictMode>,

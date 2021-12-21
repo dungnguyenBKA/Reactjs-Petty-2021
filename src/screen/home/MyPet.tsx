@@ -1,4 +1,4 @@
-import { AppStyle, background, border, flexCenter, flexHori, flexVerti, height, margin, marginHori, marginStart, marginTop, padding, paddingEnd, paddingStart, paddingVerti, radius, regular, semiBold, setOverFlowX, shadow, textColor, textWeight, weightItem, width } from '../../AppStyle'
+import { AppStyle, background, border, flexCenter, flexHori, flexVerti, height, margin, marginHori, marginStart, marginTop, padding, paddingEnd, paddingStart, paddingVerti, radius, regular, semiBold, shadow, textColor, textWeight, weightItem, width } from '../../AppStyle'
 
 import maleLogo from '../../asset/ic_male.svg' 
 import femaleLogo from '../../asset/ic_female.svg' 
@@ -18,13 +18,13 @@ export default function MyPet() {
         navigate('../add-pet')
     }
 
-    return <div style={AppStyle(margin(0), padding(0))}>
+    return <div style={AppStyle(margin(20), padding(0))}>
         <div style={AppStyle(flexHori(), flexCenter())}>
             <p style={AppStyle(weightItem(1), textWeight(700))}>Pet của tui ({pets.length})</p>
             <p style={AppStyle(textColor('#00C181'))}>Xem tất cả</p>
         </div>
 
-        <div style={AppStyle(flexHori(), margin(0), setOverFlowX())}>
+        <div style={AppStyle(flexHori(), margin(0))}>
             {
                 pets.map(function (pet) { return <MyPetItem key={pet.id} onClick={()=>{}} name={pet.name} age={pet.age} img={pet.avatar} gender={pet.gender} /> })
             }

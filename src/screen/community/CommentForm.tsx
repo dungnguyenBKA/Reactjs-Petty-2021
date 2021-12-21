@@ -25,7 +25,6 @@ import { ImageView } from "../../components/ImageView";
 import Rows from "../../components/Row";
 import TextView from "../../components/Text";
 import User, { getRamdomFakeUser } from "../../models/User";
-import "../messenger/ListMessengerScreen.css";
 interface CommentFormProp {}
 
 const CommentForm = (props: CommentFormProp) => {
@@ -104,5 +103,3 @@ const CommentItem: FC<CommentItemProp> = (props) => {
     </Rows>
   );
 };
-
-// className="single-line-text"
