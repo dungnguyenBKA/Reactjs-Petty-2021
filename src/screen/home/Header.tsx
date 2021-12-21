@@ -1,43 +1,73 @@
-import { AppStyle, background, bold, circleImage, fitContain, flexCenter, flexHori, flexVerti, height, margin, marginEnd, marginHori, marginStart, marginVertical, padding, paddingBottom, paddingTop, radius, regular, shadow, textColor, weightItem, width } from "../../AppStyle"
-
-import icScan from '../../asset/ic_qr_scan.png'
-import icAddFriend from '../../asset/ic_add_friend.png'
-import icPetAdd from '../../asset/ic_pet_add.png'
-import icPetCard from '../../asset/ic_pet_card.png'
-import icCoin from '../../asset/ic_coin.svg'
+import { AppStyle, bold, circleImage, flexCenter, flexHori, flexVerti, margin, marginHori, marginStart, padding, regular, textColor, weightItem } from "../../AppStyle"
 import bgHome from '../../asset/bg_home.png'
 import { ImageView } from "../../components/ImageView"
 
 
 import { AppCtx } from "../../App";
 import React from "react";
-import { getRamdomFakeUser } from "../../models/User";
 import ButtonView from "../../components/ButtonView"
+import { useNavigate } from "react-router-dom"
 
 export default function Header() {
     const appContext = React.useContext(AppCtx)
     let [currentUser, setCurrentUser] = [appContext.currentUser, appContext.setCurrentUser]
 
-    return <div style={
-        AppStyle({ backgroundImage: `url(${bgHome})` }, 
-        padding(20))
+    const navigate = useNavigate()
+    console.log("re-render")
+
+    if (currentUser) {
+        console.log({ currentUser })
+    } else {
+        console.log('no user')
+    }
+
+    if (currentUser) {
+        return <div style={
+            AppStyle({ backgroundImage: `url(${bgHome})` },
+                padding(20))
         }>
-        <div style={AppStyle(flexHori(), flexCenter(), marginHori(15))}>
-            <ImageView style={AppStyle(circleImage(42))} src={currentUser?.avatar} />
+            <div style={AppStyle(flexHori(), flexCenter(), marginHori(15))}>
+                <ImageView style={AppStyle(circleImage(42))} src={currentUser?.avatar} />
 
-            <div style={AppStyle(flexVerti(), weightItem(1), marginStart(15))}>
-                <p style={AppStyle(margin(0), bold(15), textColor("#007B52"))}>{currentUser?.name}</p>
-                <p style={AppStyle(margin(0), regular(13), textColor("#474A57"))}>Thong tin tai khoan chu</p>
+                <div style={AppStyle(flexVerti(), weightItem(1), marginStart(15))}>
+                    <p style={AppStyle(margin(0), bold(15), textColor("#007B52"))}>{currentUser?.name}</p>
+                    <p style={AppStyle(margin(0), regular(13), textColor("#474A57"))}>Thông tin tài khoản</p>
+                </div>
+
+                <ButtonView
+                    onClick={
+                        () => {
+                            setCurrentUser(undefined)
+                        }
+                    }>
+                    Logout
+                </ButtonView>
+
+                <ButtonView
+                    onClick={
+                        () => {
+                            navigate('../messenger')
+                        }
+                    }>
+                    Messenger
+                </ButtonView>
             </div>
-
-            <ButtonView
-                onClick={
-                    () => {
-                    setCurrentUser(getRamdomFakeUser())
-                }
-                }>
-                Random User
-            </ButtonView>
         </div>
-    </div>
+    } else {
+        return <div style={
+            AppStyle({ backgroundImage: `url(${bgHome})` },
+                padding(20))
+        }>
+            <div style={AppStyle(flexHori(), flexCenter(), marginHori(15))}>
+                <ButtonView
+                    onClick={
+                        () => {
+                            navigate('../login')
+                        }
+                    }>
+                    Login
+                </ButtonView>
+            </div>
+        </div>
+    }
 }

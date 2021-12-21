@@ -1,4 +1,4 @@
-import { Card, Image, Row } from "react-bootstrap";
+import { Card, Image } from "react-bootstrap";
 import { FC, useState } from "react";
 import icLike from "../../asset/ic_like.svg";
 import icLiked from "../../asset/ic_liked.svg";
@@ -12,7 +12,6 @@ import {
   flexCenter,
   flexCenterInParent,
   flexHori,
-  flexVerti,
   height,
   margin,
   marginEnd,
@@ -22,15 +21,12 @@ import {
   radius,
   semiBold,
   shadow,
-  textColor,
   weightItem,
   width,
 } from "../../AppStyle";
-import { Colors } from "../../AppColor";
 import TextView from "../../components/Text";
 import Rows from "../../components/Row";
 import Column from "../../components/Column";
-import MessengerScreen from "../messenger/MessengerScreen";
 import { useNavigate } from "react-router";
 import ButtonView from "../../components/ButtonView";
 import CommentForm from "./CommentForm";

@@ -2,6 +2,7 @@ interface User {
     id: string
     name: string
     avatar: string
+    pwd: string
 }
 
 let fakeAvatarUrls = [
@@ -22,11 +23,33 @@ function getRandomString(length: number) {
     return result;
 }
 
+interface Cred{
+    userName: string,
+    secret: string
+}
+
+let creds : Cred[] = [
+    {
+        userName: "demo",
+        secret: "123123"
+    },
+    {
+        userName: "demo1",
+        secret: "123123"
+    },
+    {
+        userName: "demo2",
+        secret: "123123"
+    }
+]
+
 let getRamdomFakeUser = function (): User {
+    let index = Math.round(Math.random() * (creds.length-1))
     let user: User = {
         id: getRandomString(8),
-        name: getRandomString(10),
-        avatar: fakeAvatarUrls[Math.round(Math.random() * (fakeAvatarUrls.length-1))]
+        name: creds[index].userName,
+        avatar: fakeAvatarUrls[Math.round(Math.random() * (fakeAvatarUrls.length-1))],
+        pwd: creds[index].secret
     }
     return user;
 };

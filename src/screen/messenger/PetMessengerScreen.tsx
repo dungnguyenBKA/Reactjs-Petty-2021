@@ -1,18 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FC } from "react"
-import { ChatEngine } from 'react-chat-engine'
+import { useNavigate } from "react-router-dom";
 import { AppCtx } from "../../App";
+import DirectChatPage from "./DirectChatPage";
 
-const PetMessengerScreen : FC = () => {
-	const appContext = React.useContext(AppCtx);
-	
-    return (
-		<ChatEngine
-			height='100vh'
-			userName='dungdemo'
-			userSecret='123'
-			projectID='d06a766f-700c-462b-a6a0-b4e698b90315'
+const PetMessengerScreen: FC = () => {
+	const appContext = React.useContext(AppCtx)
+	const navigate = useNavigate()
+
+	useEffect(() => {
+		if (!appContext.currentUser) {
+			navigate('../login')
+		}
+	}, [])
+
+	let { currentUser } = appContext
+
+	if (currentUser) {
+		return <DirectChatPage
+			userName={currentUser.name}
+			userSecret={currentUser.pwd}
 		/>
-	);
+	} else {
+		return <></>
+	}
 }
 export default PetMessengerScreen
