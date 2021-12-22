@@ -10,8 +10,7 @@
  */
 function AppStyle() {
     let args = Array.prototype.slice.call(arguments).filter((arg) => arg !== null && arg !== undefined)
-    let res = Object.assign.apply(Object, Array.prototype.slice.call(args));
-    return res;
+    return Object.assign.apply(Object, Array.prototype.slice.call(args));
 }
 
 function setOverFlowY() {

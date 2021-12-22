@@ -1,6 +1,4 @@
-import { FC } from "react"
-
-
+import {FC} from "react"
 
 
 interface TestScreenProp {
@@ -8,7 +6,7 @@ interface TestScreenProp {
 }
 
 const TestScreen: FC<TestScreenProp> = (props) => {
-    return <p>OK</p>
+	return <p>OK</p>
 }
 
 // function merge(...args: any[]) {

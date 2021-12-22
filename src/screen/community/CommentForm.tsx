@@ -24,7 +24,7 @@ import Column from "../../components/Column";
 import { ImageView } from "../../components/ImageView";
 import Rows from "../../components/Row";
 import TextView from "../../components/Text";
-import User, { getRamdomFakeUser } from "../../models/User";
+import User, { getRandomFakeUser } from "../../models/User";
 interface CommentFormProp {}
 
 const CommentForm = (props: CommentFormProp) => {
@@ -34,7 +34,7 @@ const CommentForm = (props: CommentFormProp) => {
   let fakeCommentUsers: CommentItemProp[] = Array.from(Array(10).keys()).map(
     () => {
       return {
-        user: getRamdomFakeUser(),
+        user: getRandomFakeUser(),
         lastComment: lorem,
       };
     }

@@ -1,22 +1,22 @@
-import { FC } from "react";
-import { AppStyle } from "../../AppStyle";
-import { Props } from "../../components/Props";
+import {FC} from "react";
+import {AppStyle} from "../../AppStyle";
+import {Props} from "../../components/Props";
 
 const BaseScreen: FC<Props<HTMLDivElement>> = (props) => {
-    return <div
-        {...props}
+	return <div
+		{...props}
 
-        style={
-            AppStyle(
-                { ...props.style },
-            )
-        }
+		style={
+			AppStyle(
+				{...props.style},
+			)
+		}
 
-    >
-        {
-            props.children
-        }
-    </div>
+	>
+		{
+			props.children
+		}
+	</div>
 }
 
 export default BaseScreen;

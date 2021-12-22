@@ -1,39 +1,53 @@
-import { FC, useState } from "react";
-import { AppStyle, borderWidth, cursorPointer, flexCenter, flexHori, marginStart, marginTop, paddingHori, paddingVerti, radius, weightItem, width } from "../../AppStyle";
+import {FC, useState} from "react";
+import {
+	AppStyle,
+	borderWidth,
+	cursorPointer,
+	flexCenter,
+	flexHori,
+	marginStart,
+	marginTop,
+	paddingHori,
+	paddingVerti,
+	radius,
+	weightItem,
+	width
+} from "../../AppStyle";
 import icPetSearch from "../../asset/ic_pet_search.svg";
-import { ImageView } from "../../components/ImageView";
-import { BaseHTMLProps } from "../../components/Props";
+import {ImageView} from "../../components/ImageView";
+import {BaseHTMLProps} from "../../components/Props";
 import Rows from "../../components/Row";
 
 
 interface SearchProp extends BaseHTMLProps {
-    onInputListener: (name: string) => void
+	onInputListener: (name: string) => void
 }
- 
-const Search:FC<SearchProp> = (prop) => {
-    let takeDataFromSearch=()=>{
-        prop.onInputListener(input);
-    }
 
-    let [input, setInput] = useState('')
+const Search: FC<SearchProp> = (prop) => {
+	let takeDataFromSearch = () => {
+		prop.onInputListener(input);
+	}
 
-    return (
-        <Rows style={AppStyle(flexHori(), flexCenter(), marginTop(6), width('100%'))}>
-            <input
-            style={AppStyle(weightItem(1), radius(15), borderWidth(1), 
-                paddingVerti(6), paddingHori(15))}
-            type="text"
-            id="header-search"
-            placeholder="Tìm kiếm..." 
-            value = {input}
-            onInput={e => {
-                let inputText = e.currentTarget.value
-                setInput(inputText)
-            }}
-        />
-            <ImageView onClick={() => takeDataFromSearch()} style ={AppStyle(marginStart(16), cursorPointer() )} src={icPetSearch} />
-        </Rows>
-    )
+	let [input, setInput] = useState('')
+
+	return (
+		<Rows style={AppStyle(flexHori(), flexCenter(), marginTop(6), width('100%'))}>
+			<input
+				style={AppStyle(weightItem(1), radius(15), borderWidth(1),
+					paddingVerti(6), paddingHori(15))}
+				type="text"
+				id="header-search"
+				placeholder="Tìm kiếm..."
+				value={input}
+				onInput={e => {
+					let inputText = e.currentTarget.value
+					setInput(inputText)
+				}}
+			/>
+			<ImageView onClick={() => takeDataFromSearch()} style={AppStyle(marginStart(16), cursorPointer())}
+			           src={icPetSearch}/>
+		</Rows>
+	)
 }
 
 export default Search

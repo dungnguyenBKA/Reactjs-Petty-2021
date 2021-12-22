@@ -82,8 +82,21 @@ const DiscoveryTab: FC = () => {
 
   const refreshData = async () => {
     setPage(FIRST_PAGE_INDEX)
-    fetchData()
+    await fetchData()
   };
+  
+  useEffect( () => {
+    const initLoad = async () => {
+      const postsFromServer = await getPostPaging(1);
+      setItems(postsFromServer)
+      if (postsFromServer.length < NUM_OF_POSTS) {
+        setHasMore(false);
+      }
+      setPage(2);
+    }
+
+    initLoad().then( () => console.log('init'))
+  }, [])
 
   return (
     <InfiniteScroll

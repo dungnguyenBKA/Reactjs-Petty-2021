@@ -1,38 +1,38 @@
-import { getDownloadURL, ref, uploadBytesResumable } from "@firebase/storage";
-import { FC, useState } from "react";
-import { ButtonGroup, Dropdown } from "react-bootstrap";
+import {getDownloadURL, ref, uploadBytesResumable} from "@firebase/storage";
+import {FC, useState} from "react";
+import {ButtonGroup, Dropdown} from "react-bootstrap";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
 import toast from "react-hot-toast";
-import { Colors } from "../../AppColor";
+import {Colors} from "../../AppColor";
 import {
-  AppStyle,
-  border,
-  borderWidth,
-  flexCenter,
-  margin,
-  marginEnd,
-  marginHori,
-  marginVertical,
-  padding,
-  radius,
-  regular,
-  semiBold,
-  shadow,
-  textColor,
-  weightItem,
+	AppStyle,
+	border,
+	borderWidth,
+	flexCenter,
+	margin,
+	marginEnd,
+	marginHori,
+	marginVertical,
+	padding,
+	radius,
+	regular,
+	semiBold,
+	shadow,
+	textColor,
+	weightItem,
 } from "../../AppStyle";
 import ButtonView from "../../components/ButtonView";
 import Column from "../../components/Column";
-import { storage } from "../../components/firebase/FirebaseApp";
+import {storage} from "../../components/firebase/FirebaseApp";
 import Rows from "../../components/Row";
 import TextView from "../../components/Text";
 import AddImage from "./AddImage";
 import "./styles.css";
 
 import BackIcon from '@mui/icons-material/ArrowBackIosNew'
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 let genderOptions = ["Đực", "Cái", "Không xác định"];
 let typeOptions = ["Dog", "Cat", "Fish"];
@@ -42,269 +42,269 @@ let statusOptions = ["Triệt sản", "No Triệt sản"];
 
 
 const AddPetScreen: FC = () => {
-  let [listImage, setListImage] = useState<File[]>([]);
-  let navigate = useNavigate()
+	let [listImage, setListImage] = useState<File[]>([]);
+	let navigate = useNavigate()
 
-  const handleSave = () => {
-    uploadImages(listImage);
-  };
+	const handleSave = () => {
+		uploadImages(listImage);
+	};
 
-  const uploadImages = (_listImage: File[]) => {
-    let promises: Promise<string>[] = _listImage.map((image) => {
-      let refImg = ref(storage, `images/${image.name}`);
-      let uploadTask = uploadBytesResumable(refImg, image);
-      let promise = new Promise<string>((resolve, reject) => {
-        uploadTask.on(
-          "state_changed",
-          undefined,
-          (error) => {
-            reject(error);
-          },
-          () => {
-            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              console.log(`File ${image.name} available at`, downloadURL);
-              resolve(downloadURL);
-            });
-          }
-        );
-      });
-      return promise;
-    });
+	const uploadImages = (_listImage: File[]) => {
+		let promises: Promise<string>[] = _listImage.map((image) => {
+			let refImg = ref(storage, `images/${image.name}`);
+			let uploadTask = uploadBytesResumable(refImg, image);
+			let promise = new Promise<string>((resolve, reject) => {
+				uploadTask.on(
+					"state_changed",
+					undefined,
+					(error) => {
+						reject(error);
+					},
+					() => {
+						getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+							console.log(`File ${image.name} available at`, downloadURL);
+							resolve(downloadURL);
+						});
+					}
+				);
+			});
+			return promise;
+		});
 
-    let uploadAllPromise = Promise.all(promises).then(
-      (value) => {
-          navigate(-1)
-      }
-    );
+		let uploadAllPromise = Promise.all(promises).then(
+			(value) => {
+				navigate(-1)
+			}
+		);
 
-    toast.promise(uploadAllPromise, {
-      loading: "Uploading",
-      success: "Upload all images, links in console",
-      error: "Error when upload image",
-    });
-  };
+		toast.promise(uploadAllPromise, {
+			loading: "Uploading",
+			success: "Upload all images, links in console",
+			error: "Error when upload image",
+		});
+	};
 
- 
 
-  return (
-    <Column>
-      <Rows style={AppStyle(margin(16),flexCenter())}>
-      <ButtonView
-          style={
-            AppStyle(
-              padding(25)
-            )
-          }
-          onClick={() => {
-            navigate(-1)
-          }
-          }
-        >
-          <BackIcon />
-        </ButtonView>
-        <TextView style={AppStyle(semiBold(17), weightItem(1))}>
-          Báo danh Boss
-        </TextView>
-        <ButtonView onClick={handleSave}>
-          <TextView
-            style={AppStyle(semiBold(17), textColor(Colors.color_primary))}
-          >
-            Lưu
-          </TextView>
-        </ButtonView>
-      </Rows>
+	return (
+		<Column>
+			<Rows style={AppStyle(margin(16), flexCenter())}>
+				<ButtonView
+					style={
+						AppStyle(
+							padding(25)
+						)
+					}
+					onClick={() => {
+						navigate(-1)
+					}
+					}
+				>
+					<BackIcon/>
+				</ButtonView>
+				<TextView style={AppStyle(semiBold(17), weightItem(1))}>
+					Báo danh Boss
+				</TextView>
+				<ButtonView onClick={handleSave}>
+					<TextView
+						style={AppStyle(semiBold(17), textColor(Colors.color_primary))}
+					>
+						Lưu
+					</TextView>
+				</ButtonView>
+			</Rows>
 
-      <AddImage listImage={listImage} setListImage={setListImage} />
+			<AddImage listImage={listImage} setListImage={setListImage}/>
 
-      <Column style={AppStyle(marginHori(16))}>
-        <TextView style={AppStyle(semiBold(17))}>THÔNG TIN CHUNG</TextView>
-        <InfoInputFromKeyBoard isNecessary={true} title={"Tên Boss"} />
-        <AddDate />
-        <InfoInputDropDown
-          isNecessary={true}
-          title={"Giới tính"}
-          listOption={genderOptions}
-        />
-        <InfoInputDropDown
-          isNecessary={true}
-          title={"Loài"}
-          listOption={typeOptions}
-        />
-        <InfoInputDropDown
-          isNecessary={true}
-          title={"Bộ tộc"}
-          listOption={botocOptions}
-        />
-        <InfoInputDropDown
-          isNecessary={true}
-          title={"Nguồn gốc"}
-          listOption={fromOptions}
-        />
-        <InfoInputDropDown
-          isNecessary={false}
-          title={"Tình trạng"}
-          listOption={statusOptions}
-        />
-        <TextView style={AppStyle(semiBold(17))}>NƠI Ở HIỆN TẠI</TextView>
+			<Column style={AppStyle(marginHori(16))}>
+				<TextView style={AppStyle(semiBold(17))}>THÔNG TIN CHUNG</TextView>
+				<InfoInputFromKeyBoard isNecessary={true} title={"Tên Boss"}/>
+				<AddDate/>
+				<InfoInputDropDown
+					isNecessary={true}
+					title={"Giới tính"}
+					listOption={genderOptions}
+				/>
+				<InfoInputDropDown
+					isNecessary={true}
+					title={"Loài"}
+					listOption={typeOptions}
+				/>
+				<InfoInputDropDown
+					isNecessary={true}
+					title={"Bộ tộc"}
+					listOption={botocOptions}
+				/>
+				<InfoInputDropDown
+					isNecessary={true}
+					title={"Nguồn gốc"}
+					listOption={fromOptions}
+				/>
+				<InfoInputDropDown
+					isNecessary={false}
+					title={"Tình trạng"}
+					listOption={statusOptions}
+				/>
+				<TextView style={AppStyle(semiBold(17))}>NƠI Ở HIỆN TẠI</TextView>
 
-        <InfoInputFromKeyBoard
-          isNecessary={false}
-          title={"Số nhà, đường/phố"}
-        />
-      </Column>
-    </Column>
-  );
+				<InfoInputFromKeyBoard
+					isNecessary={false}
+					title={"Số nhà, đường/phố"}
+				/>
+			</Column>
+		</Column>
+	);
 };
 
 function AddDate() {
-  const [startDate, setStartDate] = useState<Date|undefined>(undefined);
+	const [startDate, setStartDate] = useState<Date | undefined>(undefined);
 
-  return (
-    <Column
-      style={AppStyle(
-        borderWidth(1),
-        shadow(8),
-        border(Colors.color_E5E5E5),
-        padding(8),
-        marginVertical(12),
-        radius(8)
-      )}
-    >
-      <Rows>
-        <TextView
-          style={AppStyle(
-            textColor(Colors.color_8A8A8F),
-            regular(12),
-            marginEnd(8)
-          )}
-        >
-          Sinh thần
-        </TextView>
-        <TextView style={textColor("red")}>*</TextView>
+	return (
+		<Column
+			style={AppStyle(
+				borderWidth(1),
+				shadow(8),
+				border(Colors.color_E5E5E5),
+				padding(8),
+				marginVertical(12),
+				radius(8)
+			)}
+		>
+			<Rows>
+				<TextView
+					style={AppStyle(
+						textColor(Colors.color_8A8A8F),
+						regular(12),
+						marginEnd(8)
+					)}
+				>
+					Sinh thần
+				</TextView>
+				<TextView style={textColor("red")}>*</TextView>
 
-      </Rows>
-      <DatePicker
-        selected={startDate}
-        onChange={(date: Date) => setStartDate(date!)}
-        dateFormat="dd.MM.yyyy"
+			</Rows>
+			<DatePicker
+				selected={startDate}
+				onChange={(date: Date) => setStartDate(date!)}
+				dateFormat="dd.MM.yyyy"
 
-        onKeyDown={(e) => {
-          e.preventDefault();
-        }}
+				onKeyDown={(e) => {
+					e.preventDefault();
+				}}
 
-        onChangeRaw={(e) => {
-          e.preventDefault();
-        }}
+				onChangeRaw={(e) => {
+					e.preventDefault();
+				}}
 
-        required
-        showYearDropdown
-        scrollableYearDropdown
+				required
+				showYearDropdown
+				scrollableYearDropdown
 
-        customInput={<input
-          style={AppStyle(
-            semiBold(17),
-            textColor(Colors.color_primary),
-            borderWidth(0)
-          )}>
+				customInput={<input
+					style={AppStyle(
+						semiBold(17),
+						textColor(Colors.color_primary),
+						borderWidth(0)
+					)}>
 
-        </input>}
-      />
-    </Column>
-  );
+				</input>}
+			/>
+		</Column>
+	);
 }
+
 export default AddPetScreen;
 
 interface InfoInputDropDownProps<T> {
-  isNecessary: boolean;
-  listOption: T[];
-  title: string;
+	isNecessary: boolean;
+	listOption: T[];
+	title: string;
 }
 
 const InfoInputDropDown: FC<InfoInputDropDownProps<string>> = (props) => {
-  let [value, setValue] = useState<string>("");
+	let [value, setValue] = useState<string>("");
 
-  return (
-    <Rows
-      style={AppStyle(
-        borderWidth(1),
-        shadow(8),
-        border(Colors.color_E5E5E5),
-        padding(8),
-        marginVertical(12),
-        radius(8)
-      )}
-    >
-      <Column style={weightItem(1)}>
-        <Rows>
-          <TextView
-            style={AppStyle(
-              textColor(Colors.color_8A8A8F),
-              regular(12),
-              marginEnd(8)
-            )}
-          >
-            {props.title}
-          </TextView>
-          {props.isNecessary === true && (
-            <TextView style={textColor("red")}>*</TextView>
-          )}
-        </Rows>
-        <TextView>{value}</TextView>
-      </Column>
-      <Dropdown as={ButtonGroup}>
-        <Dropdown.Toggle split id="dropdown-split-basic" />
+	return (
+		<Rows
+			style={AppStyle(
+				borderWidth(1),
+				shadow(8),
+				border(Colors.color_E5E5E5),
+				padding(8),
+				marginVertical(12),
+				radius(8)
+			)}
+		>
+			<Column style={weightItem(1)}>
+				<Rows>
+					<TextView
+						style={AppStyle(
+							textColor(Colors.color_8A8A8F),
+							regular(12),
+							marginEnd(8)
+						)}
+					>
+						{props.title}
+					</TextView>
+					{props.isNecessary === true && (
+						<TextView style={textColor("red")}>*</TextView>
+					)}
+				</Rows>
+				<TextView>{value}</TextView>
+			</Column>
+			<Dropdown as={ButtonGroup}>
+				<Dropdown.Toggle split id="dropdown-split-basic"/>
 
-        <Dropdown.Menu>
-          {props.listOption.map((item) => (
-            <Dropdown.Item
-              key={item}
-              onClick={() => {
-                setValue(item);
-              }}
-            >
-              {item}
-            </Dropdown.Item>
-          ))}
-        </Dropdown.Menu>
-      </Dropdown>
-    </Rows>
-  );
+				<Dropdown.Menu>
+					{props.listOption.map((item) => (
+						<Dropdown.Item
+							key={item}
+							onClick={() => {
+								setValue(item);
+							}}
+						>
+							{item}
+						</Dropdown.Item>
+					))}
+				</Dropdown.Menu>
+			</Dropdown>
+		</Rows>
+	);
 };
 
 interface InfoInputProps {
-  isNecessary: boolean;
-  title: string;
+	isNecessary: boolean;
+	title: string;
 }
 
 const InfoInputFromKeyBoard: FC<InfoInputProps> = (props) => {
-  let [inputValue, setValue] = useState("");
-  return (
-    <Column
-      style={AppStyle(
-        borderWidth(1),
-        shadow(8),
-        border(Colors.color_E5E5E5),
-        padding(8),
-        marginVertical(12),
-        radius(8)
-      )}
-    >
-      <Rows>
-        <TextView style={AppStyle(textColor(Colors.color_8A8A8F), regular(12))}>
-          {props.title}
-        </TextView>
-        {props.isNecessary === true && (
-          <TextView style={textColor("red")}>*</TextView>
-        )}
-      </Rows>
+	let [inputValue, setValue] = useState("");
+	return (
+		<Column
+			style={AppStyle(
+				borderWidth(1),
+				shadow(8),
+				border(Colors.color_E5E5E5),
+				padding(8),
+				marginVertical(12),
+				radius(8)
+			)}
+		>
+			<Rows>
+				<TextView style={AppStyle(textColor(Colors.color_8A8A8F), regular(12))}>
+					{props.title}
+				</TextView>
+				{props.isNecessary === true && (
+					<TextView style={textColor("red")}>*</TextView>
+				)}
+			</Rows>
 
-      <input
-        value={inputValue}
-        onChange={(event) => {
-          setValue(event.target.value);
-        }}
-        style={AppStyle(borderWidth(0), border("none"))}
-      />
-    </Column>
-  );
+			<input
+				value={inputValue}
+				onChange={(event) => {
+					setValue(event.target.value);
+				}}
+				style={AppStyle(borderWidth(0), border("none"))}
+			/>
+		</Column>
+	);
 };

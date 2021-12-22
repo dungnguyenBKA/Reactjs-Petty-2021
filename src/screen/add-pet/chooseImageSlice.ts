@@ -1,27 +1,27 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 interface ImageState {
-    value: File[]
+	value: File[]
 }
 
 const initialState: ImageState = {
-    value: [],
+	value: [],
 }
 
 export const chooseImageSlice = createSlice({
-    name : "chooseImageSlice",
-    initialState,
-    reducers: {
-        addImage: (state, action: PayloadAction<File>) => {
-            state.value.push(action.payload)
-        },
-        removeImage: (state, action: PayloadAction<File>) => {
-            
-        },
-        removeAll: (state) => {
-            state.value = []
-        }
-    }
+	name: "chooseImageSlice",
+	initialState,
+	reducers: {
+		addImage: (state, action: PayloadAction<File>) => {
+			state.value.push(action.payload)
+		},
+		removeImage: (state, action: PayloadAction<File>) => {
+
+		},
+		removeAll: (state) => {
+			state.value = []
+		}
+	}
 })
 
 let chooseImageReducer = chooseImageSlice.reducer
