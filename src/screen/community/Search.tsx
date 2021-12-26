@@ -1,14 +1,11 @@
 import {FC, useState} from "react";
 import {
 	AppStyle,
-	borderWidth,
 	cursorPointer,
 	flexCenter,
 	flexHori,
 	marginStart,
-	marginTop,
-	paddingHori,
-	paddingVerti,
+	padding,
 	radius,
 	weightItem,
 	width
@@ -17,32 +14,31 @@ import icPetSearch from "../../asset/ic_pet_search.svg";
 import {ImageView} from "../../components/ImageView";
 import {BaseHTMLProps} from "../../components/Props";
 import Rows from "../../components/Row";
+import {TextField} from "@mui/material";
 
 
 interface SearchProp extends BaseHTMLProps {
 	onInputListener: (name: string) => void
 }
 
-const Search: FC<SearchProp> = (prop) => {
+const Search: FC<SearchProp> = (props) => {
 	let takeDataFromSearch = () => {
-		prop.onInputListener(input);
+		props.onInputListener(input);
 	}
-
 	let [input, setInput] = useState('')
 
 	return (
-		<Rows style={AppStyle(flexHori(), flexCenter(), marginTop(6), width('100%'))}>
-			<input
-				style={AppStyle(weightItem(1), radius(15), borderWidth(1),
-					paddingVerti(6), paddingHori(15))}
+		<Rows style={AppStyle(flexHori(), flexCenter(), padding(16), width('100%'), radius(15), props.style)}>
+			<TextField
+				style={AppStyle(weightItem(1))}
 				type="text"
-				id="header-search"
-				placeholder="Tìm kiếm..."
+				placeholder="Giống, loài ..."
 				value={input}
-				onInput={e => {
-					let inputText = e.currentTarget.value
-					setInput(inputText)
+				onChange={e => {
+					setInput(e.currentTarget.value)
 				}}
+				size="small"
+				label='Tìm kiếm Pet'
 			/>
 			<ImageView onClick={() => takeDataFromSearch()} style={AppStyle(marginStart(16), cursorPointer())}
 			           src={icPetSearch}/>

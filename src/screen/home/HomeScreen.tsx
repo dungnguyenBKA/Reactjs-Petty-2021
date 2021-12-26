@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {FC, useState} from "react";
 import TabPanel from "../../components/TabLayout";
 import Header from "./Header";
 import MyPet from "./MyPet";
@@ -11,7 +11,6 @@ import {AppStyle, background, height} from "../../AppStyle";
 import DiscoveryScreen from "../community/DiscoveryScreen";
 import {Paper} from "@mui/material";
 
-
 export default function HomeScreen() {
 	const [value, setValue] = useState(0);
 
@@ -23,23 +22,14 @@ export default function HomeScreen() {
 		}
 	>
 
-		<div style={
-			AppStyle(
-				height('92vh'),
-				{
-					overflowY: 'scroll'
-				}
-			)
-		}>
-			<TabPanel index={0} value={value}>
-				<PersonalScreen/>
-			</TabPanel>
 
-			<TabPanel index={1} value={value}>
-				<DiscoveryScreen/>
-			</TabPanel>
-		</div>
+		<TabPanel index={0} value={value}>
+			<PersonalScreen/>
+		</TabPanel>
 
+		<TabPanel index={1} value={value}>
+			<DiscoveryScreen/>
+		</TabPanel>
 
 		<Paper
 			elevation={3}>
@@ -64,6 +54,8 @@ export default function HomeScreen() {
 	</Column>
 
 }
+
+
 
 function PersonalScreen() {
 	return <div>

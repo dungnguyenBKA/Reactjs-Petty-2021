@@ -1,6 +1,6 @@
-import React, {useState} from 'react'
+import React from 'react'
 
-import {ChatEngine, getOrCreateChat} from 'react-chat-engine'
+import {ChatEngine} from 'react-chat-engine'
 import Column from "../../components/Column";
 import Text from "../../components/Text";
 import {AppStyle, flexCenterInParent, width} from "../../AppStyle";
@@ -8,10 +8,6 @@ import {ImageView} from "../../components/ImageView";
 import CustomChatForm from "./CustomChatForm";
 
 const DirectChatPage = (props) => {
-
-
-
-
     return (
         <ChatEngine
             height='100vh'

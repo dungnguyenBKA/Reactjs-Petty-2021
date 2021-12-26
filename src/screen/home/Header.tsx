@@ -26,7 +26,6 @@ export default function Header() {
 	let [currentUser, setCurrentUser] = [appContext.currentUser, appContext.setCurrentUser]
 
 	const navigate = useNavigate()
-	console.log("re-render")
 
 	if (currentUser) {
 		console.log({currentUser})
