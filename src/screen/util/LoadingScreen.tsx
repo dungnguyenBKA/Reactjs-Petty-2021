@@ -10,8 +10,7 @@ interface LoadingScreenProps {
 
 const LoadingScreen: FC<LoadingScreenProps> = (props) => {
 	let {isLoading} = props
-
-	return <Popup closeOnEscape={false} closeOnDocumentClick={false} modal open={isLoading}>
+	return <Popup className="loading" closeOnEscape={false} closeOnDocumentClick={false} modal open={isLoading}>
 		<CircularProgress color="success"/>
 	</Popup>
 }

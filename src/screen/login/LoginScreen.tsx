@@ -250,14 +250,17 @@ const PopUpSignUp = () => {
 	return <Popup trigger={<button style={{
 		marginTop: 16,
 		border: 'none',
-		background: 'none',
+		background: 'none'
 	}}>
 		Sign Up
 	</button>} modal>
 		{(close: any) => (
 			<Column style={
 				AppStyle(
-					padding(16)
+					padding(16),
+					background('white'),
+					radius(8),
+					width(430)
 				)
 			}>
 				<Rows style={AppStyle({justifyContent: 'space-between'})}>

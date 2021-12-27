@@ -1,13 +1,12 @@
-import React, {FC, useEffect, useState} from "react";
-import {AppStyle, background, flexCenterInParent, radius, width} from "../../AppStyle";
+import React, {FC, useState} from "react";
+import {AppStyle, background, margin, marginHori} from "../../AppStyle";
 import Column from "../../components/Column";
 import Post from "../../models/Post";
 import {fakeAvatarUrls, getRandomString, textLorem} from "../../models/User";
 import Search from "./Search";
 import PostItem from "./Post";
-import InfiniteScroll from "react-infinite-scroll-component";
 import ButtonView from "../../components/ButtonView";
-import {ImageList, ImageListItem, Paper} from "@mui/material";
+import {ImageList} from "@mui/material";
 
 interface DiscoveryScreenProp {
 
@@ -75,75 +74,27 @@ const ListPets: FC = () => {
 	const [page, setPage] = useState(FIRST_PAGE_INDEX);
 
 	const getPostLoading = () => {
-
-
 		let newPost = getFakeData(page, NUM_OF_POSTS);
 		setItems([...items, ...newPost]);
-		setPage(page+1);
+		setPage(page + 1);
 	};
 
-	// const fetchData = async () => {
-	// 	const postsFromServer = await getPostPaging(page);
-	// 	if (page === FIRST_PAGE_INDEX) {
-	// 		// refresh
-	// 		setItems(postsFromServer)
-	// 	} else {
-	// 		// append
-	// 		setItems([...items, ...postsFromServer]);
-	// 	}
-	// 	if (postsFromServer.length < NUM_OF_POSTS) {
-	// 		setHasMore(false);
-	// 	}
-	// 	setPage(page + 1);
-	// };
-
-	// useEffect(() => {
-	// 	const initLoad = async () => {
-	// 		const postsFromServer = await getPostPaging(FIRST_PAGE_INDEX);
-	// 		setItems(postsFromServer)
-	// 		if (postsFromServer.length < NUM_OF_POSTS) {
-	// 			setHasMore(false);
-	// 		}
-	// 		setPage(FIRST_PAGE_INDEX+1);
-	// 	}
-	//
-	// 	initLoad().then(() => console.log('init', {items}))
-	// }, [])
-
 	return (
-		// <Column style={AppStyle({flexWrap: 'wrap'}, width('100%'))}>
-		// 	{
-		// 		items.map((item) => {
-		// 			return <PostItem
-		// 					petName={item.petName}
-		// 					content={item.content}
-		// 					avatarURL={item.avatarUrl}
-		// 					imgURL={item.imgUrl}/>
-		// 		})
-		// 	}
-		// 	<ButtonView onClick = {getPostLoading}>Đọc thêm</ButtonView>
-		// </Column>
+		<Column style={AppStyle(
+			margin(8)
+		)}>
+			<ImageList variant="masonry" cols={2} gap={0}>
+				{
+					items.map((item) => {
+						return <PostItem
+							petName={item.petName}
+							avatarURL={item.avatarUrl}
+							imgURL={item.imgUrl}/>
+					})
+				}
+			</ImageList>
 
-		<Column style={{
-			paddingBottom: 0
-		}}>
-		<ImageList variant="masonry" cols={2} gap={0} style={{
-			paddingBottom : 0,
-			marginLeft: 20,
-			marginRight: 20
-		}}>
-			{
-						items.map((item) => {
-							return <PostItem
-									petName={item.petName}
-									avatarURL={item.avatarUrl}
-									imgURL={item.imgUrl}/>
-						})
-					}
-
-		</ImageList>
-
-	<ButtonView onClick = {getPostLoading}>Đọc thêm</ButtonView>
+			<ButtonView onClick={getPostLoading}>Đọc thêm</ButtonView>
 		</Column>
 	);
 }
