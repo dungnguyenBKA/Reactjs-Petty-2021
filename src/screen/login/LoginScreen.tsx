@@ -1,17 +1,13 @@
-import React, {FC, useEffect, useMemo, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {AppCtx} from "../../App";
 import {
 	AppStyle,
 	background,
-	borderWidth,
-	cursorPointer,
 	flexCenter,
 	flexCenterInParent,
 	flexHori,
 	height,
-	marginBottom,
-	marginEnd,
 	marginStart,
 	marginTop,
 	minHeight,
@@ -19,14 +15,12 @@ import {
 	paddingHori,
 	paddingVerti,
 	radius,
-	regular,
 	semiBold,
 	textColor,
 	weightItem,
 	width
 } from "../../AppStyle";
 import {ImageView} from "../../components/ImageView";
-import {Props} from "../../components/Props";
 import Rows from "../../components/Row";
 import Column from "../../components/Column";
 import pettyIcon from "../../asset/petty_icon.png"
@@ -34,7 +28,9 @@ import TextView from "../../components/Text";
 import {Paper, TextField} from "@mui/material";
 import ButtonView from "../../components/ButtonView";
 import {Colors} from "../../AppColor";
-import toast from "react-hot-toast";
+
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
 
 export default function LoginScreen() {
 	const navigate = useNavigate()
@@ -56,7 +52,7 @@ export default function LoginScreen() {
 		try {
 			let res = await appApi.login(userName, pwd)
 			let data = res.data
-			if(data.statusCode === 200) {
+			if (data.statusCode === 200) {
 				// success
 				appApi.setToken(data.token)
 				appContext.setCurrentUser(data.user)
@@ -161,18 +157,7 @@ export default function LoginScreen() {
 						</div>
 					</ButtonView>
 
-					<ButtonView
-						style={
-							AppStyle(
-								background(Colors.color_primary),
-								marginTop(16)
-							)
-						}
-						onClick={
-							handleRegister
-						}>
-						Sign Up
-					</ButtonView>
+					<PopUpSignUp/>
 				</Column>
 			</Paper>
 		</Rows>
@@ -180,21 +165,26 @@ export default function LoginScreen() {
 	</div>
 }
 
-
-interface LoginButtonProps extends Props<HTMLButtonElement> {
-	imgurl: string
-	text: string
-	textcolor: string
-	backgroundcolor: string
-}
-
-const LoginButton: FC<LoginButtonProps> = (props) => {
-	return <button
-		{...props}
-
-		style={AppStyle(cursorPointer(), flexHori(), marginBottom(20), width(300),
-			paddingVerti(12), flexCenterInParent(), radius(24), borderWidth(0), background(props.backgroundcolor))}>
-		<ImageView src={props.imgurl} style={AppStyle(width(24), height(24), marginEnd(10))}/>
-		<span style={AppStyle(regular(15), textColor(props.textcolor))}>{props.text}</span>
-	</button>
+const PopUpSignUp = () => {
+	return <Popup trigger={<button style={{
+		marginTop: 16,
+		border: 'none',
+		background: 'none',
+	}}>
+		Sign Up
+	</button>} modal>
+		{(close: any) => (
+			<Column style={
+				AppStyle(
+					padding(16)
+				)
+			}>
+				Content here
+				<button
+					className="close" onClick={close}>
+					Close
+				</button>
+			</Column>
+		)}
+	</Popup>
 }
