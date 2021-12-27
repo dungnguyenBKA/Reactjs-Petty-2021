@@ -9,6 +9,7 @@
  * @returns 
  */
 function AppStyle() {
+    if(arguments.length === 0) return {}
     let args = Array.prototype.slice.call(arguments).filter((arg) => arg !== null && arg !== undefined)
     return Object.assign.apply(Object, Array.prototype.slice.call(args));
 }

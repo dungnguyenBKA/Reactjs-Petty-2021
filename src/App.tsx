@@ -12,6 +12,8 @@ import {BaseFullScreen, BaseMobileScreen} from './screen/basescreen/BaseAppScree
 import React, {useState} from 'react'
 import User from './models/User'
 import {ChatEngineWrapper} from 'react-chat-engine'
+import AppApi from "./api/AppApi";
+import Logger from "./api/Logger";
 
 interface UserContextInterface {
 	currentUser: User | undefined
@@ -26,6 +28,8 @@ interface ThemeContextInterface {
 
 interface AppContextInterface extends UserContextInterface, ThemeContextInterface {
 	// shared context
+	appApi: AppApi
+	logger: Logger
 }
 
 const defaultContext: AppContextInterface = {
@@ -36,19 +40,22 @@ const defaultContext: AppContextInterface = {
 	theme: 'light',
 	setTheme: (theme: 'dark' | 'light') => {
 		console.log('change theme')
-	}
+	},
+	appApi : new AppApi(),
+	logger: new Logger()
 }
 
 export const AppCtx = React.createContext<AppContextInterface>(defaultContext)
 
 export function App() {
+	let logger = defaultContext.logger
 	let currentUser: User | undefined
 	let userJson = localStorage.getItem('user')
 	if (userJson) {
 		try {
 			currentUser = JSON.parse(userJson)
 		} catch (error) {
-			console.error(error)
+			logger.error(error)
 			currentUser = undefined
 		}
 	} else {

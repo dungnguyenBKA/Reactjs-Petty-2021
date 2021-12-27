@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from "react";
+import React, {FC, useEffect, useMemo, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {AppCtx} from "../../App";
 import {
@@ -6,29 +6,42 @@ import {
 	background,
 	borderWidth,
 	cursorPointer,
+	flexCenter,
 	flexCenterInParent,
 	flexHori,
-	flexVerti,
 	height,
 	marginBottom,
 	marginEnd,
+	marginStart,
+	marginTop,
 	minHeight,
+	padding,
+	paddingHori,
 	paddingVerti,
 	radius,
 	regular,
+	semiBold,
 	textColor,
+	weightItem,
 	width
 } from "../../AppStyle";
 import {ImageView} from "../../components/ImageView";
 import {Props} from "../../components/Props";
-import {getRandomFakeUser} from "../../models/User";
+import Rows from "../../components/Row";
+import Column from "../../components/Column";
+import pettyIcon from "../../asset/petty_icon.png"
+import TextView from "../../components/Text";
+import {Paper, TextField} from "@mui/material";
+import ButtonView from "../../components/ButtonView";
+import {Colors} from "../../AppColor";
+import toast from "react-hot-toast";
 
 export default function LoginScreen() {
-
-
 	const navigate = useNavigate()
-
 	const appContext = React.useContext(AppCtx)
+
+	const appApi = appContext.appApi
+	const logger = appContext.logger
 
 	useEffect(() => {
 		if (appContext.currentUser) {
@@ -36,31 +49,134 @@ export default function LoginScreen() {
 		}
 	})
 
-	const handleLogin = () => {
-		appContext.setCurrentUser(getRandomFakeUser())
-		navigate(-1)
+	let [userName, setUserName] = useState('')
+	let [pwd, setPwd] = useState('')
+
+	const handleLogin = async () => {
+		try {
+			let res = await appApi.login(userName, pwd)
+			let data = res.data
+			if(data.statusCode === 200) {
+				// success
+				appApi.setToken(data.token)
+				appContext.setCurrentUser(data.user)
+				logger.successToast()
+				navigate(-1)
+			} else {
+				logger.errorToast()
+				appContext.setCurrentUser(undefined)
+			}
+		} catch (e) {
+			logger.errorToast()
+			appContext.setCurrentUser(undefined)
+		}
 	}
 
-	return <div style={AppStyle(flexHori(), flexCenterInParent(),
-		minHeight("100vh"), background("linear-gradient(180deg, #00C181 0%, #1F00C181 100%)"))}>
-		<div style={AppStyle(flexVerti(), flexCenterInParent())}>
-			<div>
-				<LoginButton
-					onClick={handleLogin}
-					imgurl="https://weeboo.vn/icons/login/icon-facebook.svg"
-					text="Đăng nhập bằng Facebook"
-					backgroundcolor="rgb(51 87 149)"
-					textcolor="#FFFFFF"/>
+	const handleRegister = () => {
 
-				<LoginButton
-					onClick={handleLogin}
-					textcolor="#000000"
-					imgurl="https://weeboo.vn/icons/login/icon-google.svg"
-					text="Đăng nhập bằng Google"
-					backgroundcolor="#FFFFFF"/>
-			</div>
+	}
 
-		</div>
+	return <div style={
+		AppStyle(
+			flexHori(),
+			flexCenterInParent(),
+			minHeight("100vh"),
+			background("linear-gradient(180deg, #00C181 0%, #1F00C181 100%)")
+		)}>
+
+		<Rows style={
+			AppStyle(
+				flexCenterInParent()
+			)
+		}>
+			<Column style={
+				AppStyle(
+					flexCenter(),
+					weightItem(1)
+				)
+			}>
+				<ImageView src={pettyIcon} style={
+					AppStyle(
+						width(200),
+						height(200)
+					)
+				}/>
+
+				<TextView style={
+					AppStyle(
+						semiBold(24)
+					)
+				}>PETTY</TextView>
+			</Column>
+
+			<Paper elevation={1} style={
+				AppStyle(
+					width(350),
+					padding(16),
+					marginStart(100)
+				)
+			}>
+				<Column>
+					<TextField
+						style={AppStyle(weightItem(1))}
+						type="text"
+						placeholder="Username"
+						value={userName}
+						onChange={e => {
+							setUserName(e.currentTarget.value)
+						}}
+						label='Username'
+					/>
+
+					<TextField
+						style={AppStyle(weightItem(1), marginTop(16))}
+						type="password"
+						placeholder="Password"
+						value={pwd}
+						onChange={e => {
+							setPwd(e.currentTarget.value)
+						}}
+						label='Password'
+					/>
+
+					<ButtonView>
+						<div style={
+							AppStyle(
+								background(Colors.color_primary),
+								marginTop(16),
+								paddingHori(0),
+								paddingVerti(10),
+								radius(8)
+							)
+						} onClick={
+							handleLogin
+						}>
+							<TextView style={
+								AppStyle(
+									textColor(Colors.color_white)
+								)
+							}>
+								Log In
+							</TextView>
+						</div>
+					</ButtonView>
+
+					<ButtonView
+						style={
+							AppStyle(
+								background(Colors.color_primary),
+								marginTop(16)
+							)
+						}
+						onClick={
+							handleRegister
+						}>
+						Sign Up
+					</ButtonView>
+				</Column>
+			</Paper>
+		</Rows>
+
 	</div>
 }
 

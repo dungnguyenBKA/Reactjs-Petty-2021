@@ -24,28 +24,28 @@ import Column from "../../components/Column";
 import { ImageView } from "../../components/ImageView";
 import Rows from "../../components/Row";
 import TextView from "../../components/Text";
-import User, { getRandomFakeUser } from "../../models/User";
+import User, { } from "../../models/User";
 interface CommentFormProp {}
 
 const CommentForm = (props: CommentFormProp) => {
   let lorem =
     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi debitis eos sunt veritatis maiores cupiditate optio suscipit quo? Sequi dolorum cum voluptate libero voluptatum quam recusandae eveniet minima consequuntur aliquam!";
 
-  let fakeCommentUsers: CommentItemProp[] = Array.from(Array(10).keys()).map(
-    () => {
-      return {
-        user: getRandomFakeUser(),
-        lastComment: lorem,
-      };
-    }
-  );
+  // let fakeCommentUsers: CommentItemProp[] = Array.from(Array(10).keys()).map(
+  //   () => {
+  //     return {
+  //       user: getRandomFakeUser(),
+  //       lastComment: lorem,
+  //     };
+  //   }
+  // );
 
 
   return (
     <div style={AppStyle(weightItem(1))}>
-      {fakeCommentUsers.map((item) => {
-        return <CommentItem user={item.user} lastComment={item.lastComment} />;
-      })}
+      {/*{fakeCommentUsers.map((item) => {*/}
+      {/*  return <CommentItem user={item.user} lastComment={item.lastComment} />;*/}
+      {/*})}*/}
       <input
         type="text"
         id="comment"
