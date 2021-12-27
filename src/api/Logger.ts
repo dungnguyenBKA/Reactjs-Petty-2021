@@ -5,6 +5,9 @@ import {toast} from "react-hot-toast";
  * */
 export default class Logger {
 	private readonly isShowLog: boolean
+	private readonly toastOpts = {
+		duration: 1000
+	}
 
 	constructor() {
 		this.isShowLog = window.location.hostname === "localhost";
@@ -24,38 +27,42 @@ export default class Logger {
 
 	successToastLog = (msg?: string) => {
 		if (this.isShowLog) {
-			if (msg) {
-				toast.success(msg)
-			} else {
-				toast.success('Thành công')
-			}
+			this.successToast(msg)
 		}
 	}
 
 	errorToastLog = (msg?: string) => {
 		if (this.isShowLog) {
-			if (msg) {
-				toast.error(msg)
-			} else {
-				toast.error('Đã có lỗi xảy ra, vui lòng thử lại')
-			}
+			this.errorToast(msg)
+		}
+	}
+
+	normalToastLog = (msg?: string) => {
+		if (this.isShowLog) {
+			this.normalToast(msg)
 		}
 	}
 
 	successToast = (msg?: string) => {
 		if (msg) {
-			toast.success(msg)
+			toast.success(msg, this.toastOpts)
 		} else {
-			toast.success('Thành công')
+			toast.success('Thành công', this.toastOpts)
 		}
 
 	}
 
 	errorToast = (msg?: string) => {
 		if (msg) {
-			toast.error(msg)
+			toast.error(msg, this.toastOpts)
 		} else {
-			toast.error('Đã có lỗi xảy ra, vui lòng thử lại')
+			toast.error('Đã có lỗi xảy ra, vui lòng thử lại', this.toastOpts)
+		}
+	}
+
+	normalToast = (msg?: string) => {
+		if (msg) {
+			toast(msg, this.toastOpts)
 		}
 	}
 }

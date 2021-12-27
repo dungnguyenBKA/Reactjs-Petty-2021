@@ -38,6 +38,7 @@ export default function LoginScreen() {
 
 	const appApi = appContext.appApi
 	const logger = appContext.logger
+	const setLoading = appContext.setLoading
 
 	useEffect(() => {
 		if (appContext.currentUser) {
@@ -49,6 +50,7 @@ export default function LoginScreen() {
 	let [pwd, setPwd] = useState('')
 
 	const handleLogin = async () => {
+		setLoading(true)
 		try {
 			let res = await appApi.login(userName, pwd)
 			let data = res.data
@@ -61,10 +63,12 @@ export default function LoginScreen() {
 			} else {
 				logger.errorToast()
 				appContext.setCurrentUser(undefined)
+				setLoading(false)
 			}
 		} catch (e) {
 			logger.errorToast()
 			appContext.setCurrentUser(undefined)
+			setLoading(false)
 		}
 	}
 
@@ -100,7 +104,8 @@ export default function LoginScreen() {
 
 				<TextView style={
 					AppStyle(
-						semiBold(24)
+						semiBold(24),
+						textColor('white')
 					)
 				}>PETTY</TextView>
 			</Column>

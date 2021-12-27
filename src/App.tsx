@@ -14,6 +14,7 @@ import User from './models/User'
 import {ChatEngineWrapper} from 'react-chat-engine'
 import AppApi from "./api/AppApi";
 import Logger from "./api/Logger";
+import LoadingScreen from "./screen/util/LoadingScreen";
 
 interface UserContextInterface {
 	currentUser: User | undefined
@@ -25,8 +26,12 @@ interface ThemeContextInterface {
 	setTheme: (theme: 'dark' | 'light') => void
 }
 
+interface LoadingState {
+	isLoading: boolean,
+	setLoading: (isLoading: boolean) => void
+}
 
-interface AppContextInterface extends UserContextInterface, ThemeContextInterface {
+interface AppContextInterface extends UserContextInterface, ThemeContextInterface, LoadingState {
 	// shared context
 	appApi: AppApi
 	logger: Logger
@@ -34,15 +39,17 @@ interface AppContextInterface extends UserContextInterface, ThemeContextInterfac
 
 const defaultContext: AppContextInterface = {
 	currentUser: undefined,
-	setCurrentUser: (user: User | undefined) => {
-		console.log('change user')
-	},
+	setCurrentUser: () => {},
+
 	theme: 'light',
-	setTheme: (theme: 'dark' | 'light') => {
-		console.log('change theme')
-	},
+	setTheme: () => {},
+
 	appApi : new AppApi(),
-	logger: new Logger()
+
+	logger: new Logger(),
+
+	isLoading: false,
+	setLoading: (() => {})
 }
 
 export const AppCtx = React.createContext<AppContextInterface>(defaultContext)
@@ -62,10 +69,10 @@ export function App() {
 		currentUser = undefined
 	}
 
-	let [user, setUser] = useState<User | undefined>(currentUser)
+	let [user, setUser] = useState(currentUser)
+	let [isLoading, setLoading] = useState(false)
 
 	defaultContext.currentUser = user
-
 	defaultContext.setCurrentUser = (user: User | undefined) => {
 		console.log('set user')
 		if (user) {
@@ -76,6 +83,11 @@ export function App() {
 			localStorage.setItem('user', '')
 		}
 		setUser(user)
+	}
+
+	defaultContext.isLoading = isLoading
+	defaultContext.setLoading = (isLoading: boolean) => {
+		setLoading(isLoading)
 	}
 
 	return (
@@ -116,6 +128,8 @@ export function App() {
 					</Router>
 
 					<Toaster/>
+
+					<LoadingScreen isLoading={isLoading} />
 				</div>
 			</ChatEngineWrapper>
 		</AppCtx.Provider>
