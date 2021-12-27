@@ -28,7 +28,7 @@ const Search: FC<SearchProp> = (props) => {
 	let [input, setInput] = useState('')
 
 	return (
-		<Rows style={AppStyle(flexHori(), flexCenter(), padding(16), width('100%'), radius(15), props.style)}>
+		<Rows style={AppStyle(flexHori(), flexCenter(), padding(16), width('100%'), props.style)}>
 			<TextField
 				style={AppStyle(weightItem(1))}
 				type="text"

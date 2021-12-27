@@ -12,7 +12,6 @@ interface User {
 let fakeAvatarUrls = [
 	"https://i.scdn.co/image/78d984cb018f355126c426306677ce3fc5711593",
 	"https://media-cdn.laodong.vn/storage/newsportal/2019/11/10/765130/Son-Tung-Mtp.jpg?w=720&crop=auto&scale=both",
-	"https://upload.wikimedia.org/wikipedia/commons/9/99/Lee_Do-hyun_in_October_2020.jpg",
 	"https://store-images.s-microsoft.com/image/apps.28411.13510798887593857.411c7070-8254-4bc7-9822-93212e9b3eaa.d5650289-0ad1-4560-ac30-38a18a1847bb?mode=scale&q=90&h=200&w=200&background=%230078D7"
 ]
 
