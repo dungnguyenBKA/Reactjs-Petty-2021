@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useState} from "react";
-import {AppStyle, background} from "../../AppStyle";
+import {AppStyle, background, flexCenterInParent, radius, width} from "../../AppStyle";
 import Column from "../../components/Column";
 import Post from "../../models/Post";
 import {fakeAvatarUrls, getRandomString, textLorem} from "../../models/User";
@@ -7,6 +7,7 @@ import Search from "./Search";
 import PostItem from "./Post";
 import InfiniteScroll from "react-infinite-scroll-component";
 import ButtonView from "../../components/ButtonView";
+import {ImageList, ImageListItem, Paper} from "@mui/material";
 
 interface DiscoveryScreenProp {
 
@@ -110,17 +111,39 @@ const ListPets: FC = () => {
 	// }, [])
 
 	return (
-		<Column style={{flexWrap: 'wrap'}}>
+		// <Column style={AppStyle({flexWrap: 'wrap'}, width('100%'))}>
+		// 	{
+		// 		items.map((item) => {
+		// 			return <PostItem
+		// 					petName={item.petName}
+		// 					content={item.content}
+		// 					avatarURL={item.avatarUrl}
+		// 					imgURL={item.imgUrl}/>
+		// 		})
+		// 	}
+		// 	<ButtonView onClick = {getPostLoading}>Đọc thêm</ButtonView>
+		// </Column>
+
+		<Column style={{
+			paddingBottom: 0
+		}}>
+		<ImageList variant="masonry" cols={2} gap={0} style={{
+			paddingBottom : 0,
+			marginLeft: 20,
+			marginRight: 20
+		}}>
 			{
-				items.map((item) => {
-					return <PostItem
-							petName={item.petName}
-							content={item.content}
-							avatarURL={item.avatarUrl}
-							imgURL={item.imgUrl}/>
-				})
-			}
-			<ButtonView onClick = {getPostLoading}>Đọc thêm</ButtonView>
+						items.map((item) => {
+							return <PostItem
+									petName={item.petName}
+									avatarURL={item.avatarUrl}
+									imgURL={item.imgUrl}/>
+						})
+					}
+
+		</ImageList>
+
+	<ButtonView onClick = {getPostLoading}>Đọc thêm</ButtonView>
 		</Column>
 	);
 }

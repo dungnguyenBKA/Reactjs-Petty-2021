@@ -7,17 +7,20 @@ import icMessenger from "../../asset/ic_messenger.svg";
 
 import {
 	AppStyle,
-	background,
+	background, bold,
 	borderWidth, circleImage,
 	flexCenter,
 	flexCenterInParent,
 	flexHori,
+	flexShrink,
 	height,
 	margin,
+	marginBottom,
 	marginEnd,
 	marginStart,
 	marginTop,
 	marginVertical, maxWidth,
+	minWidth,
 	radius,
 	semiBold,
 	shadow,
@@ -31,10 +34,11 @@ import {useNavigate} from "react-router";
 import ButtonView from "../../components/ButtonView";
 import CommentForm from "./CommentForm";
 import {ImageView} from "../../components/ImageView";
+import { ImageList, ImageListItem, Paper } from "@mui/material";
 
 interface PostProp {
 	petName: string;
-	content: string;
+	// content: string;
 	avatarURL: string;
 	imgURL: string;
 }
@@ -67,18 +71,65 @@ export default function PostItem(props: PostProp) {
 
 
 	return (
-		<Card style={AppStyle(margin(20), radius(8), shadow(2),
-			maxWidth('45%'), )}>
+		// <Card style={AppStyle(margin(20), radius(8), shadow(2),
+		// 	maxWidth('100%'),  weightItem(1), flexShrink(0), {flexBasic: '30%'})}>
+        //
+        //
+        //
+		// 	<Card.Img style ={AppStyle({position: 'relative'})} src={props.imgURL}/>
+		// 	<Card.Img style={AppStyle(width(48),height(48), circleImage(48),
+		// 		{position: 'absolute', top: 10, left: 10, borderWidth: 2, borderColor: 'white'})}
+		// 			  src={props.avatarURL}/>
+        //     <div style ={{margin: 20}}>
+        //         <Header petName={props.petName} />
+        //
+        //     </div>
+        //
+        //
+		// </Card>
+		<Paper style={AppStyle(
+			radius(4),
+			margin(16),
+		)} elevation={1}>
+            <ImageListItem key={props.avatarURL} style={{
+                width: '100%',
+                height: 'auto'
+            }}>
+                <Column style={AppStyle(marginBottom(20), width('100%'))}>
+                    {/*<ImageView*/}
+                    {/*    style={*/}
+                    {/*        AppStyle(*/}
+                    {/*            width('100%')*/}
+                    {/*        )*/}
+                    {/*    }*/}
+                    {/*    src={props.imgURL}*/}
+                    {/*/>*/}
+                    <Card.Img style ={AppStyle({position: 'relative'}, width('100%'))} src={props.imgURL}/>
+                    <Card.Img style={AppStyle(width(48),height(48), circleImage(48),
+                    		{position: 'absolute', top: 10, left: 10, borderWidth: 2, borderColor: 'white'})}
+                    			  src={props.avatarURL}/>
+                   <TextView style={AppStyle(margin(20), bold(20))}>{props.petName}</TextView>
+
+                </Column>
+
+            </ImageListItem>
+		</Paper>
+    // <ImageList variant="masonry" cols={3} gap={8}>
+    //     {itemData.map((item) => (
+    //         <ImageListItem key={item.img}>
+    //             <img
+    //                 src={`${item.img}?w=248&fit=crop&auto=format`}
+    //                 srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
+    //                 alt={item.title}
+    //                 loading="lazy"
+    //             />
+    //         </ImageListItem>
+    //     ))}
+    // </ImageList>
 
 
 
-			<Card.Img style ={AppStyle({position: 'relative'})} src={props.imgURL}/>
-			<Card.Img style={AppStyle(width(48),height(48), circleImage(48),
-				{position: 'absolute', top: 20, left: 20, borderWidth: 2, borderColor: 'white'})}
-					  src={props.avatarURL}/>
-			<Header avatarUrl={props.avatarURL} petName={props.petName}/>
-
-		</Card> )
+    )
 
 		{/*	<Card.Body>*/}
 		{/*		<Column>*/}
@@ -112,7 +163,7 @@ export default function PostItem(props: PostProp) {
 }
 
 interface HeaderProp {
-	avatarUrl: string;
+	// avatarUrl: string;
 	petName: string;
 }
 
