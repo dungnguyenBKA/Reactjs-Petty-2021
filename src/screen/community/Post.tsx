@@ -8,7 +8,7 @@ import icMessenger from "../../asset/ic_messenger.svg";
 import {
 	AppStyle,
 	background,
-	borderWidth,
+	borderWidth, circleImage,
 	flexCenter,
 	flexCenterInParent,
 	flexHori,
@@ -17,7 +17,7 @@ import {
 	marginEnd,
 	marginStart,
 	marginTop,
-	marginVertical,
+	marginVertical, maxWidth,
 	radius,
 	semiBold,
 	shadow,
@@ -67,45 +67,48 @@ export default function PostItem(props: PostProp) {
 
 
 	return (
-		<Card style={AppStyle(margin(20), radius(8), shadow(2))}>
-			<Card.Body>
-				<Header avatarUrl={props.avatarURL} petName={props.petName}/>
+		<Card style={AppStyle(margin(20), radius(8), shadow(2),
+			maxWidth('45%'), )}>
 
-				<Card.Text style={AppStyle(marginTop(12))}>{props.content}</Card.Text>
-			</Card.Body>
 
-			<Card.Img variant="top" src={props.imgURL}/>
 
-			<Card.Body>
-				<Column>
-					<hr style={marginVertical(12)}/>
-					<Rows>
+			<Card.Img style ={AppStyle({position: 'relative'})} src={props.imgURL}/>
+			<Card.Img style={AppStyle(width(48),height(48), circleImage(48),
+				{position: 'absolute', top: 20, left: 20, borderWidth: 2, borderColor: 'white'})}
+					  src={props.avatarURL}/>
+			<Header avatarUrl={props.avatarURL} petName={props.petName}/>
 
-						<ReactionItem
-							title={
-								isLikeThisPost
-									? `You and ${countLike - 1} people Liked`
-									: `${countLike} people like`
-							}
-							onClick={handleLikeClick}
-							icon={isLikeThisPost ? icLiked : icLike}
-						/>
-						<ReactionItem
-							title={`${countComment} people commented`}
-							onClick={handleCommentClick}
-							icon={icComment}
-						/>
-						<ReactionItem
-							title="Message"
-							onClick={handleMessageClick}
-							icon={icMessenger}
-						/>
-					</Rows>
-					{showCommentForm && <CommentForm/>}
-				</Column>
-			</Card.Body>
-		</Card>
-	);
+		</Card> )
+
+		{/*	<Card.Body>*/}
+		{/*		<Column>*/}
+		{/*			<hr style={marginVertical(12)}/>*/}
+		{/*			<Rows>*/}
+		{/*	*/}
+		{/*				<ReactionItem*/}
+		{/*					title={*/}
+		{/*						isLikeThisPost*/}
+		{/*							? `You and ${countLike - 1} people Liked`*/}
+		{/*							: `${countLike} people like`*/}
+		{/*					}*/}
+		{/*					onClick={handleLikeClick}*/}
+		{/*					icon={isLikeThisPost ? icLiked : icLike}*/}
+		{/*				/>*/}
+		{/*				<ReactionItem*/}
+		{/*					title={`${countComment} people commented`}*/}
+		{/*					onClick={handleCommentClick}*/}
+		{/*					icon={icComment}*/}
+		{/*				/>*/}
+		{/*				<ReactionItem*/}
+		{/*					title="Message"*/}
+		{/*					onClick={handleMessageClick}*/}
+		{/*					icon={icMessenger}*/}
+		{/*				/>*/}
+		{/*			</Rows>*/}
+		{/*			{showCommentForm && <CommentForm/>}*/}
+		{/*		</Column>*/}
+		{/*	</Card.Body>*/}
+
 }
 
 interface HeaderProp {
@@ -116,11 +119,11 @@ interface HeaderProp {
 function Header(props: HeaderProp) {
 	return (
 		<div style={AppStyle(flexHori(), flexCenter())}>
-			<Image
-				src={props.avatarUrl}
-				style={AppStyle(width(41), height(41), marginEnd(12))}
-				roundedCircle
-			/>
+			{/*<Image*/}
+			{/*	src={props.avatarUrl}*/}
+			{/*	style={AppStyle(width(41), height(41), marginEnd(12))}*/}
+			{/*	roundedCircle*/}
+			{/*/>*/}
 			<TextView style={AppStyle(semiBold(20))}>{props.petName}</TextView>
 		</div>
 	);

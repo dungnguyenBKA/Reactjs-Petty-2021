@@ -6,6 +6,7 @@ import {fakeAvatarUrls, getRandomString, textLorem} from "../../models/User";
 import Search from "./Search";
 import PostItem from "./Post";
 import InfiniteScroll from "react-infinite-scroll-component";
+import ButtonView from "../../components/ButtonView";
 
 interface DiscoveryScreenProp {
 
@@ -72,42 +73,44 @@ const ListPets: FC = () => {
 	const [hasMore, setHasMore] = useState(true);
 	const [page, setPage] = useState(FIRST_PAGE_INDEX);
 
-	const getPostPaging = async (pageNum: number) => {
-		console.log('get posts', pageNum)
-		await new Promise(r => setTimeout(r, 2000));
-		return getFakeData(pageNum, NUM_OF_POSTS);
+	const getPostLoading = () => {
+
+
+		let newPost = getFakeData(page, NUM_OF_POSTS);
+		setItems([...items, ...newPost]);
+		setPage(page+1);
 	};
 
-	const fetchData = async () => {
-		const postsFromServer = await getPostPaging(page);
-		if (page === FIRST_PAGE_INDEX) {
-			// refresh
-			setItems(postsFromServer)
-		} else {
-			// append
-			setItems([...items, ...postsFromServer]);
-		}
-		if (postsFromServer.length < NUM_OF_POSTS) {
-			setHasMore(false);
-		}
-		setPage(page + 1);
-	};
+	// const fetchData = async () => {
+	// 	const postsFromServer = await getPostPaging(page);
+	// 	if (page === FIRST_PAGE_INDEX) {
+	// 		// refresh
+	// 		setItems(postsFromServer)
+	// 	} else {
+	// 		// append
+	// 		setItems([...items, ...postsFromServer]);
+	// 	}
+	// 	if (postsFromServer.length < NUM_OF_POSTS) {
+	// 		setHasMore(false);
+	// 	}
+	// 	setPage(page + 1);
+	// };
 
-	useEffect(() => {
-		const initLoad = async () => {
-			const postsFromServer = await getPostPaging(FIRST_PAGE_INDEX);
-			setItems(postsFromServer)
-			if (postsFromServer.length < NUM_OF_POSTS) {
-				setHasMore(false);
-			}
-			setPage(FIRST_PAGE_INDEX+1);
-		}
-
-		initLoad().then(() => console.log('init', {items}))
-	}, [])
+	// useEffect(() => {
+	// 	const initLoad = async () => {
+	// 		const postsFromServer = await getPostPaging(FIRST_PAGE_INDEX);
+	// 		setItems(postsFromServer)
+	// 		if (postsFromServer.length < NUM_OF_POSTS) {
+	// 			setHasMore(false);
+	// 		}
+	// 		setPage(FIRST_PAGE_INDEX+1);
+	// 	}
+	//
+	// 	initLoad().then(() => console.log('init', {items}))
+	// }, [])
 
 	return (
-		<Column>
+		<Column style={{flexWrap: 'wrap'}}>
 			{
 				items.map((item) => {
 					return <PostItem
@@ -117,6 +120,7 @@ const ListPets: FC = () => {
 							imgURL={item.imgUrl}/>
 				})
 			}
+			<ButtonView onClick = {getPostLoading}>Đọc thêm</ButtonView>
 		</Column>
 	);
 }
