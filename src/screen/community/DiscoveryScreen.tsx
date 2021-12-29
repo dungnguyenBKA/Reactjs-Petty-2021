@@ -1,12 +1,13 @@
-import React, {FC, useState} from "react";
-import {AppStyle, background, margin, marginHori} from "../../AppStyle";
+import React, {FC, useContext, useEffect, useMemo, useRef, useState} from "react";
+import {AppStyle, background, flexCenterInParent, flexHori, margin, marginHori} from "../../AppStyle";
 import Column from "../../components/Column";
 import Post from "../../models/Post";
 import {fakeAvatarUrls, getRandomString, textLorem} from "../../models/User";
 import Search from "./Search";
 import PostItem from "./Post";
 import ButtonView from "../../components/ButtonView";
-import {ImageList} from "@mui/material";
+import {CircularProgress, ImageList} from "@mui/material";
+import {AppCtx} from "../../App";
 
 interface DiscoveryScreenProp {
 
@@ -72,17 +73,28 @@ const ListPets: FC = () => {
 	const [items, setItems] = useState<Post[]>([]);
 	const [hasMore, setHasMore] = useState(true);
 	const [page, setPage] = useState(FIRST_PAGE_INDEX);
+	const myRef = useRef<HTMLParagraphElement|null>(null)
+
+
+	const isVisible = useOnScreen(myRef)
 
 	const getPostLoading = () => {
-		let newPost = getFakeData(page, NUM_OF_POSTS);
-		setItems([...items, ...newPost]);
-		setPage(page + 1);
-	};
+		setTimeout(() => {
+			let newPost = getFakeData(page, NUM_OF_POSTS);
+			setItems([...items, ...newPost]);
+			setPage(page + 1);
+		}, 1000)
+	}
 
-	return (
-		<Column style={AppStyle(
+	useEffect(() => {
+		if(isVisible) {
+			getPostLoading()
+		}
+	}, [isVisible])
+
+	return (<Column style={AppStyle(
 			margin(8)
-		)}>
+		)}  >
 			<ImageList variant="masonry" cols={2} gap={0}>
 				{
 					items.map((item) => {
@@ -94,7 +106,38 @@ const ListPets: FC = () => {
 				}
 			</ImageList>
 
-			<ButtonView onClick={getPostLoading}>Đọc thêm</ButtonView>
+			<p ref={myRef} style={
+				AppStyle(
+					flexHori(),
+					flexCenterInParent()
+				)
+			}>
+				<CircularProgress/>
+			</p>
 		</Column>
 	);
+}
+
+export function useOnScreen(ref: any) {
+
+	const [isIntersecting, setIntersecting] = useState(false)
+
+	const observer = useMemo(() => {
+		return new IntersectionObserver(
+			([entry]) => {
+				setIntersecting(entry.isIntersecting)
+				console.log('re set visible')
+			}
+		)
+	}, [])
+
+	useEffect(() => {
+		if(ref.current) {
+			observer.observe(ref.current)
+		}
+		// Remove the observer as soon as the component is unmounted
+		return () => { observer.disconnect() }
+	}, [observer, ref])
+
+	return isIntersecting
 }
