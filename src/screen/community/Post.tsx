@@ -20,7 +20,7 @@ import {
 	marginStart,
 	marginTop,
 	marginVertical, maxWidth,
-	minWidth,
+	minWidth, padding, paddingStart,
 	radius,
 	semiBold,
 	shadow,
@@ -104,11 +104,14 @@ export default function PostItem(props: PostProp) {
                     {/*    }*/}
                     {/*    src={props.imgURL}*/}
                     {/*/>*/}
-                    <Card.Img style ={AppStyle({position: 'relative'}, width('100%'))} src={props.imgURL}/>
-                    <Card.Img style={AppStyle(width(48),height(48), circleImage(48),
-                    		{position: 'absolute', top: 10, left: 10, borderWidth: 2, borderColor: 'white'})}
-                    			  src={props.avatarURL}/>
-                   <TextView style={AppStyle(margin(20), bold(20))}>{props.petName}</TextView>
+					<div style={AppStyle(marginBottom(20))}>
+						<Card.Img style ={AppStyle({position: 'relative'}, width('100%'))} src={props.imgURL}/>
+						<Card.Img style={AppStyle(width(48),height(48), circleImage(48), 							{position: 'absolute', top: 10, left: 10, borderWidth: 2, borderColor: 'white'})}
+								  src={props.avatarURL}/>
+
+					</div>
+
+                   <p style={AppStyle(paddingStart(20), bold(20))}>{props.petName}</p>
 
                 </Column>
 
