@@ -6,10 +6,10 @@ export default class Constants {
 		LOGIN: 'users/login',
 		REGISTER: 'users/register',
 		USER_DETAIL: 'users/detail',
-		USER_UPDATE: 'users',
+		USERS: 'users',
 
 		// pets
-		ALL_PETS: 'pets',
+		PETS: 'pets',
 		MY_PETS: 'pets/my',
 
 	}

@@ -1,18 +1,33 @@
 import User from "../models/User";
+import Pet from "../models/Pet";
 
-interface UserResponse {
+export interface BaseResponse<T> {
+	statusCode: number,
+	data: T,
+	message: string
+}
+
+export interface TokenUserResponse {
 	token: string,
 	user: User
 }
 
-export interface LoginResponse {
-	statusCode: number,
-	data: UserResponse,
-	message: string
+export interface LoginResponse extends BaseResponse<TokenUserResponse>{
+
 }
 
-export interface RegisterResponse {
-	statusCode: number,
-	data: UserResponse,
-	message: string
+export interface RegisterResponse extends BaseResponse<TokenUserResponse>{
+
+}
+
+export interface AllPetsResponse extends BaseResponse<Pet[]>{
+
+}
+
+export interface PetDetailResponse extends BaseResponse<Pet>{
+
+}
+
+export interface UserResponse extends BaseResponse<User>{
+
 }

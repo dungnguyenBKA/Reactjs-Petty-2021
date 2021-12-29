@@ -16,15 +16,17 @@ import TextView from "../../components/Text";
 import Column from "../../components/Column";
 import {ImageListItem, Paper} from "@mui/material";
 import Pet from "../../models/Pet";
-import {useContext} from "react";
+import {FC, useContext} from "react";
 import {AppCtx} from "../../App";
+import {useNavigate} from "react-router-dom";
 
-interface PostProp {
+interface PetItemProp {
 	pet: Pet
 }
 
 
-export default function PostItem(props: PostProp) {
+const PetItem: FC<PetItemProp> = (props) => {
+	let navigate = useNavigate()
 	let pet = props.pet
 	const logger = useContext(AppCtx).logger
 
@@ -37,10 +39,14 @@ export default function PostItem(props: PostProp) {
 	}
 
 	let avatar: string
-	if(listImages.length === 0) {
+	if(!listImages) {
 		avatar = ''
 	} else {
 		avatar = listImages[0]
+	}
+
+	const navigateToPetDetail = () => {
+		navigate(`/pet-detail/${pet.id}`)
 	}
 
 	return (
@@ -48,14 +54,14 @@ export default function PostItem(props: PostProp) {
 			radius(8),
 			margin(8),
 			cursorPointer()
-		)} elevation={1}>
+		)} elevation={1} onClick={navigateToPetDetail}>
 			<ImageListItem key={pet.id} style={{
 				width: '100%',
 				height: 'auto'
 			}}>
 				<Column style={AppStyle(marginBottom(20), width('100%'))}>
 					<div>
-						<Card.Img style={AppStyle({position: 'relative'}, width('100%'))} src={listImages[0]}/>
+						<Card.Img style={AppStyle({position: 'relative'}, width('100%'))} src={avatar}/>
 						<Card.Img style={AppStyle(width(48), height(48), circleImage(48),
 							{position: 'absolute', top: 10, left: 10, borderWidth: 2, borderColor: 'white'})}
 						          src={avatar}/>
@@ -74,3 +80,5 @@ export default function PostItem(props: PostProp) {
 		</Paper>
 	)
 }
+
+export default PetItem

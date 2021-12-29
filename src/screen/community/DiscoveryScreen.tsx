@@ -1,13 +1,12 @@
 import React, {FC, useContext, useEffect, useMemo, useRef, useState} from "react";
-import {AppStyle, background, flexCenterInParent, flexHori, margin, marginHori} from "../../AppStyle";
+import {AppStyle, background, flexCenterInParent, flexHori, margin} from "../../AppStyle";
 import Column from "../../components/Column";
-import Post from "../../models/Post";
-import {fakeAvatarUrls, getRandomString, textLorem} from "../../models/User";
 import Search from "./Search";
-import PostItem from "./Post";
-import ButtonView from "../../components/ButtonView";
+import PetItem from "./PetItem";
 import {CircularProgress, ImageList} from "@mui/material";
 import {AppCtx} from "../../App";
+import Pet from "../../models/Pet";
+import {getRandomString} from "../../models/User";
 
 interface DiscoveryScreenProp {
 
@@ -49,71 +48,66 @@ export {
 	MemoDiscoveryScreen
 }
 
-const NUM_OF_POSTS = 5
-
-const getFakeData = (page: number, len: number): Post[] => {
-	console.log({page});
-	let fakePosts: Post[] = [];
-	for (let index = 0; index < len; index++) {
-		const ranPost = new Post(
-			page * NUM_OF_POSTS + index,
-			getRandomString(10),
-			textLorem,
-			fakeAvatarUrls[Math.round(Math.random() * 10) % fakeAvatarUrls.length],
-			fakeAvatarUrls[Math.round(Math.random() * 10) % fakeAvatarUrls.length]
-		);
-		fakePosts.push(ranPost);
-	}
-
-	return fakePosts;
-};
-
 const ListPets: FC = () => {
 	const FIRST_PAGE_INDEX = 0
-	const [items, setItems] = useState<Post[]>([]);
+	const [items, setItems] = useState<Pet[]>([]);
 	const [hasMore, setHasMore] = useState(true);
 	const [page, setPage] = useState(FIRST_PAGE_INDEX);
-	const myRef = useRef<HTMLParagraphElement|null>(null)
-
+	const myRef = useRef<HTMLParagraphElement | null>(null)
+	const appContext = useContext(AppCtx)
+	const appApi = appContext.appApi
+	const logger = appContext.logger
 
 	const isVisible = useOnScreen(myRef)
 
-	const getPostLoading = () => {
-		setTimeout(() => {
-			let newPost = getFakeData(page, NUM_OF_POSTS);
-			setItems([...items, ...newPost]);
-			setPage(page + 1);
-		}, 1000)
+	const getPets = async () => {
+		try {
+			let res = await appApi.getAllPets(page)
+			let resData = res.data
+			if (resData.statusCode === 200) {
+				if (!resData.data) {
+					setHasMore(false)
+				} else {
+					setItems([...items, ...resData.data]);
+					//setPage(page + 1);
+				}
+			} else {
+				logger.errorToast()
+				setHasMore(false)
+			}
+		} catch (e) {
+			logger.error(e)
+			logger.errorToast()
+			setHasMore(false)
+		}
 	}
 
 	useEffect(() => {
-		if(isVisible) {
-			getPostLoading()
-		}
+		getPets().then(
+			() => logger.log('fetch done')
+		)
 	}, [isVisible])
 
 	return (<Column style={AppStyle(
 			margin(8)
-		)}  >
+		)}>
 			<ImageList variant="masonry" cols={2} gap={0}>
 				{
-					items.map((item) => {
-						return <PostItem
-							petName={item.petName}
-							avatarURL={item.avatarUrl}
-							imgURL={item.imgUrl}/>
+					items.map((pet) => {
+						return <PetItem key={`${pet.id} ${getRandomString(10)}`} pet={pet}/>
 					})
 				}
 			</ImageList>
 
-			<p ref={myRef} style={
-				AppStyle(
-					flexHori(),
-					flexCenterInParent()
-				)
-			}>
-				<CircularProgress/>
-			</p>
+			{hasMore &&
+                <p ref={myRef} style={
+					AppStyle(
+						flexHori(),
+						flexCenterInParent()
+					)
+				}>
+                    <CircularProgress/>
+                </p>}
 		</Column>
 	);
 }
@@ -132,11 +126,13 @@ export function useOnScreen(ref: any) {
 	}, [])
 
 	useEffect(() => {
-		if(ref.current) {
+		if (ref.current) {
 			observer.observe(ref.current)
 		}
 		// Remove the observer as soon as the component is unmounted
-		return () => { observer.disconnect() }
+		return () => {
+			observer.disconnect()
+		}
 	}, [observer, ref])
 
 	return isIntersecting

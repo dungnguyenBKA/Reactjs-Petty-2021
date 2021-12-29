@@ -52,7 +52,7 @@ export default function MyPet() {
 			{
 				pets.map(function (pet) {
 					return <MyPetItem key={pet.id} onClick={() => {
-					}} name={pet.name} age={pet.age} img={pet.avatar} gender={pet.gender}/>
+					}} name={pet.name} age={pet.age} img={''} gender={pet.gender}/>
 				})
 			}
 			<CreatePetButton eventClick={addPet}/>
@@ -70,7 +70,7 @@ interface MyPetItemProps extends BaseHTMLProps {
 
 const MyPetItem: FC<MyPetItemProps> = (props) => {
 	let genderImg;
-	if (props.gender === "male") {
+	if (props.gender === "Male") {
 		genderImg = maleLogo
 	} else {
 		genderImg = femaleLogo
