@@ -115,7 +115,7 @@ const AddImageItem: FC<AddImageItemProps> = (props) => {
 					radius(10),
 					border(Colors.color_8A8A8F),
 					borderWidth(1),
-					margin(12),
+					margin(16),
 					flexCenterInParent()
 				)}
 			>

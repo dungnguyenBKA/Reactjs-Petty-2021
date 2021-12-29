@@ -28,6 +28,7 @@ import BackIcon from "@mui/icons-material/ArrowBackIosNew";
 import {useNavigate} from "react-router-dom";
 import {Colors} from "../../AppColor";
 import bgHome from "../../asset/bg_home.png";
+import {BaseMobileScreen} from "../basescreen/BaseAppScreen";
 
 interface PersonalInfoProps {
 }
@@ -61,6 +62,7 @@ const PersonalInfo: FC<PersonalInfoProps> = () => {
 	}
 
 	return (
+		<BaseMobileScreen>
 		<div>
 			<header
 				style={AppStyle(
@@ -68,8 +70,8 @@ const PersonalInfo: FC<PersonalInfoProps> = () => {
 					paddingBottom(20)
 				)}
 			>
-				<div style={AppStyle(flexHori(), margin(20))}>
-					<ButtonView
+				<div style={AppStyle(flexHori(), marginStart(40))}>
+					<ButtonView style={{padding: 0}}
 						onClick={() => {
 							navigate(-1);
 						}}
@@ -112,13 +114,13 @@ const PersonalInfo: FC<PersonalInfoProps> = () => {
 						style={AppStyle(width(42), height(42), radius(21), padding(0))}
 						src="https://lh3.googleusercontent.com/proxy/ZOwrvNtJI1G9uq96CA7_kfOqgHAXdC-g_-bcu6pEePUmx6ZJzIZT8lHv5vGJzp1qvfZ1Kp1w4mH3E7UMzvYYR0B56g5E7Gw9WKu_z8nn8NvmBZMWXDvt0UJSkgU"
 					/>
-					<Column style={AppStyle(flexVerti(), weightItem(1), marginStart(15))}>
+					<Column style={AppStyle(flexVerti(), marginStart(15))}>
 						<TextView style={AppStyle(margin(0), width("auto"), bold(15))}>
 							Nguyễn Minh Dũng
 						</TextView>
-						<TextView style={AppStyle(margin(0), width("auto"), regular(13))}>
+						<ButtonView style={AppStyle(margin(0), padding(0), width("auto"), regular(13), textColor('rgb(0, 193, 129)'))}>
 							Đổi ảnh đại diện
-						</TextView>
+						</ButtonView>
 					</Column>
 					{/* <ButtonView>Lưu</ButtonView> */}
 				</div>
@@ -186,6 +188,7 @@ const PersonalInfo: FC<PersonalInfoProps> = () => {
 				/>
 			</Column>
 		</div>
+		</BaseMobileScreen>
 	);
 };
 

@@ -13,7 +13,7 @@ import {
 	flexCenter,
 	margin,
 	marginEnd,
-	marginHori,
+	marginHori, marginStart,
 	marginVertical,
 	padding,
 	radius,
@@ -91,7 +91,7 @@ const AddPetScreen: FC = () => {
 				<ButtonView
 					style={
 						AppStyle(
-							padding(25)
+							padding(0)
 						)
 					}
 					onClick={() => {
@@ -101,7 +101,7 @@ const AddPetScreen: FC = () => {
 				>
 					<BackIcon/>
 				</ButtonView>
-				<TextView style={AppStyle(semiBold(17), weightItem(1))}>
+				<TextView style={AppStyle(semiBold(17), weightItem(1), marginStart(13))}>
 					Báo danh Boss
 				</TextView>
 				<ButtonView onClick={handleSave}>
