@@ -15,31 +15,50 @@ import {
 import TextView from "../../components/Text";
 import Column from "../../components/Column";
 import {ImageListItem, Paper} from "@mui/material";
+import Pet from "../../models/Pet";
+import {useContext} from "react";
+import {AppCtx} from "../../App";
 
 interface PostProp {
-	petName: string;
-	avatarURL: string;
-	imgURL: string;
+	pet: Pet
 }
 
 
 export default function PostItem(props: PostProp) {
+	let pet = props.pet
+	const logger = useContext(AppCtx).logger
+
+	let listImages : string[]
+	try {
+		listImages = JSON.parse(pet.images)
+	} catch (e) {
+		logger.error(e)
+		listImages = []
+	}
+
+	let avatar: string
+	if(listImages.length === 0) {
+		avatar = ''
+	} else {
+		avatar = listImages[0]
+	}
+
 	return (
 		<Paper style={AppStyle(
 			radius(8),
 			margin(8),
 			cursorPointer()
 		)} elevation={1}>
-			<ImageListItem key={props.avatarURL} style={{
+			<ImageListItem key={pet.id} style={{
 				width: '100%',
 				height: 'auto'
 			}}>
 				<Column style={AppStyle(marginBottom(20), width('100%'))}>
 					<div>
-						<Card.Img style={AppStyle({position: 'relative'}, width('100%'))} src={props.imgURL}/>
+						<Card.Img style={AppStyle({position: 'relative'}, width('100%'))} src={listImages[0]}/>
 						<Card.Img style={AppStyle(width(48), height(48), circleImage(48),
 							{position: 'absolute', top: 10, left: 10, borderWidth: 2, borderColor: 'white'})}
-						          src={props.avatarURL}/>
+						          src={avatar}/>
 					</div>
 
 					<Column style={
@@ -47,7 +66,7 @@ export default function PostItem(props: PostProp) {
 							padding(20)
 						)
 					}>
-						<TextView style={AppStyle(regular(20))}>{props.petName}</TextView>
+						<TextView style={AppStyle(regular(20))}>{pet.name}</TextView>
 					</Column>
 
 				</Column>

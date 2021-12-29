@@ -53,7 +53,7 @@ const AddPetScreen: FC = () => {
 		let promises: Promise<string>[] = _listImage.map((image) => {
 			let refImg = ref(storage, `images/${image.name}`);
 			let uploadTask = uploadBytesResumable(refImg, image);
-			let promise = new Promise<string>((resolve, reject) => {
+			return new Promise<string>((resolve, reject) => {
 				uploadTask.on(
 					"state_changed",
 					undefined,
@@ -68,7 +68,6 @@ const AddPetScreen: FC = () => {
 					}
 				);
 			});
-			return promise;
 		});
 
 		let uploadAllPromise = Promise.all(promises).then(

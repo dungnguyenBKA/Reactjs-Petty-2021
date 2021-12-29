@@ -37,6 +37,7 @@ import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 
 import {Visibility, VisibilityOff} from "@mui/icons-material";
+import firebaseHelperInstance from "../../helper/FirebaseHelper";
 
 export default function LoginScreen() {
 	const navigate = useNavigate()
@@ -48,7 +49,7 @@ export default function LoginScreen() {
 
 	useEffect(() => {
 		if (appContext.currentUser) {
-			navigate(-1)
+			navigate('../')
 		}
 	})
 
@@ -59,21 +60,25 @@ export default function LoginScreen() {
 		setLoading(true)
 		try {
 			let res = await appApi.login(userName, pwd)
-			let data = res.data
-			if (data.statusCode === 200) {
+			let resData = res.data
+			if (resData.statusCode === 200) {
 				// success
-				appApi.setToken(data.token)
-				appContext.setCurrentUser(data.user)
+				appApi.setToken(resData.data.token)
+				logger.log('app token: ', resData.data.token)
+				appContext.setCurrentUser(resData.data.user)
 				logger.successToast()
-				navigate(-1)
+
+				// navigate home
+				navigate('../')
 			} else {
-				logger.errorToast()
+				let errMsg = resData.message ? resData.message : undefined
+				logger.errorToast(errMsg)
 				appContext.setCurrentUser(undefined)
-				setLoading(false)
 			}
 		} catch (e) {
 			logger.errorToast()
 			appContext.setCurrentUser(undefined)
+		} finally {
 			setLoading(false)
 		}
 	}
@@ -174,13 +179,21 @@ export default function LoginScreen() {
 }
 
 const PopUpSignUp = () => {
-	let logger = useContext(AppCtx).logger
+	let appContext = useContext(AppCtx)
+	let logger = appContext.logger
+	let appApi = appContext.appApi
+	let setLoading = appContext.setLoading
+	let navigate = useNavigate()
+
 	let [name, setName] = useState('')
 	let [userName, setUserName] = useState('')
 	let [pwd, setPwd] = useState('')
 	let [confirmPwd, setConfirmPwd] = useState('')
 	let [showPassword, setShowPassword] = useState(false)
 	let [phone, setPhone] = useState('')
+
+	let [avatarUrl, setAvatarUrl] = useState('');
+	let [avatarFile, setAvatarFile] = useState<File>();
 
 	const handlePasswordChange = (event: any) => {
 		setPwd(event.target.value);
@@ -191,13 +204,6 @@ const PopUpSignUp = () => {
 	const isEmailTrue = (): boolean => {
 		return userName.includes('@')
 	}
-
-	let isFirstTime: boolean
-	isFirstTime = false
-
-	useEffect(() => {
-		isFirstTime = true
-	}, [])
 
 	const isPassWordMatch = (): boolean => {
 		return pwd === confirmPwd
@@ -215,12 +221,47 @@ const PopUpSignUp = () => {
 	}
 
 	const handleRegister = async () => {
-		if (!isValid) {
-			logger.errorToast('No valid')
-			return
+		setLoading(true)
+		// upload images
+		if(avatarFile) {
+			try {
+				let imageUrl = await firebaseHelperInstance.uploadImageFile(avatarFile)
+				if (imageUrl) {
+					setAvatarUrl(imageUrl)
+				} else {
+					setAvatarUrl('')
+				}
+			} catch (e) {
+				logger.error(e)
+				setAvatarUrl('')
+			}
 		}
 
-		logger.successToast('valid')
+		// register
+		try {
+			let res = await appApi.register(
+				name, userName, pwd, avatarUrl, phone
+			)
+			let resData = res.data
+			if (resData.statusCode === 200) {
+				// success
+				appApi.setToken(resData.data.token)
+				appContext.setCurrentUser(resData.data.user)
+				logger.successToast()
+
+				// navigate home
+				navigate('../')
+			} else {
+				let errMsg = resData.message ? resData.message : undefined
+				logger.errorToast(errMsg)
+				appContext.setCurrentUser(undefined)
+			}
+		} catch (e) {
+			logger.error(e)
+			appContext.setCurrentUser(undefined)
+		} finally {
+			setLoading(false)
+		}
 	}
 
 	useEffect(() => {
@@ -228,7 +269,6 @@ const PopUpSignUp = () => {
 	}, [pwd, confirmPwd, userName])
 
 	let handleHelpEmail = (): string | undefined => {
-		if (isFirstTime) return undefined
 		if (!isEmailTrue()) {
 			return 'Email không đúng định dạng'
 		} else {
@@ -314,6 +354,17 @@ const PopUpSignUp = () => {
 					helperText={<p>{handleHelpEmail()}</p>}
 				/>
 
+				<TextField
+					style={AppStyle(weightItem(1), marginTop(16), radius(8))}
+					type="number"
+					placeholder="Phone number"
+					value={phone}
+					onChange={e => {
+						setPhone(e.currentTarget.value)
+					}}
+					label='Phone number'
+				/>
+
 
 				<TextField
 					style={AppStyle(weightItem(1), radius(8))}
@@ -353,6 +404,23 @@ const PopUpSignUp = () => {
 						</InputAdornment>
 					}}
 				/>
+
+				<input
+					id="file"
+					type="file"
+					accept="image/*"
+
+					onChange={(event) => {
+						let files = event.target.files;
+						if (files && files[0]) {
+							setAvatarFile(files[0])
+						} else {
+							logger.error("Đã có lỗi xảy ra, vui lòng thử lại")
+						}
+						event.target.value = ''
+					}}
+				/>
+
 				<Rows style={AppStyle(marginTop(16), flexCenterInParent())}>
 
 

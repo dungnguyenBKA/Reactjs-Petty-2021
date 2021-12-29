@@ -1,7 +1,16 @@
-export default class Pet{
-    id: string = ""
-    gender: string = ""
-    name: string = ""
-    age: string = ""
-    avatar: string = ""
+export default interface Pet{
+    id: string,
+    name: string,
+    dob: string,
+    gender: string,
+    type: string,
+    class: string,
+    resource: string,
+    status: string|null,
+    address: string|null,
+    age: string,
+    userId: number,
+    images: string,
+    createdAt: string,
+    updatedAt: string,
 }

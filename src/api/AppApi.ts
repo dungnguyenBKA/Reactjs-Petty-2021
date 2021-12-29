@@ -1,6 +1,7 @@
 import axios, {AxiosRequestConfig, AxiosStatic} from "axios";
 import * as AxiosLogger from 'axios-logger';
 import Constants from "./Constants";
+import {LoginResponse, RegisterResponse} from "./ApiJsonFormat";
 
 export default class AppApi{
 	private appAxios: AxiosStatic
@@ -29,18 +30,19 @@ export default class AppApi{
 			'email': username,
 			'password': pwd
 		}
-		return this.appAxios.post(Constants.BASE_URL_V1 + Constants.endPoint.LOGIN, bodyData, this.appAxiosConfig)
+		return this.appAxios.post<LoginResponse>(Constants.BASE_URL_V1 + Constants.endPoint.LOGIN, bodyData, this.appAxiosConfig)
 	}
 
-	register = (name: string, username: string, pwd: string, phone: string|undefined) => {
+	register = (name: string, username: string, pwd: string, avatar: string|undefined, phone: string|undefined) => {
 		let bodyData = {
 			'email': username,
 			'password': pwd,
-			'repeat_password': pwd,
+			'repeatPassword': pwd,
 			'phone': phone? phone : '',
-			'name': name
+			'name': name,
+			'avatar': avatar? avatar : '',
 		}
-		return this.appAxios.post(Constants.BASE_URL_V1 + Constants.endPoint.LOGIN, bodyData, this.appAxiosConfig)
+		return this.appAxios.post<RegisterResponse>(Constants.BASE_URL_V1 + Constants.endPoint.REGISTER, bodyData, this.appAxiosConfig)
 	}
 }
 

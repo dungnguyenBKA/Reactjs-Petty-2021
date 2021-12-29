@@ -13,7 +13,7 @@ export default class Logger {
 		this.isShowLog = window.location.hostname === "localhost";
 	}
 
-	log = (data: any[]|any) => {
+	log = (...data: any[]) => {
 		if (this.isShowLog) {
 			console.log(data)
 		}

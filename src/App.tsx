@@ -81,6 +81,7 @@ export function App() {
 		} else {
 			// logout
 			localStorage.setItem('user', '')
+			defaultContext.appApi.setToken('')
 		}
 		setUser(user)
 	}
