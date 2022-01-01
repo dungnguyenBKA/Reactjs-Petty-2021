@@ -1,10 +1,9 @@
 import {getDownloadURL, ref, uploadBytesResumable} from "@firebase/storage";
-import {FC, useState} from "react";
+import {FC, useContext, useState} from "react";
 import {ButtonGroup, Dropdown} from "react-bootstrap";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
-import toast from "react-hot-toast";
 import {Colors} from "../../AppColor";
 import {
 	AppStyle,
@@ -13,7 +12,8 @@ import {
 	flexCenter,
 	margin,
 	marginEnd,
-	marginHori, marginStart,
+	marginHori,
+	marginStart,
 	marginVertical,
 	padding,
 	radius,
@@ -33,6 +33,13 @@ import "./styles.css";
 
 import BackIcon from '@mui/icons-material/ArrowBackIosNew'
 import {useNavigate} from "react-router-dom";
+import Pet from "../../models/Pet";
+import DateHelper from "../../helper/DateHelper";
+import Logger from "../../api/Logger";
+import {AppCtx} from "../../App";
+import AppApi, {NetworkErrorHandler} from "../../api/AppApi";
+import {BaseResponse} from "../../api/ApiJsonFormat";
+import {AxiosError} from "axios";
 
 let genderOptions = ["Đực", "Cái", "Không xác định"];
 let typeOptions = ["Dog", "Cat", "Fish"];
@@ -42,14 +49,69 @@ let statusOptions = ["Triệt sản", "No Triệt sản"];
 
 
 const AddPetScreen: FC = () => {
-	let [listImage, setListImage] = useState<File[]>([]);
 	let navigate = useNavigate()
+	let [listImage, setListImage] = useState<File[]>([])
+	let [listImageJson, setListImageJson] = useState('')
+	let [name, setName] = useState('')
+	let [dob, setDob] = useState('')
+	let [petType, setType] = useState('')
+	let [petClass, setClass] = useState('')
+	let [petAddress, setAddress] = useState('')
+	let [gender, setGender] = useState('')
+	let [resource, setResource] = useState('')
+	let [status, setStatus] = useState('')
 
-	const handleSave = () => {
-		uploadImages(listImage);
+	let appContext = useContext(AppCtx)
+	let setLoading = appContext.setLoading
+	let appApi = appContext.appApi
+	let user = appContext.currentUser
+
+	const handleSave = async () => {
+		if (!user) {
+			return
+		}
+		// upload to get urls of pet's images
+		await uploadImages(listImage);
+
+		// call api
+		setLoading(true)
+		try {
+			let newPet = new Pet()
+			newPet.name = name
+			newPet.dob = dob
+			newPet.gender = gender
+			newPet.type = petType
+			newPet.class = petClass
+			newPet.address = petAddress
+			newPet.resource = resource
+			newPet.status = status
+			newPet.images = listImageJson
+
+			let res = await appApi.ensureAuthorize(user.email, user.pwd, () => {
+				return appApi.addPet(newPet)
+			})
+			if (res.data.statusCode === 200) {
+				Logger.successToast()
+				navigate('../')
+			} else {
+				Logger.errorToast()
+			}
+		} catch (e) {
+			AppApi.handleCallApiError(e, new class implements NetworkErrorHandler {
+				onNetworkError(e: AxiosError<BaseResponse<any>>): void {
+					Logger.errorToast(e.response?.data.message)
+				}
+
+				onOtherError(e: unknown): void {
+					Logger.errorToast()
+				}
+			}())
+		} finally {
+			setLoading(false)
+		}
 	};
 
-	const uploadImages = (_listImage: File[]) => {
+	const uploadImages = async (_listImage: File[]) => {
 		let promises: Promise<string>[] = _listImage.map((image) => {
 			let refImg = ref(storage, `images/${image.name}`);
 			let uploadTask = uploadBytesResumable(refImg, image);
@@ -70,19 +132,17 @@ const AddPetScreen: FC = () => {
 			});
 		});
 
-		let uploadAllPromise = Promise.all(promises).then(
-			(value) => {
-				navigate(-1)
-			}
-		);
-
-		toast.promise(uploadAllPromise, {
-			loading: "Uploading",
-			success: "Upload all images, links in console",
-			error: "Error when upload image",
-		});
+		setLoading(true)
+		try {
+			let urls = await Promise.all(promises)
+			setListImageJson(JSON.stringify(urls))
+		} catch (e) {
+			Logger.error(e)
+			Logger.errorToast()
+		} finally {
+			setLoading(false)
+		}
 	};
-
 
 	return (
 		<Column>
@@ -112,49 +172,65 @@ const AddPetScreen: FC = () => {
 				</ButtonView>
 			</Rows>
 
-			<AddImage listImage={listImage} setListImage={setListImage}/>
+			<AddImage setListImage={setListImage}/>
 
 			<Column style={AppStyle(marginHori(16))}>
 				<TextView style={AppStyle(semiBold(17))}>THÔNG TIN CHUNG</TextView>
-				<InfoInputFromKeyBoard isNecessary={true} title={"Tên Boss"}/>
-				<AddDate/>
+				<InfoInputFromKeyBoard
+					isNecessary={true}
+					title={"Tên Boss"}
+					onChangeValue={setName}
+				/>
+				<AddDate setDate={(date) => {
+					setDob(DateHelper.dateToFormatString(date))
+				}}/>
 				<InfoInputDropDown
 					isNecessary={true}
 					title={"Giới tính"}
 					listOption={genderOptions}
+					onChangeValue={setGender}
 				/>
 				<InfoInputDropDown
 					isNecessary={true}
 					title={"Loài"}
 					listOption={typeOptions}
+					onChangeValue={setType}
 				/>
 				<InfoInputDropDown
 					isNecessary={true}
 					title={"Bộ tộc"}
 					listOption={botocOptions}
+					onChangeValue={setClass}
 				/>
 				<InfoInputDropDown
 					isNecessary={true}
 					title={"Nguồn gốc"}
 					listOption={fromOptions}
+					onChangeValue={setResource}
 				/>
 				<InfoInputDropDown
 					isNecessary={false}
 					title={"Tình trạng"}
 					listOption={statusOptions}
+					onChangeValue={setStatus}
 				/>
 				<TextView style={AppStyle(semiBold(17))}>NƠI Ở HIỆN TẠI</TextView>
 
 				<InfoInputFromKeyBoard
 					isNecessary={false}
 					title={"Số nhà, đường/phố"}
+					onChangeValue={setAddress}
 				/>
 			</Column>
 		</Column>
 	);
 };
 
-function AddDate() {
+interface AddDateProps {
+	setDate: (date: Date) => void
+}
+
+const AddDate: FC<AddDateProps> = (props) => {
 	const [startDate, setStartDate] = useState<Date | undefined>(undefined);
 
 	return (
@@ -183,7 +259,12 @@ function AddDate() {
 			</Rows>
 			<DatePicker
 				selected={startDate}
-				onChange={(date: Date) => setStartDate(date!)}
+				onChange={
+					(date: Date) => {
+						setStartDate(date)
+						props.setDate(date)
+					}
+				}
 				dateFormat="dd.MM.yyyy"
 
 				onKeyDown={(e) => {
@@ -213,10 +294,8 @@ function AddDate() {
 
 export default AddPetScreen;
 
-interface InfoInputDropDownProps<T> {
-	isNecessary: boolean;
+interface InfoInputDropDownProps<T> extends InfoInputProps<T> {
 	listOption: T[];
-	title: string;
 }
 
 const InfoInputDropDown: FC<InfoInputDropDownProps<string>> = (props) => {
@@ -244,7 +323,7 @@ const InfoInputDropDown: FC<InfoInputDropDownProps<string>> = (props) => {
 					>
 						{props.title}
 					</TextView>
-					{props.isNecessary === true && (
+					{props.isNecessary && (
 						<TextView style={textColor("red")}>*</TextView>
 					)}
 				</Rows>
@@ -259,6 +338,7 @@ const InfoInputDropDown: FC<InfoInputDropDownProps<string>> = (props) => {
 							key={item}
 							onClick={() => {
 								setValue(item);
+								props.onChangeValue(item)
 							}}
 						>
 							{item}
@@ -270,12 +350,13 @@ const InfoInputDropDown: FC<InfoInputDropDownProps<string>> = (props) => {
 	);
 };
 
-interface InfoInputProps {
+interface InfoInputProps<T> {
 	isNecessary: boolean;
 	title: string;
+	onChangeValue: (t: T) => void;
 }
 
-const InfoInputFromKeyBoard: FC<InfoInputProps> = (props) => {
+const InfoInputFromKeyBoard: FC<InfoInputProps<string>> = (props) => {
 	let [inputValue, setValue] = useState("");
 	return (
 		<Column
@@ -292,7 +373,7 @@ const InfoInputFromKeyBoard: FC<InfoInputProps> = (props) => {
 				<TextView style={AppStyle(textColor(Colors.color_8A8A8F), regular(12))}>
 					{props.title}
 				</TextView>
-				{props.isNecessary === true && (
+				{props.isNecessary && (
 					<TextView style={textColor("red")}>*</TextView>
 				)}
 			</Rows>
@@ -300,7 +381,9 @@ const InfoInputFromKeyBoard: FC<InfoInputProps> = (props) => {
 			<input
 				value={inputValue}
 				onChange={(event) => {
-					setValue(event.target.value);
+					let value = event.target.value
+					setValue(value);
+					props.onChangeValue(value);
 				}}
 				style={AppStyle(borderWidth(0), border("none"))}
 			/>

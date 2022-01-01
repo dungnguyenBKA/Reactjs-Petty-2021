@@ -4,46 +4,45 @@ import {toast} from "react-hot-toast";
  * Logger only on local (url == localhost)
  * */
 export default class Logger {
-	private readonly isShowLog: boolean
-	private readonly toastOpts = {
+	private static readonly toastOpts = {
 		duration: 1000
 	}
 
-	constructor() {
-		this.isShowLog = window.location.hostname === "localhost";
+	public static shouldShowLog() {
+		return window.location.hostname === "localhost";
 	}
 
-	log = (...data: any[]) => {
-		if (this.isShowLog) {
+	public static log = (...data: any[]) => {
+		if (Logger.shouldShowLog()) {
 			console.log(data)
 		}
 	}
 
-	error = (e: unknown) => {
-		if (this.isShowLog) {
+	public static error = (e: unknown) => {
+		if (Logger.shouldShowLog()) {
 			console.error(e)
 		}
 	}
 
-	successToastLog = (msg?: string) => {
-		if (this.isShowLog) {
+	public static successToastLog = (msg?: string) => {
+		if (Logger.shouldShowLog()) {
 			this.successToast(msg)
 		}
 	}
 
-	errorToastLog = (msg?: string) => {
-		if (this.isShowLog) {
+	public static errorToastLog = (msg?: string) => {
+		if (Logger.shouldShowLog()) {
 			this.errorToast(msg)
 		}
 	}
 
-	normalToastLog = (msg?: string) => {
-		if (this.isShowLog) {
+	public static normalToastLog = (msg?: string) => {
+		if (Logger.shouldShowLog()) {
 			this.normalToast(msg)
 		}
 	}
 
-	successToast = (msg?: string) => {
+	public static successToast = (msg?: string) => {
 		if (msg) {
 			toast.success(msg, this.toastOpts)
 		} else {
@@ -52,7 +51,7 @@ export default class Logger {
 
 	}
 
-	errorToast = (msg?: string) => {
+	public static errorToast = (msg?: string) => {
 		if (msg) {
 			toast.error(msg, this.toastOpts)
 		} else {
@@ -60,7 +59,7 @@ export default class Logger {
 		}
 	}
 
-	normalToast = (msg?: string) => {
+	public static normalToast = (msg?: string) => {
 		if (msg) {
 			toast(msg, this.toastOpts)
 		}

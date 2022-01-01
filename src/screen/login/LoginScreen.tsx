@@ -38,13 +38,16 @@ import 'reactjs-popup/dist/index.css';
 
 import {Visibility, VisibilityOff} from "@mui/icons-material";
 import firebaseHelperInstance from "../../helper/FirebaseHelper";
+import Logger from "../../api/Logger";
+import {AxiosError} from "axios";
+import AppApi, {NetworkErrorHandler} from "../../api/AppApi";
+import {BaseResponse} from "../../api/ApiJsonFormat";
 
 export default function LoginScreen() {
 	const navigate = useNavigate()
 	const appContext = React.useContext(AppCtx)
 
 	const appApi = appContext.appApi
-	const logger = appContext.logger
 	const setLoading = appContext.setLoading
 
 	useEffect(() => {
@@ -64,19 +67,31 @@ export default function LoginScreen() {
 			if (resData.statusCode === 200) {
 				// success
 				appApi.setToken(resData.data.token)
-				logger.log('app token: ', resData.data.token)
+				Logger.log('app token: ', resData.data.token)
+				// save pwd data in client
+				let currentUser = resData.data.user
+				currentUser.pwd = pwd
 				appContext.setCurrentUser(resData.data.user)
-				logger.successToast()
+				Logger.successToast()
 
 				// navigate home
 				navigate('../')
 			} else {
 				let errMsg = resData.message ? resData.message : undefined
-				logger.errorToast(errMsg)
+				Logger.errorToast(errMsg)
 				appContext.setCurrentUser(undefined)
 			}
 		} catch (e) {
-			logger.errorToast()
+			AppApi.handleCallApiError(e, new class implements NetworkErrorHandler {
+				onNetworkError(e: AxiosError<BaseResponse<any>>): void {
+					Logger.errorToast(e.response?.data.message)
+				}
+
+				onOtherError(e: unknown): void {
+					Logger.errorToast()
+				}
+			}())
+
 			appContext.setCurrentUser(undefined)
 		} finally {
 			setLoading(false)
@@ -180,7 +195,6 @@ export default function LoginScreen() {
 
 const PopUpSignUp = () => {
 	let appContext = useContext(AppCtx)
-	let logger = appContext.logger
 	let appApi = appContext.appApi
 	let setLoading = appContext.setLoading
 	let navigate = useNavigate()
@@ -223,7 +237,7 @@ const PopUpSignUp = () => {
 	const handleRegister = async () => {
 		setLoading(true)
 		// upload images
-		if(avatarFile) {
+		if (avatarFile) {
 			try {
 				let imageUrl = await firebaseHelperInstance.uploadImageFile(avatarFile)
 				if (imageUrl) {
@@ -232,7 +246,7 @@ const PopUpSignUp = () => {
 					setAvatarUrl('')
 				}
 			} catch (e) {
-				logger.error(e)
+				Logger.error(e)
 				setAvatarUrl('')
 			}
 		}
@@ -247,17 +261,17 @@ const PopUpSignUp = () => {
 				// success
 				appApi.setToken(resData.data.token)
 				appContext.setCurrentUser(resData.data.user)
-				logger.successToast()
+				Logger.successToast()
 
 				// navigate home
 				navigate('../')
 			} else {
 				let errMsg = resData.message ? resData.message : undefined
-				logger.errorToast(errMsg)
+				Logger.errorToast(errMsg)
 				appContext.setCurrentUser(undefined)
 			}
 		} catch (e) {
-			logger.error(e)
+			Logger.error(e)
 			appContext.setCurrentUser(undefined)
 		} finally {
 			setLoading(false)
@@ -415,7 +429,7 @@ const PopUpSignUp = () => {
 						if (files && files[0]) {
 							setAvatarFile(files[0])
 						} else {
-							logger.error("Đã có lỗi xảy ra, vui lòng thử lại")
+							Logger.error("Đã có lỗi xảy ra, vui lòng thử lại")
 						}
 						event.target.value = ''
 					}}

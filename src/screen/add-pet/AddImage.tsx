@@ -1,4 +1,4 @@
-import {FC} from "react";
+import {FC, useState} from "react";
 import {Colors} from "../../AppColor";
 import {
 	AppStyle,
@@ -23,29 +23,30 @@ import "./AddImage.css";
 
 import icCancle from "../../asset/ic_cancle.svg";
 import toast from "react-hot-toast";
+import Logger from "../../api/Logger";
 
 interface AddImageProps {
-	listImage: File[],
 	setListImage: (list: File[]) => void
 }
 
 const AddImage: FC<AddImageProps> = (props) => {
-	let {listImage, setListImage} = props
+	let [listImage, setListImage] = useState<File[]>([])
 
 	const pushIfNotDuplicate = (file: File) => {
 		let isDup = false;
 		for (let index = 0; index < listImage.length; index++) {
 			const element = listImage[index];
 			if (element.name === file.name) {
-				isDup = true;
-				break;
+				isDup = true
+				break
 			}
 		}
 		if (!isDup) {
-			let newList = [...listImage];
+			let newList = [...listImage]
 			newList.push(file)
-			setListImage(newList);
-			toast.success("Thành công")
+			setListImage(newList)
+			props.setListImage(newList)
+			Logger.log('add images')
 		} else {
 			toast.error("Trùng file!!")
 		}

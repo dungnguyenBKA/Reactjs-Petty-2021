@@ -30,6 +30,7 @@ import {useParams} from "react-router";
 import User from "../../models/User";
 import Pet from "../../models/Pet";
 import {AppCtx} from "../../App";
+import Logger from "../../api/Logger";
 
 interface PetDetailProp {
 
@@ -60,56 +61,59 @@ const PetDetail: FC<PetDetailProp> = () => {
 	let petId = params.petId ? params.petId : ''
 	const appContext = useContext(AppCtx)
 	const appApi = appContext.appApi
-	const logger = appContext.logger
 	const setLoading = appContext.setLoading
 
 	if (!petId) {
 		// err
 	}
 
-	const fetchPetDetail = async () => {
-		setLoading(true)
-		try {
-			let res = await appApi.getPetById(petId)
-			let resData = res.data
-			if (resData.statusCode === 200) {
-				logger.successToast("OK")
-				let pet = resData.data
-				let userId = pet.userId
-				setPet(resData.data)
-				await fetchUserData(userId)
-			} else {
-
-			}
-		} catch (e) {
-			logger.error(e)
-		} finally {
-			setLoading(false)
-		}
-	}
-
 	useEffect(() => {
-		fetchPetDetail().then(
-			() => logger.log('fetched data pet')
-		)
-	}, [])
+		let controller = new AbortController()
 
-	const fetchUserData = async (userId: number) => {
-		setLoading(true)
-		try {
-			let res = await appApi.getUserById(userId)
-			let resData = res.data
-			if (resData.statusCode === 200) {
-				setUser(resData.data)
-			} else {
+		const fetchUserData = async (userId: number) => {
+			setLoading(true)
+			try {
+				let res = await appApi.getUserById(userId, controller)
+				let resData = res.data
+				if (resData.statusCode === 200) {
+					setUser(resData.data)
+				} else {
 
+				}
+			} catch (e) {
+				Logger.error(e)
+			} finally {
+				setLoading(false)
 			}
-		} catch (e) {
-			logger.error(e)
-		} finally {
-			setLoading(false)
 		}
-	}
+
+		const fetchPetDetail = async () => {
+			setLoading(true)
+			try {
+				let res = await appApi.getPetById(petId, controller)
+				let resData = res.data
+				if (resData.statusCode === 200) {
+					Logger.successToast("OK")
+					let pet = resData.data
+					let userId = pet.userId
+					setPet(resData.data)
+					await fetchUserData(userId)
+				} else {
+
+				}
+			} catch (e) {
+				Logger.error(e)
+			} finally {
+				setLoading(false)
+			}
+		}
+		fetchPetDetail().then(
+			() => Logger.log('fetched data pet')
+		)
+		return () => {
+			controller.abort()
+		}
+	}, [])
 
 
 	return <Column style={AppStyle(border(Colors.color_E5E5E5))}>

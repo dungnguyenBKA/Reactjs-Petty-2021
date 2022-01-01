@@ -16,9 +16,9 @@ import TextView from "../../components/Text";
 import Column from "../../components/Column";
 import {ImageListItem, Paper} from "@mui/material";
 import Pet from "../../models/Pet";
-import {FC, useContext} from "react";
-import {AppCtx} from "../../App";
+import {FC} from "react";
 import {useNavigate} from "react-router-dom";
+import Logger from "../../api/Logger";
 
 interface PetItemProp {
 	pet: Pet
@@ -28,18 +28,17 @@ interface PetItemProp {
 const PetItem: FC<PetItemProp> = (props) => {
 	let navigate = useNavigate()
 	let pet = props.pet
-	const logger = useContext(AppCtx).logger
 
-	let listImages : string[]
+	let listImages: string[]
 	try {
 		listImages = JSON.parse(pet.images)
 	} catch (e) {
-		logger.error(e)
+		Logger.error(e)
 		listImages = []
 	}
 
 	let avatar: string
-	if(!listImages) {
+	if (!listImages) {
 		avatar = ''
 	} else {
 		avatar = listImages[0]

@@ -7,6 +7,8 @@ import {CircularProgress, ImageList} from "@mui/material";
 import {AppCtx} from "../../App";
 import Pet from "../../models/Pet";
 import {getRandomString} from "../../models/User";
+import Logger from "../../api/Logger";
+import AppApi from "../../api/AppApi";
 
 interface DiscoveryScreenProp {
 
@@ -56,36 +58,40 @@ const ListPets: FC = () => {
 	const myRef = useRef<HTMLParagraphElement | null>(null)
 	const appContext = useContext(AppCtx)
 	const appApi = appContext.appApi
-	const logger = appContext.logger
-
 	const isVisible = useOnScreen(myRef)
 
-	const getPets = async () => {
-		try {
-			let res = await appApi.getAllPets(page)
-			let resData = res.data
-			if (resData.statusCode === 200) {
-				if (!resData.data) {
-					setHasMore(false)
+	useEffect(() => {
+		let controller = new AbortController()
+		const getPets = async () => {
+			try {
+				let res = await appApi.getAllPets(page, AppApi.DEFAULT_LEN_ITEMS, controller)
+				let resData = res.data
+				if (resData.statusCode === 200) {
+					if (!resData.data) {
+						setHasMore(false)
+					} else {
+						setItems([...items, ...resData.data]);
+						setPage(page + 1);
+					}
 				} else {
-					setItems([...items, ...resData.data]);
-					//setPage(page + 1);
+					Logger.errorToast()
+					setHasMore(false)
 				}
-			} else {
-				logger.errorToast()
+			} catch (e) {
+				Logger.error(e)
+				Logger.errorToast()
 				setHasMore(false)
 			}
-		} catch (e) {
-			logger.error(e)
-			logger.errorToast()
-			setHasMore(false)
+			return
 		}
-	}
 
-	useEffect(() => {
-		getPets().then(
-			() => logger.log('fetch done')
+		getPets().then(() =>
+			Logger.log('fetch all pets done')
 		)
+
+		return () => {
+			controller.abort()
+		}
 	}, [isVisible])
 
 	return (<Column style={AppStyle(

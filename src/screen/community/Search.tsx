@@ -1,15 +1,5 @@
 import {FC, useState} from "react";
-import {
-	AppStyle,
-	cursorPointer,
-	flexCenter,
-	flexHori,
-	marginStart,
-	padding,
-	radius,
-	weightItem,
-	width
-} from "../../AppStyle";
+import {AppStyle, cursorPointer, flexCenter, flexHori, marginStart, padding, weightItem, width} from "../../AppStyle";
 import icPetSearch from "../../asset/ic_pet_search.svg";
 import {ImageView} from "../../components/ImageView";
 import {BaseHTMLProps} from "../../components/Props";

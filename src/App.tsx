@@ -34,35 +34,34 @@ interface LoadingState {
 interface AppContextInterface extends UserContextInterface, ThemeContextInterface, LoadingState {
 	// shared context
 	appApi: AppApi
-	logger: Logger
 }
 
 const defaultContext: AppContextInterface = {
 	currentUser: undefined,
-	setCurrentUser: () => {},
+	setCurrentUser: () => {
+	},
 
 	theme: 'light',
-	setTheme: () => {},
+	setTheme: () => {
+	},
 
-	appApi : new AppApi(),
-
-	logger: new Logger(),
+	appApi: new AppApi(),
 
 	isLoading: false,
-	setLoading: (() => {})
+	setLoading: (() => {
+	})
 }
 
 export const AppCtx = React.createContext<AppContextInterface>(defaultContext)
 
 export function App() {
-	let logger = defaultContext.logger
 	let currentUser: User | undefined
 	let userJson = localStorage.getItem('user')
 	if (userJson) {
 		try {
 			currentUser = JSON.parse(userJson)
 		} catch (error) {
-			logger.error(error)
+			Logger.error(error)
 			currentUser = undefined
 		}
 	} else {
@@ -130,7 +129,7 @@ export function App() {
 
 					<Toaster/>
 
-					<LoadingScreen isLoading={isLoading} />
+					<LoadingScreen isLoading={isLoading}/>
 				</div>
 			</ChatEngineWrapper>
 		</AppCtx.Provider>

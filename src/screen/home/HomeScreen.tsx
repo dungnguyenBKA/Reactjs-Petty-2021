@@ -1,4 +1,4 @@
-import {FC, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import TabPanel from "../../components/TabLayout";
 import Header from "./Header";
 import MyPet from "./MyPet";
@@ -10,9 +10,21 @@ import CommunityIcon from '@mui/icons-material/Group';
 import {AppStyle, background, height} from "../../AppStyle";
 import DiscoveryScreen from "../community/DiscoveryScreen";
 import {Paper} from "@mui/material";
+import {AppCtx} from "../../App";
+import {useNavigate} from "react-router-dom";
 
 export default function HomeScreen() {
 	const [value, setValue] = useState(0);
+	const navigate = useNavigate()
+	const appContext = useContext(AppCtx)
+	const currentUser = appContext.currentUser
+	const setLoading = appContext.setLoading
+
+	useEffect(() => {
+		if(!currentUser) {
+			navigate('/login')
+		}
+	})
 
 	return <Column
 		style={
@@ -21,8 +33,6 @@ export default function HomeScreen() {
 			)
 		}
 	>
-
-
 		<TabPanel index={0} value={value}>
 			<PersonalScreen/>
 		</TabPanel>
@@ -54,7 +64,6 @@ export default function HomeScreen() {
 	</Column>
 
 }
-
 
 
 function PersonalScreen() {
