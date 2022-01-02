@@ -49,7 +49,7 @@ export default function PersonalInfo (props: PersonalInfoProps) {
 
 	let user = appContext.currentUser
 	let setUser = appContext.setCurrentUser
-	const [disabled, setDisabled] = useState(false);
+	const [disabled, setDisabled] = useState(true);
 	// let [user, setUser] = useState<User>()
 	let [name, setName] = useState(user?.name)
 	let [email, setEmail] = useState(user?.email)
@@ -73,6 +73,7 @@ export default function PersonalInfo (props: PersonalInfoProps) {
 			let res = await appApi.updateUserDetail(user.id, name? name: '', email? email: '', phone? phone: '')
 			if (res.data.statusCode===200){
 				setUser(res.data.data)
+				setDisabled(!disabled)
 			}else{
 				Logger.errorToast()
 			}
@@ -166,22 +167,18 @@ export default function PersonalInfo (props: PersonalInfoProps) {
 		}, [])
 
 		const update = () => {
-			if (disabled) {
+		let title
+			if(disabled) {title = 'Sửa'} else title='Lưu'
 				return <ButtonView
-					style={AppStyle(weightItem(1), textColor(Colors.color_primary))}
-					onClick={updateUserDetail}
-				>
-					Sửa
-				</ButtonView>
-
-			} else {
-				return <ButtonView
-					style={AppStyle(weightItem(1), textColor(Colors.color_primary))}
-					onClick={updateUserDetail}
-				>
-					Lưu
-				</ButtonView>
-			}
+				style={AppStyle(weightItem(1), textColor(Colors.color_primary))}
+				onClick={
+					() => {
+						setDisabled(!disabled)
+						if(!disabled){updateUserDetail()}
+					}
+				}
+			>{title}
+			</ButtonView>
 		}
 
 		return (
