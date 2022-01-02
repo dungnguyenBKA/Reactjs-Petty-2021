@@ -80,15 +80,15 @@ export default function MyPet() {
 			<ButtonView style={AppStyle(textColor('#00C181'))}>Xem tất cả</ButtonView>
 		</div>
 
-		<Column>
-			<ImageList variant="masonry" cols={2} gap={0}>
+		<Column >
+
 				{
 					pets.map(function (pet) {
 						return <MyPetItem key={pet.id} pet={pet}/>
 					})
 				}
 
-			</ImageList>
+
 			<CreatePetButton eventClick={addPet}/>
 
 		</Column>

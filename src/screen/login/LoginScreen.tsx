@@ -4,12 +4,12 @@ import {AppCtx} from "../../App";
 import {
 	AppStyle,
 	background,
-	bold,
+	bold, borderColor,
 	borderWidth,
 	flexCenter,
 	flexCenterInParent,
 	flexHori,
-	height,
+	height, marginBottom, marginEnd,
 	marginStart,
 	marginTop,
 	minHeight,
@@ -197,7 +197,8 @@ const PopUpSignUp = () => {
 	let appContext = useContext(AppCtx)
 	let appApi = appContext.appApi
 	let setLoading = appContext.setLoading
-	let navigate = useNavigate()
+	let navigate = useNavigate();
+	let [isValid, setValid] = useState(false)
 
 	let [name, setName] = useState('')
 	let [userName, setUserName] = useState('')
@@ -213,7 +214,7 @@ const PopUpSignUp = () => {
 		setPwd(event.target.value);
 	};
 
-	let [isValid, setValid] = useState(false)
+
 
 	const isEmailTrue = (): boolean => {
 		return userName.includes('@')
@@ -369,7 +370,7 @@ const PopUpSignUp = () => {
 				/>
 
 				<TextField
-					style={AppStyle(weightItem(1), marginTop(16), radius(8))}
+					style={AppStyle(weightItem(1), marginTop(0), radius(8))}
 					type="number"
 					placeholder="Phone number"
 					value={phone}
@@ -381,7 +382,7 @@ const PopUpSignUp = () => {
 
 
 				<TextField
-					style={AppStyle(weightItem(1), radius(8))}
+					style={AppStyle(weightItem(1), radius(8), marginTop(16))}
 					type={showPassword ? 'text' : 'password'}
 					placeholder="Password"
 					value={pwd}
@@ -418,31 +419,48 @@ const PopUpSignUp = () => {
 						</InputAdornment>
 					}}
 				/>
+				<Rows style={AppStyle(marginTop(16) , width('100%'),
+					flexCenterInParent(),radius(8), marginStart('auto'), borderWidth(1),
+					marginEnd('auto'), background('#FFFFFF'), borderColor('rgb(0, 193, 129)'))}>
+					<label style ={AppStyle(marginTop('auto'), marginBottom('auto'),
+						textColor('rgb(0, 193, 129)'),
+						borderWidth(0), height(40))}>
+						Upload Ảnh
+						<input
 
-				<input
-					id="file"
-					type="file"
-					accept="image/*"
+							id="file"
+							type="file"
+							accept="image/*"
 
-					onChange={(event) => {
-						let files = event.target.files;
-						if (files && files[0]) {
-							setAvatarFile(files[0])
-						} else {
-							Logger.error("Đã có lỗi xảy ra, vui lòng thử lại")
-						}
-						event.target.value = ''
-					}}
-				/>
+
+							onChange={(event) => {
+								let files = event.target.files;
+								if (files && files[0]) {
+									setAvatarFile(files[0])
+								} else {
+									Logger.error("Đã có lỗi xảy ra, vui lòng thử lại")
+								}
+								// event.target.value = ''
+							}}
+						/>
+
+					</label>
+
+
+				</Rows>
+
+
+
+
 
 				<Rows style={AppStyle(marginTop(16), flexCenterInParent())}>
 
 
 					<button
-						style={AppStyle(background('rgb(0, 193, 129'),
+						style={AppStyle(background('#111111'),
 							radius(8),
 							textColor('#FFFFFF'),
-							borderWidth(0), minWidth('45%'), height(40))}
+							borderWidth(0), width('100%'), height(40))}
 
 						onClick={handleRegister} disabled={!isValid}>
 						Sign Up

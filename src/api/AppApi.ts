@@ -6,7 +6,7 @@ import {
 	BaseResponse,
 	LoginResponse,
 	PetDetailResponse,
-	RegisterResponse,
+	RegisterResponse, TokenUserResponse,
 	UserResponse
 } from "./ApiJsonFormat";
 import Pet from "../models/Pet";
@@ -174,6 +174,28 @@ export default class AppApi {
 			handler.onOtherError(e)
 		}
 	}
+	getUserDetail = (abortController?: AbortController) => {
+		const configs = this.configWithAbortController(abortController, this.appAxiosConfig)
+		return this. appAxios.get<UserResponse>(Constants.BASE_URL_V1 + Constants.endPoint.USER_DETAIL , configs);
+	}
+
+	updateUserDetail = (id: string, name: string, username: string, phone: string | undefined, abortController?: AbortController)=>{
+		let bodyData = {
+			'id': id,
+			'name': name,
+			'email': username,
+			'phone': phone ? phone : '',
+
+			// 'avatar': avatar ? avatar : '',
+		}
+
+	const configs = this.configWithAbortController(abortController, this.appAxiosConfig)
+		return this.appAxios.put<UserResponse>(Constants.BASE_URL_V1 + Constants.endPoint.USERS, bodyData, configs)
+
+}
+
+
+
 }
 
 export interface NetworkErrorHandler {
