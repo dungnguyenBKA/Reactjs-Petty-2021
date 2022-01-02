@@ -9,6 +9,7 @@ interface ValidateTextInputProps extends BaseTextFieldProps {
 	 * @param listValidator need an array of checking valid input (because may be more than one validate are required)
 	 */
 	checkValidFunctions: ((input: string) => [boolean, string?])[]
+	setValue: (value: string) => void
 }
 
 const ValidateTextInput: FC<ValidateTextInputProps> = (props) => {
@@ -49,7 +50,9 @@ const ValidateTextInput: FC<ValidateTextInputProps> = (props) => {
 		value={text}
 		onChange={
 			(e) => {
-				setText(e.target.value)
+				let value = e.target.value
+				setText(value)
+				props.setValue(value)
 			}
 		}
 		required
@@ -65,7 +68,7 @@ const ValidateTextInput: FC<ValidateTextInputProps> = (props) => {
 		}
 		}
 		helperText={handleErrorText()}
-		error={!isValid}
+		error={!isValid && text.length > 0}
 	/>
 }
 
