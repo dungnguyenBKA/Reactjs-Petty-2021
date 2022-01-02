@@ -1,9 +1,9 @@
 import {FC, useEffect, useState} from "react";
-import {BaseTextFieldProps} from "@mui/material/TextField/TextField";
+import {BaseTextFieldProps, StandardTextFieldProps} from "@mui/material/TextField/TextField";
 import {TextField} from "@mui/material";
 
 
-interface ValidateTextInputProps extends BaseTextFieldProps {
+interface ValidateTextInputProps extends StandardTextFieldProps {
 	/**
 	 * @name checkValidFunctions
 	 * @param listValidator need an array of checking valid input (because may be more than one validate are required)
@@ -55,7 +55,7 @@ const ValidateTextInput: FC<ValidateTextInputProps> = (props) => {
 				props.setValue(value)
 			}
 		}
-		required
+
 		onFocus={
 			(e) => {
 				setIsValid(checkIsValid())
