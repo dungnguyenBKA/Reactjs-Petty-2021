@@ -20,10 +20,18 @@ import React from "react";
 import ButtonView from "../../components/ButtonView"
 import {useNavigate} from "react-router-dom"
 import Rows from "../../components/Row";
+import {Avatar} from "@mui/material";
+import {deepPurple} from "@mui/material/colors";
 
 export default function Header() {
 	const appContext = React.useContext(AppCtx)
 	let [currentUser, setCurrentUser] = [appContext.currentUser, appContext.setCurrentUser]
+
+	// const avatarHandler = () => {
+	// 	if(currentUser?.avatar === 'null'){
+	// 		return <Avatar sx={{ bgcolor: deepPurple[500] }}>OP</Avatar>
+	// 	}else return
+	// }
 
 	const navigate = useNavigate()
 
@@ -47,7 +55,10 @@ export default function Header() {
 					style={AppStyle(weightItem(1))}
 				>
 					<Rows>
-						<ImageView style={AppStyle(circleImage(42))} src={currentUser?.avatar}/>
+
+						{/*<ImageView style={AppStyle(circleImage(42))} src={currentUser?.avatar}/>*/}
+						{currentUser.avatar === null && <Avatar sx={{ bgcolor: deepPurple[500] }}>{currentUser.name.slice(0, 2).toUpperCase()}</Avatar>}
+						{currentUser.avatar !== null && <Avatar style={AppStyle(circleImage(42))} src={currentUser?.avatar}/>}
 
 						<div style={AppStyle(flexVerti(), marginStart(15))}>
 							<p style={AppStyle(margin(0), bold(17), textColor("#007B52"), {textAlign: 'left'})}>{currentUser?.name}</p>

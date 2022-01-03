@@ -1,12 +1,13 @@
 import {getDownloadURL, ref, uploadBytesResumable} from "@firebase/storage";
-import {FC, useContext, useState} from "react";
+import React, {FC, useContext, useState} from "react";
 import {ButtonGroup, Dropdown} from "react-bootstrap";
 import DatePicker from "react-datepicker";
+
 
 import "react-datepicker/dist/react-datepicker.css";
 import {Colors} from "../../AppColor";
 import {
-	AppStyle,
+	AppStyle, background,
 	border,
 	borderWidth,
 	flexCenter,
@@ -40,6 +41,10 @@ import {AppCtx} from "../../App";
 import AppApi, {NetworkErrorHandler} from "../../api/AppApi";
 import {BaseResponse} from "../../api/ApiJsonFormat";
 import {AxiosError} from "axios";
+import ValidateTextInput from "../../components/ValidatorInput";
+import {TextField} from "@mui/material";
+import {useForm} from "react-hook-form";
+import BaseValidateTextInput from "../../components/BaseValidateTextInput";
 
 let genderOptions = ["Đực", "Cái", "Không xác định"];
 let typeOptions = ["Dog", "Cat", "Fish"];
@@ -60,11 +65,47 @@ const AddPetScreen: FC = () => {
 	let [gender, setGender] = useState('')
 	let [resource, setResource] = useState('')
 	let [status, setStatus] = useState('')
+	let [isValid, setIsValid] = useState(false)
+	const { register } = useForm();
+
+
 
 	let appContext = useContext(AppCtx)
 	let setLoading = appContext.setLoading
 	let appApi = appContext.appApi
 	let user = appContext.currentUser
+
+	let checkIsLenValid = (text: string): [boolean, string?] => {
+		return [text.length >= 0, 'field is invalid'];
+	}
+
+	const buttonSave = () => {
+		if(isValid){
+			return <ButtonView onClick={handleSave}>
+				<input type='Submit' value='Lưu'
+					   style={AppStyle(semiBold(17), textColor(Colors.color_primary), borderWidth(0), background('#FFFFFF'))} disabled={!isValid}
+				/>
+			</ButtonView>
+		} else {
+			return <ButtonView onClick={handleSave}>
+			<input type='Submit' value='Lưu'
+				   style={AppStyle(semiBold(17), textColor('grey'), borderWidth(0), background('#FFFFFF'))} disabled={isValid}
+			/>
+		</ButtonView>}
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	const handleSave = async () => {
 		if (!user) {
@@ -93,6 +134,7 @@ const AddPetScreen: FC = () => {
 			if (res.data.statusCode === 200) {
 				Logger.successToast()
 				navigate('../')
+				setIsValid(!isValid)
 			} else {
 				Logger.errorToast()
 			}
@@ -163,45 +205,69 @@ const AddPetScreen: FC = () => {
 				<TextView style={AppStyle(semiBold(17), weightItem(1), marginStart(13))}>
 					Báo danh Boss
 				</TextView>
-				<ButtonView onClick={handleSave}>
-					<TextView
-						style={AppStyle(semiBold(17), textColor(Colors.color_primary))}
-					>
-						Lưu
-					</TextView>
-				</ButtonView>
+				{buttonSave()}
+				{/*<ButtonView onClick={handleSave}>*/}
+				{/*	<input type='Submit' value='Lưu' onChange={()=>setIsValid(!isValid)}*/}
+				{/*		style={AppStyle(semiBold(17), borderWidth(0), background('#FFFFFF'))} disabled={isValid}*/}
+				{/*	/>*/}
+				{/*</ButtonView>*/}
 			</Rows>
 
 			<AddImage setListImage={setListImage}/>
 
 			<Column style={AppStyle(marginHori(16))}>
 				<TextView style={AppStyle(semiBold(17))}>THÔNG TIN CHUNG</TextView>
-				<InfoInputFromKeyBoard
-					isNecessary={true}
-					title={"Tên Boss"}
-					onChangeValue={setName}
-				/>
-				<AddDate setDate={(date) => {
-					setDob(DateHelper.dateToFormatString(date))
-				}}/>
+
+
+				<BaseValidateTextInput checkValidFunctions={[checkIsLenValid]} setValue={setName} value={name} type="text"
+									   placeholder="Báo danh Boss" />
+				<AddDate validCheck = {checkIsLenValid}
+						 setDate={(date) => {setDob(DateHelper.dateToFormatString(date))}}/>
+				<BaseValidateTextInput
+					checkValidFunctions={[checkIsLenValid]} setValue={setType} value={petType} type="text"
+					placeholder="Loài" />
+				<BaseValidateTextInput
+				checkValidFunctions={[checkIsLenValid]} setValue={setClass} value={petClass} type="text"
+				placeholder="Bộ tộc" />
+
+
+
+
+
+				{/*<InfoInputFromKeyBoard*/}
+				{/*	isNecessary={true}*/}
+				{/*	title={"Tên Boss"}*/}
+				{/*	onChangeValue={setName}*/}
+				{/*	onBlur={validNameCheck}*/}
+
+
+
+				{/*/>*/}
 				<InfoInputDropDown
 					isNecessary={true}
-					title={"Giới tính"}
-					listOption={genderOptions}
-					onChangeValue={setGender}
-				/>
-				<InfoInputDropDown
-					isNecessary={true}
-					title={"Loài"}
-					listOption={typeOptions}
-					onChangeValue={setType}
-				/>
-				<InfoInputDropDown
-					isNecessary={true}
-					title={"Bộ tộc"}
-					listOption={botocOptions}
-					onChangeValue={setClass}
-				/>
+				title={"Giới tính"}
+				listOption={genderOptions}
+				onChangeValue={setGender}/>
+				{/*<InfoInputDropDown*/}
+				{/*	isNecessary={true}*/}
+				{/*	title={"Loài"}*/}
+				{/*	listOption={typeOptions}*/}
+				{/*	onChangeValue={setType}*/}
+
+				{/*	onBlur={validNameCheck}*/}
+
+				{/*	// required = {handleValid}*/}
+				{/*/>*/}
+				{/*<InfoInputDropDown*/}
+				{/*	isNecessary={true}*/}
+				{/*	title={"Bộ tộc"}*/}
+				{/*	listOption={botocOptions}*/}
+				{/*	onChangeValue={setClass}*/}
+
+				{/*	onBlur={validNameCheck}*/}
+
+				{/*	// required = {handleValid}*/}
+				{/*/>*/}
 				<InfoInputDropDown
 					isNecessary={true}
 					title={"Nguồn gốc"}
@@ -227,6 +293,7 @@ const AddPetScreen: FC = () => {
 };
 
 interface AddDateProps {
+	validCheck: any;
 	setDate: (date: Date) => void
 }
 
@@ -280,6 +347,7 @@ const AddDate: FC<AddDateProps> = (props) => {
 				scrollableYearDropdown
 
 				customInput={<input
+
 					style={AppStyle(
 						semiBold(17),
 						textColor(Colors.color_primary),
@@ -354,10 +422,13 @@ interface InfoInputProps<T> {
 	isNecessary: boolean;
 	title: string;
 	onChangeValue: (t: T) => void;
+	onBlur?: any;
+
 }
 
 const InfoInputFromKeyBoard: FC<InfoInputProps<string>> = (props) => {
 	let [inputValue, setValue] = useState("");
+
 	return (
 		<Column
 			style={AppStyle(
@@ -379,13 +450,19 @@ const InfoInputFromKeyBoard: FC<InfoInputProps<string>> = (props) => {
 			</Rows>
 
 			<input
+
 				value={inputValue}
 				onChange={(event) => {
 					let value = event.target.value
 					setValue(value);
 					props.onChangeValue(value);
+
 				}}
-				style={AppStyle(borderWidth(0), border("none"))}
+				onBlur={props.onBlur}
+				style={AppStyle(borderWidth(0), border('none'))}
+
+
+
 			/>
 		</Column>
 	);

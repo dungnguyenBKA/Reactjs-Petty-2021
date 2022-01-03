@@ -3,7 +3,7 @@ import {
 	AppStyle,
 	background,
 	bold,
-	borderWidth,
+	borderWidth, circleImage,
 	flexCenter,
 	flexHori,
 	flexVerti,
@@ -38,6 +38,8 @@ import {AxiosError} from "axios";
 import {BaseResponse} from "../../api/ApiJsonFormat";
 import {getDownloadURL, ref, uploadBytesResumable} from "@firebase/storage";
 import {storage} from "../../components/firebase/FirebaseApp";
+import {Avatar} from "@mui/material";
+import {deepPurple} from "@mui/material/colors";
 
 interface PersonalInfoProps {
 }
@@ -214,10 +216,14 @@ export default function PersonalInfo (props: PersonalInfoProps) {
 								marginEnd(40)
 							)}
 						>
-							<ImageView
-								style={AppStyle(width(42), height(42), radius(21), padding(0))}
-								src="https://lh3.googleusercontent.com/proxy/ZOwrvNtJI1G9uq96CA7_kfOqgHAXdC-g_-bcu6pEePUmx6ZJzIZT8lHv5vGJzp1qvfZ1Kp1w4mH3E7UMzvYYR0B56g5E7Gw9WKu_z8nn8NvmBZMWXDvt0UJSkgU"
-							/>
+
+							{/*<ImageView*/}
+							{/*	style={AppStyle(width(42), height(42), radius(21), padding(0))}*/}
+							{/*	src="https://lh3.googleusercontent.com/proxy/ZOwrvNtJI1G9uq96CA7_kfOqgHAXdC-g_-bcu6pEePUmx6ZJzIZT8lHv5vGJzp1qvfZ1Kp1w4mH3E7UMzvYYR0B56g5E7Gw9WKu_z8nn8NvmBZMWXDvt0UJSkgU"*/}
+							{/*/>*/}
+
+							{user?.avatar=== null && <Avatar sx={{ bgcolor: deepPurple[500] }}>{user.name.slice(0, 2).toUpperCase()}</Avatar>}
+							{user?.avatar !== null && <Avatar style={AppStyle(circleImage(42))} src={user?.avatar}/>}
 							<Column style={AppStyle(flexVerti(), marginStart(15))}>
 								<TextView style={AppStyle(margin(0), width("auto"), bold(15))}>
 									{name}

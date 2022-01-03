@@ -1,4 +1,4 @@
-import {FC, useContext, useEffect, useState} from "react";
+import React, {FC, useContext, useEffect, useState} from "react";
 import {
 	AppStyle,
 	border,
@@ -31,6 +31,8 @@ import User from "../../models/User";
 import Pet from "../../models/Pet";
 import {AppCtx} from "../../App";
 import Logger from "../../api/Logger";
+import {Avatar} from "@mui/material";
+import {deepPurple} from "@mui/material/colors";
 
 interface PetDetailProp {
 
@@ -168,7 +170,12 @@ interface ContactBoxProp extends BaseHTMLProps {
 const ContactBox: FC<ContactBoxProp> = (props) => {
 	let user = props.user
 	return <Rows style={AppStyle(margin(16))}>
-		<ImageView src={user?.avatar} style={AppStyle(circleImage(36))}/>
+
+		{user?.avatar=== null && <Avatar sx={{ bgcolor: deepPurple[500] }}>{user.name.slice(0, 2).toUpperCase()}</Avatar>}
+		{user?.avatar !== null && <Avatar style={AppStyle(circleImage(36))} src={user?.avatar}/>}
+
+
+		{/*<ImageView src={user?.avatar} style={AppStyle(circleImage(36))}/>*/}
 		<Column style={AppStyle(weightItem(1), marginHori(16))}>
 			<TextView style={regular(13)}>Liên hệ với Chủ</TextView>
 			<TextView style={semiBold(15)}>{user?.name}</TextView>
