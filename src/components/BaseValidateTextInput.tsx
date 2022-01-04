@@ -32,7 +32,6 @@ const BaseValidateTextInput: FC<BaseValidateTextInputProps> = (props) => {
     let handleErrorText = (): string => {
         for (const checkValidFunction of checkValidFunctions) {
             let res = checkValidFunction(text)
-            console.log(res)
             if (!res[0]) {
                 return res[1] ? res[1] : ''
             }
@@ -59,12 +58,10 @@ const BaseValidateTextInput: FC<BaseValidateTextInputProps> = (props) => {
         onFocus={
             (e) => {
                 setIsValid(checkIsValid())
-                console.log('on focus')
             }
         }
         onBlur={(e) => {
             setIsValid(true)
-            console.log('on blur')
         }
         }
         helperText={handleErrorText()}

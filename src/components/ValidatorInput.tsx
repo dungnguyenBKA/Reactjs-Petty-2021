@@ -1,5 +1,5 @@
 import {FC, useEffect, useState} from "react";
-import {BaseTextFieldProps, StandardTextFieldProps} from "@mui/material/TextField/TextField";
+import {StandardTextFieldProps} from "@mui/material/TextField/TextField";
 import {TextField} from "@mui/material";
 
 
@@ -10,6 +10,7 @@ interface ValidateTextInputProps extends StandardTextFieldProps {
 	 */
 	checkValidFunctions: ((input: string) => [boolean, string?])[]
 	setValue: (value: string) => void
+	setValid?: (isValid: boolean) => void
 }
 
 const ValidateTextInput: FC<ValidateTextInputProps> = (props) => {
@@ -32,7 +33,6 @@ const ValidateTextInput: FC<ValidateTextInputProps> = (props) => {
 	let handleErrorText = (): string => {
 		for (const checkValidFunction of checkValidFunctions) {
 			let res = checkValidFunction(text)
-			console.log(res)
 			if (!res[0]) {
 				return res[1] ? res[1] : ''
 			}
@@ -41,7 +41,13 @@ const ValidateTextInput: FC<ValidateTextInputProps> = (props) => {
 	}
 
 	useEffect(() => {
-		setIsValid(checkIsValid())
+		let isValid = checkIsValid()
+		setIsValid(isValid)
+
+		if(props.setValid) {
+			props.setValid(isValid)
+		}
+		console.log('text: ',text, isValid)
 	}, [text])
 
 	return <TextField
@@ -59,12 +65,10 @@ const ValidateTextInput: FC<ValidateTextInputProps> = (props) => {
 		onFocus={
 			(e) => {
 				setIsValid(checkIsValid())
-				console.log('on focus')
 			}
 		}
 		onBlur={(e) => {
 			setIsValid(true)
-			console.log('on blur')
 		}
 		}
 		helperText={handleErrorText()}

@@ -67,6 +67,7 @@ const ListPets: FC = () => {
 				let res = await appApi.getAllPets(page, AppApi.DEFAULT_LEN_ITEMS, controller)
 				let resData = res.data
 				if (resData.statusCode === 200) {
+					console.log(resData.data, 'wtf', !resData.data)
 					if (!resData.data) {
 						setHasMore(false)
 					} else {
@@ -126,7 +127,6 @@ export function useOnScreen(ref: any) {
 		return new IntersectionObserver(
 			([entry]) => {
 				setIntersecting(entry.isIntersecting)
-				console.log('re set visible')
 			}
 		)
 	}, [])

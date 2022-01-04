@@ -107,19 +107,6 @@ const AddPetScreen: FC = () => {
 		</ButtonView>}
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 	const handleSave = async () => {
 		if (!user) {
 			return

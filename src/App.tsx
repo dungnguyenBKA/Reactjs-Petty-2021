@@ -9,7 +9,7 @@ import {Toaster} from 'react-hot-toast'
 import PersonalInfo from './screen/personal-info/PersonalInfo'
 import PetMessengerScreen from './screen/messenger/PetMessengerScreen'
 import {BaseFullScreen, BaseMobileScreen} from './screen/basescreen/BaseAppScreen'
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import User from './models/User'
 import {ChatEngineWrapper} from 'react-chat-engine'
 import AppApi from "./api/AppApi";
@@ -89,6 +89,38 @@ export function App() {
 	defaultContext.setLoading = (isLoading: boolean) => {
 		setLoading(isLoading)
 	}
+
+	useEffect(() => {
+		let appApi = defaultContext.appApi
+		let abortController = new AbortController()
+		let refreshToken = async () => {
+			if(!user) {
+				return
+			}
+
+			try {
+				let refreshTokenRes = await appApi.refreshToken(user.email, user.pwd, abortController)
+				if(refreshTokenRes.data.statusCode === 200) {
+					appApi.setToken(refreshTokenRes.data.data.token)
+				} else {
+					appApi.setToken('')
+				}
+
+			} catch (e) {
+				Logger.error(e)
+				appApi.setToken('')
+			}
+		}
+
+		refreshToken().then(() => {
+			Logger.log('refresh token')
+		})
+
+		return () => {
+			abortController.abort()
+		}
+
+	},[])
 
 	return (
 		<AppCtx.Provider value={defaultContext}>

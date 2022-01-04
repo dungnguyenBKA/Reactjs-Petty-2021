@@ -4,16 +4,17 @@ import {AppCtx} from "../../App";
 import {
 	AppStyle,
 	background,
-	bold, borderColor,
+	bold,
+	borderColor,
 	borderWidth,
 	flexCenter,
 	flexCenterInParent,
 	flexHori,
-	height, marginBottom, marginEnd,
+	height,
+	marginBottom,
 	marginStart,
 	marginTop,
 	minHeight,
-	minWidth,
 	padding,
 	paddingHori,
 	paddingVerti,
@@ -202,22 +203,33 @@ const PopUpSignUp = () => {
 	let [isValid, setValid] = useState(false)
 
 	let [name, setName] = useState('')
+	let [isNameValid, setNameValid] = useState(false)
+
 	let [userName, setUserName] = useState('')
+	let [isUserNameValid, setUserNameValid] = useState(false)
+
 	let [pwd, setPwd] = useState('')
+	let [isPwdValid, setPwdValid] = useState(false)
+
 	let [confirmPwd, setConfirmPwd] = useState('')
-	let [showPassword, setShowPassword] = useState(false)
+	let [isRePwdValid, setRePwdValid] = useState(false)
+
+
 	let [phone, setPhone] = useState('')
 
 	let [avatarUrl, setAvatarUrl] = useState('');
-	let [avatarFile, setAvatarFile] = useState<File>();
+	let [avatarFile, setAvatarFile] = useState<File>()
 
-
+	let [showPassword, setShowPassword] = useState(false)
 
 
 	const handleShowPassword = () => {
 		setShowPassword(!showPassword);
 	}
 
+	let checkIsNameLenValid = (text: string): [boolean, string?] => {
+		return [text.length > 0, 'Tên không được ngắn quá'];
+	}
 
 	let checkIsLenValid = (text: string): [boolean, string?] => {
 		return [text.length >= 3, 'Email chưa đủ độ dài'];
@@ -230,17 +242,18 @@ const PopUpSignUp = () => {
 	let checkIsPwdValid = (text: string): [boolean, string?] => {
 		return [text.length >= 8, 'Password cần từ 8 kí tự trở lên']
 	}
+
 	const isPassWordMatch = (text: string): [boolean, string?] => {
-		return [pwd===confirmPwd, 'Password không trùng khớp nhau']
+		return [pwd === confirmPwd, 'Password không trùng khớp nhau']
 	}
 
-	let validCheck = () => {
-		if(name.length>=0 && phone.length>=0 && userName.length >= 3
-			&& userName.includes('@') && pwd.length>=8 && (pwd===confirmPwd)){
+	useEffect(() => {
+		if (isNameValid && isUserNameValid && isPwdValid && isRePwdValid) {
 			setValid(true)
-		}setValid(false)
-	}
-
+		} else {
+			setValid(false)
+		}
+	}, [isNameValid, isUserNameValid, isPwdValid, isRePwdValid])
 
 	const handleRegister = async () => {
 		setLoading(true)
@@ -287,9 +300,6 @@ const PopUpSignUp = () => {
 	}
 
 
-
-
-
 	return <Popup trigger={<button style={{
 		marginTop: 16,
 		border: 'none',
@@ -331,16 +341,13 @@ const PopUpSignUp = () => {
 				</Rows>
 
 
-				<TextField
+				<ValidateTextInput
 					style={AppStyle(weightItem(1), marginTop(16), radius(8))}
-
-
+					checkValidFunctions={[checkIsNameLenValid]}
 					type="text"
 					placeholder="Tên"
-					value={name}
-					onChange={e => {
-						setName(e.currentTarget.value)
-					}}
+					setValue={setName}
+					setValid={setNameValid}
 					label='Tên'
 				/>
 
@@ -349,11 +356,9 @@ const PopUpSignUp = () => {
 					checkValidFunctions={[checkIsLenValid, checkIsContainValid]}
 					type="email"
 					placeholder="Email : abc@gmail.com"
-					value={userName}
 					setValue={setUserName}
+					setValid={setUserNameValid}
 					label='Email'
-					// error={handleHelpEmail() !== undefined}
-					// helperText={<p>{handleHelpEmail()}</p>}
 				/>
 
 				<TextField
@@ -373,8 +378,11 @@ const PopUpSignUp = () => {
 					checkValidFunctions={[checkIsPwdValid, isPassWordMatch]}
 					type={showPassword ? 'text' : 'password'}
 					placeholder="Password"
-					value={pwd}
 					setValue={setPwd}
+					setValid={isValid => {
+						setPwdValid(isValid)
+						setRePwdValid(isValid)
+					}}
 					label='Password'
 
 					InputProps={{
@@ -390,11 +398,12 @@ const PopUpSignUp = () => {
 					style={AppStyle(weightItem(1), radius(10), marginTop(16))}
 					checkValidFunctions={[checkIsPwdValid, isPassWordMatch]}
 					type={showPassword ? 'text' : 'password'}
-
-
 					placeholder="Nhập lại Password"
-					value={confirmPwd}
 					setValue={setConfirmPwd}
+					setValid={isValid => {
+						setPwdValid(isValid)
+						setRePwdValid(isValid)
+					}}
 					label='Nhập lại Password'
 					InputProps={{
 						endAdornment: <InputAdornment position='end'>
@@ -405,19 +414,16 @@ const PopUpSignUp = () => {
 					}}
 				/>
 				<Rows style={AppStyle(marginTop(16),
-					radius(8),  borderWidth(1), background('#FFFFFF'), borderColor('rgb(0, 193, 129)'))}>
-					<label style ={AppStyle(marginTop('auto'), marginBottom('auto'),
+					radius(8), borderWidth(1), background('#FFFFFF'), borderColor('rgb(0, 193, 129)'))}>
+					<label style={AppStyle(marginTop('auto'), marginBottom('auto'),
 						textColor('rgb(0, 193, 129)'),
 						borderWidth(0), height(40))}>
 						Upload Ảnh
 						<input
-
 							id="file"
 							type="file"
 							accept="image/*"
 							hidden
-
-
 							onChange={(event) => {
 								let files = event.target.files;
 								if (files && files[0]) {
@@ -425,36 +431,23 @@ const PopUpSignUp = () => {
 								} else {
 									Logger.error("Đã có lỗi xảy ra, vui lòng thử lại")
 								}
-								// event.target.value = ''
 							}}
 						/>
-
 					</label>
-
-
 				</Rows>
 
-
-
-
-
 				<Rows style={AppStyle(marginTop(16), flexCenterInParent())}>
-
-
 					<button
 						style={AppStyle(
 							radius(8),
 							textColor('#FFFFFF'),
 							borderWidth(0), width('100%'), height(40),
-							{background: isValid? 'rgb(0, 193, 129)': '#333333'})}
+							{background: isValid ? 'rgb(0, 193, 129)' : '#333333'})}
 
 						onClick={handleRegister} disabled={!isValid}>
 						Sign Up
 					</button>
-
 				</Rows>
-
-
 			</Column>
 		)}
 	</Popup>
