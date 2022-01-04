@@ -1,7 +1,8 @@
 import {getDownloadURL, ref, uploadBytesResumable} from "@firebase/storage";
 import React, {FC, useContext, useState} from "react";
 import {ButtonGroup, Dropdown} from "react-bootstrap";
-import DatePicker from "react-datepicker";
+// import DatePicker from "react-datepicker";
+
 
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -11,10 +12,10 @@ import {
 	border,
 	borderWidth,
 	flexCenter,
-	margin,
+	margin, marginBottom,
 	marginEnd,
 	marginHori,
-	marginStart,
+	marginStart, marginTop,
 	marginVertical,
 	padding,
 	radius,
@@ -42,9 +43,21 @@ import AppApi, {NetworkErrorHandler} from "../../api/AppApi";
 import {BaseResponse} from "../../api/ApiJsonFormat";
 import {AxiosError} from "axios";
 import ValidateTextInput from "../../components/ValidatorInput";
-import {TextField} from "@mui/material";
+import {
+	Box,
+	FormControl,
+	FormHelperText,
+	InputLabel,
+	MenuItem,
+	Select,
+	SelectChangeEvent,
+	TextField
+} from "@mui/material";
+import DateTimePicker from '@mui/lab/DateTimePicker';
 import {useForm} from "react-hook-form";
 import BaseValidateTextInput from "../../components/BaseValidateTextInput";
+import {DatePicker, LocalizationProvider} from "@mui/lab";
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
 
 let genderOptions = ["Đực", "Cái", "Không xác định"];
 let typeOptions = ["Dog", "Cat", "Fish"];
@@ -76,7 +89,7 @@ const AddPetScreen: FC = () => {
 	let user = appContext.currentUser
 
 	let checkIsLenValid = (text: string): [boolean, string?] => {
-		return [text.length >= 0, 'field is invalid'];
+		return [text.length >= 0, 'Không được để trống'];
 	}
 
 	const buttonSave = () => {
@@ -219,16 +232,29 @@ const AddPetScreen: FC = () => {
 				<TextView style={AppStyle(semiBold(17))}>THÔNG TIN CHUNG</TextView>
 
 
-				<BaseValidateTextInput checkValidFunctions={[checkIsLenValid]} setValue={setName} value={name} type="text"
-									   placeholder="Báo danh Boss" />
-				<AddDate validCheck = {checkIsLenValid}
-						 setDate={(date) => {setDob(DateHelper.dateToFormatString(date))}}/>
-				<BaseValidateTextInput
-					checkValidFunctions={[checkIsLenValid]} setValue={setType} value={petType} type="text"
-					placeholder="Loài" />
-				<BaseValidateTextInput
-				checkValidFunctions={[checkIsLenValid]} setValue={setClass} value={petClass} type="text"
-				placeholder="Bộ tộc" />
+					<BaseValidateTextInput label="Báo danh Boss*" multiline style={AppStyle(marginTop(24), marginBottom(24))} checkValidFunctions={[checkIsLenValid]} setValue={setName} value={name} type="text"
+											  />
+					<AddDate validCheck = {checkIsLenValid} placeholder='Sinh thần*'
+							 setDate={(date) => {setDob(DateHelper.dateToFormatString(date))}}/>
+					<BaseValidateTextInput style={AppStyle(marginTop(24))}
+						checkValidFunctions={[checkIsLenValid]} setValue={setType} value={petType} type="text"
+						label="Loài*" />
+					<BaseValidateTextInput style={AppStyle(marginTop(24), marginBottom(8))}
+						checkValidFunctions={[checkIsLenValid]} setValue={setClass} value={petClass} type="text"
+						label="Bộ tộc*" />
+
+				<InfoInputDropDown listOption={genderOptions}
+								   label='Giới tính'  />
+
+				<InfoInputDropDown listOption={fromOptions}
+								   label='Nguồn gốc'  />
+
+				<InfoInputDropDown listOption={statusOptions}
+								   label='Tình trạng'  />
+
+
+
+
 
 
 
@@ -243,11 +269,9 @@ const AddPetScreen: FC = () => {
 
 
 				{/*/>*/}
-				<InfoInputDropDown
-					isNecessary={true}
-				title={"Giới tính"}
-				listOption={genderOptions}
-				onChangeValue={setGender}/>
+
+				{/*// listOption={genderOptions}*/}
+				{/*// onChangeValue={setGender}/>*/}
 				{/*<InfoInputDropDown*/}
 				{/*	isNecessary={true}*/}
 				{/*	title={"Loài"}*/}
@@ -268,24 +292,24 @@ const AddPetScreen: FC = () => {
 
 				{/*	// required = {handleValid}*/}
 				{/*/>*/}
-				<InfoInputDropDown
-					isNecessary={true}
-					title={"Nguồn gốc"}
-					listOption={fromOptions}
-					onChangeValue={setResource}
-				/>
-				<InfoInputDropDown
-					isNecessary={false}
-					title={"Tình trạng"}
-					listOption={statusOptions}
-					onChangeValue={setStatus}
-				/>
-				<TextView style={AppStyle(semiBold(17))}>NƠI Ở HIỆN TẠI</TextView>
+				{/*<InfoInputDropDown*/}
+				{/*	isNecessary={true}*/}
+				{/*	title={"Nguồn gốc"}*/}
+				{/*	listOption={fromOptions}*/}
+				{/*	onChangeValue={setResource}*/}
+				{/*/>*/}
+				{/*<InfoInputDropDown*/}
+				{/*	isNecessary={false}*/}
+				{/*	title={"Tình trạng"}*/}
+				{/*	listOption={statusOptions}*/}
+				{/*	onChangeValue={setStatus}*/}
+				{/*/>*/}
+				<TextView style={AppStyle(semiBold(17), marginTop(24))}>NƠI Ở HIỆN TẠI</TextView>
 
-				<InfoInputFromKeyBoard
-					isNecessary={false}
-					title={"Số nhà, đường/phố"}
-					onChangeValue={setAddress}
+				<TextField
+					style = {AppStyle(marginTop(18), marginBottom(24))}
+
+					label='Số nhà, đường phố' onChange={e => setAddress(e.target.value)}
 				/>
 			</Column>
 		</Column>
@@ -294,127 +318,165 @@ const AddPetScreen: FC = () => {
 
 interface AddDateProps {
 	validCheck: any;
-	setDate: (date: Date) => void
+	setDate: (date: Date) => void;
+	placeholder: string;
+	style?: any
 }
 
 const AddDate: FC<AddDateProps> = (props) => {
 	const [startDate, setStartDate] = useState<Date | undefined>(undefined);
 
 	return (
-		<Column
-			style={AppStyle(
-				borderWidth(1),
-				shadow(8),
-				border(Colors.color_E5E5E5),
-				padding(8),
-				marginVertical(12),
-				radius(8)
-			)}
-		>
-			<Rows>
-				<TextView
-					style={AppStyle(
-						textColor(Colors.color_8A8A8F),
-						regular(12),
-						marginEnd(8)
-					)}
-				>
-					Sinh thần
-				</TextView>
-				<TextView style={textColor("red")}>*</TextView>
-
-			</Rows>
-			<DatePicker
-				selected={startDate}
-				onChange={
-					(date: Date) => {
-						setStartDate(date)
-						props.setDate(date)
-					}
-				}
-				dateFormat="dd.MM.yyyy"
-
-				onKeyDown={(e) => {
-					e.preventDefault();
-				}}
-
-				onChangeRaw={(e) => {
-					e.preventDefault();
-				}}
-
-				required
-				showYearDropdown
-				scrollableYearDropdown
-
-				customInput={<input
-
-					style={AppStyle(
-						semiBold(17),
-						textColor(Colors.color_primary),
-						borderWidth(0)
-					)}>
-
-				</input>}
-			/>
-		</Column>
+		// <Column
+		// 	style={AppStyle(
+		// 		borderWidth(1),
+		// 		shadow(8),
+		// 		border(Colors.color_E5E5E5),
+		// 		padding(8),
+		// 		marginVertical(12),
+		// 		radius(8)
+		// 	)}
+		// >
+		// 	<Rows>
+		// 		<TextView
+		// 			style={AppStyle(
+		// 				textColor(Colors.color_8A8A8F),
+		// 				regular(12),
+		// 				marginEnd(8)
+		// 			)}
+		// 		>
+		// 			Sinh thần
+		// 		</TextView>
+		// 		<TextView style={textColor("red")}>*</TextView>
+		//
+		// 	{/*</Rows>*/}
+		<LocalizationProvider dateAdapter={AdapterDateFns}>
+		<DatePicker
+			label= {props.placeholder}
+			value={startDate}
+			onChange={(date: any) => {
+							setStartDate(date)
+							props.setDate(date)
+						}}
+			renderInput={(params) => <TextField {...params} />}
+		/>
+		</LocalizationProvider>
+			// <DatePicker onChange={}
+			//
+			//
+			// 	selected={startDate}
+			// 	onChange={
+			// 		(date: Date) => {
+			// 			setStartDate(date)
+			// 			props.setDate(date)
+			// 		}
+			// 	}
+			// 	dateFormat="dd.MM.yyyy"
+			//
+			// 	onKeyDown={(e) => {
+			// 		e.preventDefault();
+			// 	}}
+			//
+			// 	onChangeRaw={(e) => {
+			// 		e.preventDefault();
+			// 	}}
+			//
+			// 	required
+			// 	showYearDropdown
+			// 	scrollableYearDropdown
+			// 	placeholderText={props.placeholder}
+			//
+			// 	customInput={<TextField fullWidth
+			//
+			// 		style={AppStyle(
+			// 			semiBold(17),
+			// 			textColor('rgba(0, 0, 0, 0.87)')
+			// 		)}>
+			//
+			// 	</TextField>}
+			// />
+		// </Column>
 	);
 }
 
 export default AddPetScreen;
 
-interface InfoInputDropDownProps<T> extends InfoInputProps<T> {
+interface InfoInputDropDownProps<T>  {
 	listOption: T[];
+	label: string;
 }
 
 const InfoInputDropDown: FC<InfoInputDropDownProps<string>> = (props) => {
 	let [value, setValue] = useState<string>("");
+	const handleChange = (event: SelectChangeEvent) => {
+		setValue(event.target.value);
+	};
 
-	return (
-		<Rows
-			style={AppStyle(
-				borderWidth(1),
-				shadow(8),
-				border(Colors.color_E5E5E5),
-				padding(8),
-				marginVertical(12),
-				radius(8)
-			)}
-		>
-			<Column style={weightItem(1)}>
-				<Rows>
-					<TextView
-						style={AppStyle(
-							textColor(Colors.color_8A8A8F),
-							regular(12),
-							marginEnd(8)
-						)}
-					>
-						{props.title}
-					</TextView>
-					{props.isNecessary && (
-						<TextView style={textColor("red")}>*</TextView>
-					)}
-				</Rows>
-				<TextView>{value}</TextView>
-			</Column>
-			<Dropdown as={ButtonGroup}>
-				<Dropdown.Toggle split id="dropdown-split-basic"/>
+	return ( <FormControl required sx={{ width: '100%', marginTop: 3 }}>
+			<InputLabel id="demo-simple-select-required-label">{props.label}</InputLabel>
+			<Select
 
-				<Dropdown.Menu>
-					{props.listOption.map((item) => (
-						<Dropdown.Item
-							key={item}
-							onClick={() => {
-								setValue(item);
-								props.onChangeValue(item)
-							}}
-						>
-							{item}
-						</Dropdown.Item>
-					))}
-				</Dropdown.Menu>
-			</Dropdown>
-		</Rows>
+				value={value}
+				label={props.label}
+
+			> {props.listOption.map((item) => (
+								<MenuItem
+									value={item}
+									key={item}
+									onClick={() => {
+										setValue(item);}}>
+									{item}
+				</MenuItem>))}
+
+
+			</Select>
+
+		</FormControl>
+		// <Rows
+		// 	style={AppStyle(
+		// 		borderWidth(1),
+		// 		shadow(8),
+		// 		border(Colors.color_E5E5E5),
+		// 		padding(8),
+		// 		marginVertical(12),
+		// 		radius(8)
+		// 	)}
+		// >
+		// 	<Column style={weightItem(1)}>
+		// 		<Rows>
+		// 			<TextView
+		// 				style={AppStyle(
+		// 					textColor(Colors.color_8A8A8F),
+		// 					regular(12),
+		// 					marginEnd(8)
+		// 				)}
+		// 			>
+		// 				{props.title}
+		// 			</TextView>
+		// 			{props.isNecessary && (
+		// 				<TextView style={textColor("red")}>*</TextView>
+		// 			)}
+		// 		</Rows>
+		// 		<TextView>{value}</TextView>
+		// 	</Column>
+		// 	<Dropdown as={ButtonGroup}>
+		// 		<Dropdown.Toggle split id="dropdown-split-basic"/>
+		//
+		// 		<Dropdown.Menu>
+		// 			{props.listOption.map((item) => (
+		// 				<Dropdown.Item
+		// 					key={item}
+		// 					onClick={() => {
+		// 						setValue(item);
+		// 						props.onChangeValue(item)
+		// 					}}
+		// 				>
+		// 					{item}
+		// 				</Dropdown.Item>
+		// 			))}
+		// 		</Dropdown.Menu>
+		// 	</Dropdown>
+		// </Rows>
 	);
 };
 
@@ -459,7 +521,7 @@ const InfoInputFromKeyBoard: FC<InfoInputProps<string>> = (props) => {
 
 				}}
 				onBlur={props.onBlur}
-				style={AppStyle(borderWidth(0), border('none'))}
+				style={AppStyle(borderWidth(0), {borderBottom: 'none'})}
 
 
 

@@ -4,7 +4,7 @@ import {
 	border,
 	borderWidth,
 	circleImage,
-	flexCenter,
+	flexCenter, flexCenterInParent,
 	margin,
 	marginHori,
 	marginTop,
@@ -38,23 +38,14 @@ interface PetDetailProp {
 
 }
 
-interface HeaderProps {
-	pet: Pet | undefined
-}
+// interface HeaderProps {
+// 	pet: Pet | undefined
+// }
 
-const Header: FC<HeaderProps> = (props) => {
-	return <Column style={AppStyle(flexCenter())}>
-		<ImageView style={AppStyle(width('100%'), maxHeight(300), radius(8))} src={''}/>
-		<Rows>
-
-			<Column style={AppStyle(marginTop(-100), flexCenter())}>
-				<ImageView style={AppStyle(circleImage(200))} src={''}/>
-				<TextView style={semiBold(20)}>Binz The Love</TextView>
-			</Column>
-		</Rows>
-	</Column>
-
-}
+// const Header: FC<HeaderProps> = (props) => {
+// 	return
+//
+// }
 
 const PetDetail: FC<PetDetailProp> = () => {
 	const params = useParams()
@@ -119,14 +110,34 @@ const PetDetail: FC<PetDetailProp> = () => {
 
 
 	return <Column style={AppStyle(border(Colors.color_E5E5E5))}>
-		<Header pet={pet}/>
-		<Rows>
-			<InfoBox>
-				<Column>
-					<TextView style={AppStyle(regular(12), textColor(Colors.color_8A8A8F))}>Ngày sinh</TextView>
-					<TextView style={AppStyle(semiBold(14))}>{pet?.dob}</TextView>
+		{/*<Column>*/}
+		{/*	<Header pet={pet}/>*/}
+
+		{/*	*/}
+
+
+		{/*</Column>*/}
+
+		<Column style={AppStyle(flexCenter())}>
+			<ImageView style={AppStyle(width('100%'), maxHeight(300), radius(8))} src={''}/>
+			<Rows>
+
+				<Column style={AppStyle(marginTop(-100), flexCenter())}>
+					<ImageView style={AppStyle(circleImage(200))} src={''}/>
+					<TextView style={AppStyle(semiBold(24), flexCenter())}>{pet?.name}</TextView>
 				</Column>
-			</InfoBox>
+			</Rows>
+		</Column>
+
+
+		<Rows>
+
+			<InfoBox>
+			<Column>
+				<TextView style={AppStyle(regular(12), textColor(Colors.color_8A8A8F))}>Ngày sinh</TextView>
+				<TextView style={AppStyle(semiBold(14))}>{pet?.dob}</TextView>
+			</Column>
+		</InfoBox>
 
 			<InfoBox>
 				<Column>

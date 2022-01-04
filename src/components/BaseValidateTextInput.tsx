@@ -1,9 +1,9 @@
 import {FC, useEffect, useState} from "react";
 import {BaseTextFieldProps, StandardTextFieldProps} from "@mui/material/TextField/TextField";
-import {FilledInput, TextField} from "@mui/material";
+import {FilledInput, InputUnstyled, InputUnstyledProps, TextField} from "@mui/material";
 
 
-interface BaseValidateTextInputProps extends BaseTextFieldProps {
+interface BaseValidateTextInputProps extends StandardTextFieldProps {
     /**
      * @name checkValidFunctions
      * @param listValidator need an array of checking valid input (because may be more than one validate are required)
@@ -69,10 +69,7 @@ const BaseValidateTextInput: FC<BaseValidateTextInputProps> = (props) => {
         }
         helperText={handleErrorText()}
         error={!isValid && text.length > 0}
-        InputProps={{
-            style:{borderWidth: 0
-        }
-        }}
+
     />
 }
 
