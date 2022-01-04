@@ -304,7 +304,7 @@ const AddPetScreen: FC = () => {
 				{/*	listOption={statusOptions}*/}
 				{/*	onChangeValue={setStatus}*/}
 				{/*/>*/}
-				<TextView style={AppStyle(semiBold(17), marginTop(24))}>NƠI Ở HIỆN TẠI</TextView>
+				<TextView style={AppStyle(semiBold(17), marginTop(20))}>NƠI Ở HIỆN TẠI</TextView>
 
 				<TextField
 					style = {AppStyle(marginTop(18), marginBottom(24))}
