@@ -1,28 +1,60 @@
-import React, { useEffect } from "react";
-import { FC } from "react"
-import { useNavigate } from "react-router-dom";
-import { AppCtx } from "../../App";
+import React, {FC, useEffect, useState} from "react";
+import {useNavigate} from "react-router-dom";
+import {AppCtx} from "../../App";
 import DirectChatPage from "./DirectChatPage";
+import {NetworkErrorHandler} from "../../api/AppApi";
+import {AxiosError} from "axios";
+import Logger from "../../api/Logger";
+import ApiHelper from "../../api/ApiHelper";
+import LoadingScreen from "../util/LoadingScreen";
 
 const PetMessengerScreen: FC = () => {
 	const appContext = React.useContext(AppCtx)
+	const chatAppApi = appContext.chatApi
+	const currentUser = appContext.currentUser
 	const navigate = useNavigate()
+	const [isReadyChat, setReadyChat] = useState(false)
 
 	useEffect(() => {
-		if (!appContext.currentUser) {
-			navigate('../login')
+		// register messenger service
+		const getOrCreateChatUser = async () => {
+			if (!currentUser) {
+				navigate('../login')
+				return
+			}
+			try {
+				let chatRes = await chatAppApi.getOrCreateChatUser(currentUser)
+				if (chatRes.status === 200) {
+					setReadyChat(true)
+				} else {
+					navigate(-1)
+				}
+			} catch (e) {
+				ApiHelper.handleCallApiError(e, new class implements NetworkErrorHandler {
+					onNetworkError(): void {
+						Logger.errorToast()
+						navigate(-1)
+					}
+
+					onOtherError(): void {
+						navigate(-1)
+					}
+				}())
+			}
 		}
+
+		getOrCreateChatUser().then(() => {
+			Logger.log('get|register chat user done')
+		})
 	}, [])
 
-	let { currentUser } = appContext
-
-	if (currentUser) {
+	if (isReadyChat && currentUser) {
 		return <DirectChatPage
-			userName={currentUser.name}
+			userName={currentUser.email}
 			userSecret={currentUser.pwd}
 		/>
 	} else {
-		return <></>
+		return <LoadingScreen isLoading={true}/>
 	}
 }
 export default PetMessengerScreen

@@ -9,12 +9,13 @@ import {Toaster} from 'react-hot-toast'
 import PersonalInfo from './screen/personal-info/PersonalInfo'
 import PetMessengerScreen from './screen/messenger/PetMessengerScreen'
 import {BaseFullScreen, BaseMobileScreen} from './screen/basescreen/BaseAppScreen'
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import User from './models/User'
 import {ChatEngineWrapper} from 'react-chat-engine'
 import AppApi from "./api/AppApi";
 import Logger from "./api/Logger";
 import LoadingScreen from "./screen/util/LoadingScreen";
+import ChatClientApi from "./api/ChatClientApi";
 
 interface UserContextInterface {
 	currentUser: User | undefined
@@ -34,6 +35,7 @@ interface LoadingState {
 interface AppContextInterface extends UserContextInterface, ThemeContextInterface, LoadingState {
 	// shared context
 	appApi: AppApi
+	chatApi: ChatClientApi
 }
 
 const defaultContext: AppContextInterface = {
@@ -46,6 +48,7 @@ const defaultContext: AppContextInterface = {
 	},
 
 	appApi: new AppApi(),
+	chatApi: new ChatClientApi(),
 
 	isLoading: false,
 	setLoading: (() => {
@@ -89,6 +92,35 @@ export function App() {
 	defaultContext.setLoading = (isLoading: boolean) => {
 		setLoading(isLoading)
 	}
+
+	useEffect(() => {
+		let controller = new AbortController()
+
+		const refreshToken = async () => {
+			if(!currentUser) {
+				return
+			}
+
+			try {
+				let res = await defaultContext.appApi.refreshToken(currentUser.email, currentUser.pwd, controller)
+				if(res.data.statusCode === 200) {
+					defaultContext.appApi.setToken(res.data.data.token)
+				} else {
+					//
+				}
+			} catch (e) {
+				Logger.error(e)
+			}
+		}
+
+		refreshToken().then(() => {
+			Logger.log("refresh token done")
+		})
+		return () => {
+			controller.abort()
+		}
+
+	}, [])
 
 	return (
 		<AppCtx.Provider value={defaultContext}>

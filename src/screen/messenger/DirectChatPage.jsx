@@ -6,6 +6,7 @@ import Text from "../../components/Text";
 import {AppStyle, flexCenterInParent, width} from "../../AppStyle";
 import {ImageView} from "../../components/ImageView";
 import CustomChatForm from "./CustomChatForm";
+import Constants from "../../api/Constants";
 
 const DirectChatPage = (props) => {
     return (
@@ -13,7 +14,7 @@ const DirectChatPage = (props) => {
             height='100vh'
             userName={props.userName}
             userSecret={props.userSecret}
-            projectID='d06a766f-700c-462b-a6a0-b4e698b90315'
+            projectID={Constants.MESSENGER_PROJECT_ID}
             renderNewChatForm={(creds) => <CustomChatForm creds={creds}/>}
             renderChatHeader={() => {
             }}

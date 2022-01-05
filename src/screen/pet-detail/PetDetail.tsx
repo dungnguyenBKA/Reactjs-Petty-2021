@@ -31,6 +31,10 @@ import User from "../../models/User";
 import Pet from "../../models/Pet";
 import {AppCtx} from "../../App";
 import Logger from "../../api/Logger";
+import {useNavigate} from "react-router-dom";
+import Constants from "../../api/Constants";
+import ApiHelper from "../../api/ApiHelper";
+import axios from "axios";
 
 interface PetDetailProp {
 
@@ -166,18 +170,69 @@ interface ContactBoxProp extends BaseHTMLProps {
 }
 
 const ContactBox: FC<ContactBoxProp> = (props) => {
-	let user = props.user
+	const toUser = props.user
+	const context = useContext(AppCtx)
+	const chatApi = context.chatApi
+	const me = context.currentUser
+	const navigate = useNavigate()
+
+	const getOrCreateChatWithThisUser = async () => {
+		if (!me || !toUser) {
+			return
+		}
+		try {
+			const config = {
+				headers: {
+					'user-name': me.email,
+					'user-secret': me.pwd,
+					'public-key': Constants.MESSENGER_PROJECT_ID
+				}
+			}
+
+			let bodyData = {
+				'usernames': [toUser.email],
+				'is_direct_chat': true
+			}
+
+			let res = await axios.create({
+				baseURL: "https://api.chatengine.io/"
+			}).put<any>(
+				Constants.chatEndPoint.CHATS, bodyData, config
+			)
+
+			if (res.status === 200) {
+				Logger.successToast("Đã tạo tin nhắn thành công, vào messenger để chat nhé!")
+			} else {
+				Logger.errorToast()
+			}
+		} catch (e) {
+			Logger.errorToast()
+		}
+	}
+
+	useEffect(() => {
+		if (!me) {
+			navigate('../login')
+		}
+	}, [])
+
 	return <Rows style={AppStyle(margin(16))}>
-		<ImageView src={user?.avatar} style={AppStyle(circleImage(36))}/>
+		<ImageView src={toUser?.avatar} style={AppStyle(circleImage(36))}/>
 		<Column style={AppStyle(weightItem(1), marginHori(16))}>
 			<TextView style={regular(13)}>Liên hệ với Chủ</TextView>
-			<TextView style={semiBold(15)}>{user?.name}</TextView>
+			<TextView style={semiBold(15)}>{toUser?.name}</TextView>
 		</Column>
-		<ButtonImageView src={icMessageToOwner}
-		                 onClick={() => {
-			                 console.log("Click")
-		                 }
-		                 }
+		<ButtonImageView
+			src={icMessageToOwner}
+			onClick={
+				() => {
+					getOrCreateChatWithThisUser().then(() => {
+						Logger.log('getOrCreateChatWithThisUser done')
+					}).catch(e => {
+						Logger.error(e)
+					})
+				}
+			}
 		/>
 
 	</Rows>

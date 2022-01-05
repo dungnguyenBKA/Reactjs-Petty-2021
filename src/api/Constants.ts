@@ -13,4 +13,12 @@ export default class Constants {
 		MY_PETS: 'pets/my',
 
 	}
+
+	public static chatEndPoint = {
+		USERS: 'users',
+		CHATS: 'chats/'
+	}
+
+	public static MESSENGER_PROJECT_ID = "d06a766f-700c-462b-a6a0-b4e698b90315"
+	public static MESSENGER_PROJECT_PRIVATE_KEY = "e81da5ed-c0a1-4a9a-90cb-bb026bd92d08"
 }

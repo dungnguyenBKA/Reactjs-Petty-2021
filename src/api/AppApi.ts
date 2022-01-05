@@ -11,6 +11,7 @@ import {
 } from "./ApiJsonFormat";
 import Pet from "../models/Pet";
 import Logger from "./Logger";
+import ApiHelper from "./ApiHelper";
 
 export default class AppApi {
 	private readonly appAxios: AxiosStatic
@@ -68,29 +69,12 @@ export default class AppApi {
 		}
 	}
 
-	private configWithAbortController = (abortController?: AbortController, configs?: any): any => {
-		if (!abortController) {
-			return configs
-		}
-
-		if (!configs) {
-			return {
-				signal: abortController.signal
-			}
-		}
-
-		return {
-			...configs,
-			signal: abortController.signal
-		}
-	}
-
 	login = (username: string, pwd: string, abortController?: AbortController) => {
 		let bodyData = {
 			'email': username,
 			'password': pwd
 		}
-		const configs = this.configWithAbortController(abortController, this.appAxiosConfig)
+		const configs = ApiHelper.configWithAbortController(abortController, this.appAxiosConfig)
 		return this.appAxios.post<LoginResponse>(Constants.BASE_URL_V1 + Constants.endPoint.LOGIN, bodyData, configs)
 	}
 
@@ -100,7 +84,7 @@ export default class AppApi {
 			'email': username,
 			'password': pwd
 		}
-		const configs = this.configWithAbortController(abortController, this.appAxiosConfig)
+		const configs = ApiHelper.configWithAbortController(abortController, this.appAxiosConfig)
 		return this.appAxios.post<BaseResponse<{ token: string }>>(Constants.BASE_URL_V1 + Constants.endPoint.LOGIN, bodyData, configs)
 	}
 
@@ -114,13 +98,13 @@ export default class AppApi {
 			'name': name,
 			'avatar': avatar ? avatar : '',
 		}
-		const configs = this.configWithAbortController(abortController, this.appAxiosConfig)
+		const configs = ApiHelper.configWithAbortController(abortController, this.appAxiosConfig)
 		return this.appAxios.post<RegisterResponse>(Constants.BASE_URL_V1 + Constants.endPoint.REGISTER, bodyData, configs)
 	}
 
 
 	getAllPets = (page: number, size: number = AppApi.DEFAULT_LEN_ITEMS, abortController?: AbortController) => {
-		const configs = this.configWithAbortController(abortController, {
+		const configs = ApiHelper.configWithAbortController(abortController, {
 			params: {
 				'page': page,
 				'size': size
@@ -130,12 +114,12 @@ export default class AppApi {
 	}
 
 	getPetById = (id: string, abortController?: AbortController) => {
-		const configs = this.configWithAbortController(abortController)
+		const configs = ApiHelper.configWithAbortController(abortController)
 		return this.appAxios.get<PetDetailResponse>(Constants.BASE_URL_V1 + Constants.endPoint.PETS + `/${id}`, configs)
 	}
 
 	getUserById = (id: number, abortController?: AbortController) => {
-		const configs = this.configWithAbortController(abortController, this.appAxiosConfig)
+		const configs = ApiHelper.configWithAbortController(abortController, this.appAxiosConfig)
 		return this.appAxios.get<UserResponse>(Constants.BASE_URL_V1 + Constants.endPoint.USERS + `/${id}`, configs)
 	}
 
@@ -151,7 +135,7 @@ export default class AppApi {
 			"address": pet.address,
 			"images": pet.images
 		}
-		const configs = this.configWithAbortController(abortController, this.appAxiosConfig)
+		const configs = ApiHelper.configWithAbortController(abortController, this.appAxiosConfig)
 		return this.appAxios.post<PetDetailResponse>(
 			Constants.BASE_URL_V1 + Constants.endPoint.PETS,
 			bodyData,
@@ -160,19 +144,11 @@ export default class AppApi {
 	}
 
 	getMyPets = (abortController?: AbortController) => {
-		const configs = this.configWithAbortController(abortController, this.appAxiosConfig)
+		const configs = ApiHelper.configWithAbortController(abortController, this.appAxiosConfig)
 		return this.appAxios.get<AllPetsResponse>(
 			Constants.BASE_URL_V1 + Constants.endPoint.MY_PETS + `?page=0&size=10`,
 			configs
 		)
-	}
-
-	public static handleCallApiError(e: unknown, handler: NetworkErrorHandler) {
-		if ((e as AxiosError).isAxiosError) {
-			handler.onNetworkError(e as AxiosError<BaseResponse<any>>)
-		} else {
-			handler.onOtherError(e)
-		}
 	}
 }
 

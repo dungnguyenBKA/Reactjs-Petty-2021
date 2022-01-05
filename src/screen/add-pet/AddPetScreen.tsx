@@ -40,6 +40,7 @@ import {AppCtx} from "../../App";
 import AppApi, {NetworkErrorHandler} from "../../api/AppApi";
 import {BaseResponse} from "../../api/ApiJsonFormat";
 import {AxiosError} from "axios";
+import ApiHelper from "../../api/ApiHelper";
 
 let genderOptions = ["Đực", "Cái", "Không xác định"];
 let typeOptions = ["Dog", "Cat", "Fish"];
@@ -97,8 +98,8 @@ const AddPetScreen: FC = () => {
 				Logger.errorToast()
 			}
 		} catch (e) {
-			AppApi.handleCallApiError(e, new class implements NetworkErrorHandler {
-				onNetworkError(e: AxiosError<BaseResponse<any>>): void {
+			ApiHelper.handleCallApiError(e, new class implements NetworkErrorHandler {
+				onNetworkError(e: AxiosError): void {
 					Logger.errorToast(e.response?.data.message)
 				}
 
