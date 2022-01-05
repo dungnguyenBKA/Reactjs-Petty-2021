@@ -155,7 +155,7 @@ const AddPetScreen: FC = () => {
 		} catch (e) {
 			ApiHelper.handleCallApiError(e, new class implements NetworkErrorHandler {
 				onNetworkError(e: AxiosError): void {
-					Logger.errorToast(e.response?.data.message)
+					Logger.errorToast()
 				}
 
 				onOtherError(e: unknown): void {
