@@ -30,6 +30,7 @@ const Search: FC<SearchProp> = (props) => {
 				size="small"
 				label='Tìm kiếm Pet'
 			/>
+			{/*An search khong hien meo, cho*/}
 			<ImageView onClick={() => takeDataFromSearch()} style={AppStyle(marginStart(16), cursorPointer())}
 			           src={icPetSearch}/>
 		</Rows>

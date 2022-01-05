@@ -1,5 +1,5 @@
 import {getDownloadURL, ref, uploadBytesResumable} from "@firebase/storage";
-import React, {FC, useContext, useState} from "react";
+import React, {FC, useContext, useEffect, useState} from "react";
 import {ButtonGroup, Dropdown} from "react-bootstrap";
 // import DatePicker from "react-datepicker";
 
@@ -44,7 +44,7 @@ import {BaseResponse} from "../../api/ApiJsonFormat";
 import {AxiosError} from "axios";
 import ValidateTextInput from "../../components/ValidatorInput";
 import {
-	Box,
+	Box, Button,
 	FormControl,
 	FormHelperText,
 	InputLabel,
@@ -59,11 +59,11 @@ import BaseValidateTextInput from "../../components/BaseValidateTextInput";
 import {DatePicker, LocalizationProvider} from "@mui/lab";
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 
-let genderOptions = ["Đực", "Cái", "Không xác định"];
-let typeOptions = ["Dog", "Cat", "Fish"];
-let botocOptions = ["SNSD", "BTS", "BIGBANG"];
-let fromOptions = ["VN", "USD"];
-let statusOptions = ["Triệt sản", "No Triệt sản"];
+let genderOptions = ["Đực", "Cái", "Chưa xác định"];
+// let typeOptions = ["Dog", "Cat", "Fish"];
+// let botocOptions = ["SNSD", "BTS", "BIGBANG"];
+let fromOptions = ["Việt Nam", "Ngoại nhập"];
+let statusOptions = ["Triệt sản", "Chưa Triệt sản"];
 
 
 const AddPetScreen: FC = () => {
@@ -71,15 +71,28 @@ const AddPetScreen: FC = () => {
 	let [listImage, setListImage] = useState<File[]>([])
 	let [listImageJson, setListImageJson] = useState('')
 	let [name, setName] = useState('')
+	let [isNameValid, setNameValid] = useState(false)
 	let [dob, setDob] = useState('')
+	let [isDOBValid, setDOBValid] = useState(false)
 	let [petType, setType] = useState('')
+	let [isTypeValid, setTypeValid] = useState(false)
 	let [petClass, setClass] = useState('')
+	let [isClassValid, setClassValid] = useState(false)
 	let [petAddress, setAddress] = useState('')
 	let [gender, setGender] = useState('')
 	let [resource, setResource] = useState('')
 	let [status, setStatus] = useState('')
-	let [isValid, setIsValid] = useState(false)
-	const { register } = useForm();
+	let [isValid, setValid] = useState(false)
+
+
+	useEffect(() => {
+		if (isNameValid && isTypeValid && isClassValid) {
+			setValid(true)
+		} else {
+			setValid(false)
+		}
+	}, [isNameValid, isTypeValid, isClassValid])
+
 
 
 
@@ -89,23 +102,23 @@ const AddPetScreen: FC = () => {
 	let user = appContext.currentUser
 
 	let checkIsLenValid = (text: string): [boolean, string?] => {
-		return [text.length >= 0, 'Không được để trống'];
+		return [text.length > 0, 'Không được để trống'];
 	}
-
-	const buttonSave = () => {
-		if(isValid){
-			return <ButtonView onClick={handleSave}>
-				<input type='Submit' value='Lưu'
-					   style={AppStyle(semiBold(17), textColor(Colors.color_primary), borderWidth(0), background('#FFFFFF'))} disabled={!isValid}
-				/>
-			</ButtonView>
-		} else {
-			return <ButtonView onClick={handleSave}>
-			<input type='Submit' value='Lưu'
-				   style={AppStyle(semiBold(17), textColor('grey'), borderWidth(0), background('#FFFFFF'))} disabled={isValid}
-			/>
-		</ButtonView>}
-	}
+	//
+	// const buttonSave = () => {
+	// 	if(!isValid){
+	// 		return <ButtonView onClick={handleSave}>
+	// 			<input type='Submit' value='Lưu'
+	// 				   style={AppStyle(semiBold(17), textColor(Colors.color_primary), borderWidth(0), background('#FFFFFF'))} disabled={isValid}
+	// 			/>
+	// 		</ButtonView>
+	// 	} else {
+	// 		return <ButtonView onClick={handleSave}>
+	// 		<input type='Submit' value='Lưu'
+	// 			   style={AppStyle(semiBold(17), textColor('grey'), borderWidth(0), background('#FFFFFF'))} disabled={isValid}
+	// 		/>
+	// 	</ButtonView>}
+	// }
 
 	const handleSave = async () => {
 		if (!user) {
@@ -134,7 +147,7 @@ const AddPetScreen: FC = () => {
 			if (res.data.statusCode === 200) {
 				Logger.successToast()
 				navigate('../')
-				setIsValid(!isValid)
+
 			} else {
 				Logger.errorToast()
 			}
@@ -205,12 +218,11 @@ const AddPetScreen: FC = () => {
 				<TextView style={AppStyle(semiBold(17), weightItem(1), marginStart(13))}>
 					Báo danh Boss
 				</TextView>
-				{buttonSave()}
-				{/*<ButtonView onClick={handleSave}>*/}
-				{/*	<input type='Submit' value='Lưu' onChange={()=>setIsValid(!isValid)}*/}
-				{/*		style={AppStyle(semiBold(17), borderWidth(0), background('#FFFFFF'))} disabled={isValid}*/}
-				{/*	/>*/}
-				{/*</ButtonView>*/}
+				{/*Khong hieu sao disabled khong an???????*/} {/*Khong hieu sao isValid khong an*/}
+				<Button variant={'text'} onClick={handleSave} color='inherit' disabled={!isValid}>
+					Lưu
+				</Button>
+
 			</Rows>
 
 			<AddImage setListImage={setListImage}/>
@@ -219,25 +231,35 @@ const AddPetScreen: FC = () => {
 				<TextView style={AppStyle(semiBold(17))}>THÔNG TIN CHUNG</TextView>
 
 
-					<BaseValidateTextInput label="Báo danh Boss*" multiline style={AppStyle(marginTop(24), marginBottom(24))} checkValidFunctions={[checkIsLenValid]} setValue={setName} value={name} type="text"
-											  />
-					<AddDate validCheck = {checkIsLenValid} placeholder='Sinh thần*'
+					<ValidateTextInput label="Báo danh Boss*" multiline style={AppStyle(marginTop(24), marginBottom(24))}
+									   checkValidFunctions={[checkIsLenValid]} setValue={setName} value={name} type="text"
+											setValid={setNameValid} placeholder='' />
+					<AddDate validCheck = {(date: any)=>setDOBValid(date)} placeholder='Sinh thần*'
 							 setDate={(date) => {setDob(DateHelper.dateToFormatString(date))}}/>
-					<BaseValidateTextInput style={AppStyle(marginTop(24))}
+					<ValidateTextInput style={AppStyle(marginTop(24))}
 						checkValidFunctions={[checkIsLenValid]} setValue={setType} value={petType} type="text"
-						label="Loài*" />
-					<BaseValidateTextInput style={AppStyle(marginTop(24), marginBottom(8))}
+						label="Loài*" setValid={setTypeValid}/>
+					<ValidateTextInput style={AppStyle(marginTop(24), marginBottom(8))}
 						checkValidFunctions={[checkIsLenValid]} setValue={setClass} value={petClass} type="text"
-						label="Bộ tộc*" />
+						label="Bộ tộc*"  setValid={setClassValid}/>
 
 				<InfoInputDropDown listOption={genderOptions}
-								   label='Giới tính'  />
+								   label='Giới tính'  onChangeValue={setGender}/>
 
 				<InfoInputDropDown listOption={fromOptions}
-								   label='Nguồn gốc'  />
+								   label='Nguồn gốc'  onChangeValue={setResource}/>
 
 				<InfoInputDropDown listOption={statusOptions}
-								   label='Tình trạng'  />
+								   label='Tình trạng' onChangeValue={setStatus} />
+				<div style={AppStyle(marginTop(20))}>
+					<TextView style={AppStyle(semiBold(17), marginTop(20))}>NƠI Ở HIỆN TẠI</TextView>
+
+				</div>
+				<TextField
+					style = {AppStyle(marginTop(18), marginBottom(24))}
+
+					label='Số nhà, đường phố' onChange={e => setAddress(e.target.value)}
+				/>
 
 
 
@@ -291,13 +313,7 @@ const AddPetScreen: FC = () => {
 				{/*	listOption={statusOptions}*/}
 				{/*	onChangeValue={setStatus}*/}
 				{/*/>*/}
-				<TextView style={AppStyle(semiBold(17), marginTop(20))}>NƠI Ở HIỆN TẠI</TextView>
 
-				<TextField
-					style = {AppStyle(marginTop(18), marginBottom(24))}
-
-					label='Số nhà, đường phố' onChange={e => setAddress(e.target.value)}
-				/>
 			</Column>
 		</Column>
 	);
@@ -338,7 +354,7 @@ const AddDate: FC<AddDateProps> = (props) => {
 		//
 		// 	{/*</Rows>*/}
 		<LocalizationProvider dateAdapter={AdapterDateFns}>
-		<DatePicker
+		<DatePicker ignoreInvalidInputs={props.validCheck}
 			label= {props.placeholder}
 			value={startDate}
 			onChange={(date: any) => {
@@ -389,6 +405,7 @@ const AddDate: FC<AddDateProps> = (props) => {
 export default AddPetScreen;
 
 interface InfoInputDropDownProps<T>  {
+	onChangeValue: any;
 	listOption: T[];
 	label: string;
 }
@@ -411,7 +428,8 @@ const InfoInputDropDown: FC<InfoInputDropDownProps<string>> = (props) => {
 									value={item}
 									key={item}
 									onClick={() => {
-										setValue(item);}}>
+										setValue(item);
+										props.onChangeValue(item)}}>
 									{item}
 				</MenuItem>))}
 
@@ -467,52 +485,52 @@ const InfoInputDropDown: FC<InfoInputDropDownProps<string>> = (props) => {
 	);
 };
 
-interface InfoInputProps<T> {
-	isNecessary: boolean;
-	title: string;
-	onChangeValue: (t: T) => void;
-	onBlur?: any;
+// interface InfoInputProps<T> {
+// 	isNecessary: boolean;
+// 	title: string;
+// 	onChangeValue: (t: T) => void;
+// 	onBlur?: any;
+//
+// }
 
-}
-
-const InfoInputFromKeyBoard: FC<InfoInputProps<string>> = (props) => {
-	let [inputValue, setValue] = useState("");
-
-	return (
-		<Column
-			style={AppStyle(
-				borderWidth(1),
-				shadow(8),
-				border(Colors.color_E5E5E5),
-				padding(8),
-				marginVertical(12),
-				radius(8)
-			)}
-		>
-			<Rows>
-				<TextView style={AppStyle(textColor(Colors.color_8A8A8F), regular(12))}>
-					{props.title}
-				</TextView>
-				{props.isNecessary && (
-					<TextView style={textColor("red")}>*</TextView>
-				)}
-			</Rows>
-
-			<input
-
-				value={inputValue}
-				onChange={(event) => {
-					let value = event.target.value
-					setValue(value);
-					props.onChangeValue(value);
-
-				}}
-				onBlur={props.onBlur}
-				style={AppStyle(borderWidth(0), {borderBottom: 'none'})}
-
-
-
-			/>
-		</Column>
-	);
-};
+// const InfoInputFromKeyBoard: FC<InfoInputProps<string>> = (props) => {
+// 	let [inputValue, setValue] = useState("");
+//
+// 	return (
+// 		<Column
+// 			style={AppStyle(
+// 				borderWidth(1),
+// 				shadow(8),
+// 				border(Colors.color_E5E5E5),
+// 				padding(8),
+// 				marginVertical(12),
+// 				radius(8)
+// 			)}
+// 		>
+// 			<Rows>
+// 				<TextView style={AppStyle(textColor(Colors.color_8A8A8F), regular(12))}>
+// 					{props.title}
+// 				</TextView>
+// 				{props.isNecessary && (
+// 					<TextView style={textColor("red")}>*</TextView>
+// 				)}
+// 			</Rows>
+//
+// 			<input
+//
+// 				value={inputValue}
+// 				onChange={(event) => {
+// 					let value = event.target.value
+// 					setValue(value);
+// 					props.onChangeValue(value);
+//
+// 				}}
+// 				onBlur={props.onBlur}
+// 				style={AppStyle(borderWidth(0), {borderBottom: 'none'})}
+//
+//
+//
+// 			/>
+// 		</Column>
+// 	);
+// };
