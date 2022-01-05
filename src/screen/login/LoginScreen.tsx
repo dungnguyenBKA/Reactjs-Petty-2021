@@ -146,12 +146,12 @@ export default function LoginScreen() {
 					<TextField
 						style={AppStyle(weightItem(1))}
 						type="text"
-						placeholder="Username"
+						placeholder="Email"
 						value={userName}
 						onChange={e => {
 							setUserName(e.currentTarget.value)
 						}}
-						label='Username'
+						label='Email'
 					/>
 
 					<TextField
@@ -442,7 +442,7 @@ const PopUpSignUp = () => {
 							radius(8),
 							textColor('#FFFFFF'),
 							borderWidth(0), width('100%'), height(40),
-							{background: isValid ? 'rgb(0, 193, 129)' : '#333333'})}
+							{background: isValid ? '#00C181' : '#333333'})}
 
 						onClick={handleRegister} disabled={!isValid}>
 						Sign Up

@@ -68,7 +68,7 @@ const ListPets: FC = () => {
 				let resData = res.data
 				if (resData.statusCode === 200) {
 					console.log(resData.data, 'wtf', !resData.data)
-					if (!resData.data) {
+					if (resData.data.length === 0 ) {
 						setHasMore(false)
 					} else {
 						setItems([...items, ...resData.data]);

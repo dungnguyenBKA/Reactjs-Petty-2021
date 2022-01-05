@@ -20,8 +20,9 @@ import React from "react";
 import ButtonView from "../../components/ButtonView"
 import {useNavigate} from "react-router-dom"
 import Rows from "../../components/Row";
-import {Avatar} from "@mui/material";
+import {Avatar, Button, IconButton} from "@mui/material";
 import {deepPurple} from "@mui/material/colors";
+import {Logout, Message, MessageOutlined} from "@mui/icons-material";
 
 export default function Header() {
 	const appContext = React.useContext(AppCtx)
@@ -68,24 +69,25 @@ export default function Header() {
 				</ButtonView>
 
 
-				<ButtonView
+				<IconButton color='inherit'
 					onClick={
 						() => {
 							setCurrentUser(undefined)
 							navigate('../login')
 						}
 					}>
-					Logout
-				</ButtonView>
+					<Logout/>
 
-				<ButtonView
+				</IconButton>
+
+				<IconButton color='inherit'
 					onClick={
 						() => {
 							navigate('../messenger')
 						}
 					}>
-					Messenger
-				</ButtonView>
+					<Message/>
+				</IconButton>
 			</div>
 		</div>
 	} else {
