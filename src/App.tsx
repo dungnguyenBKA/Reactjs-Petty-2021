@@ -15,6 +15,7 @@ import {ChatEngineWrapper} from 'react-chat-engine'
 import AppApi from "./api/AppApi";
 import Logger from "./api/Logger";
 import LoadingScreen from "./screen/util/LoadingScreen";
+import ChatClientApi from "./api/ChatClientApi";
 
 interface UserContextInterface {
 	currentUser: User | undefined
@@ -34,6 +35,7 @@ interface LoadingState {
 interface AppContextInterface extends UserContextInterface, ThemeContextInterface, LoadingState {
 	// shared context
 	appApi: AppApi
+	chatApi: ChatClientApi
 }
 
 const defaultContext: AppContextInterface = {
@@ -46,6 +48,7 @@ const defaultContext: AppContextInterface = {
 	},
 
 	appApi: new AppApi(),
+	chatApi: new ChatClientApi(),
 
 	isLoading: false,
 	setLoading: (() => {
@@ -91,36 +94,33 @@ export function App() {
 	}
 
 	useEffect(() => {
-		let appApi = defaultContext.appApi
-		let abortController = new AbortController()
-		let refreshToken = async () => {
-			if(!user) {
+		let controller = new AbortController()
+
+		const refreshToken = async () => {
+			if(!currentUser) {
 				return
 			}
 
 			try {
-				let refreshTokenRes = await appApi.refreshToken(user.email, user.pwd, abortController)
-				if(refreshTokenRes.data.statusCode === 200) {
-					appApi.setToken(refreshTokenRes.data.data.token)
+				let res = await defaultContext.appApi.refreshToken(currentUser.email, currentUser.pwd, controller)
+				if(res.data.statusCode === 200) {
+					defaultContext.appApi.setToken(res.data.data.token)
 				} else {
-					appApi.setToken('')
+					//
 				}
-
 			} catch (e) {
 				Logger.error(e)
-				appApi.setToken('')
 			}
 		}
 
 		refreshToken().then(() => {
-			Logger.log('refresh token')
+			Logger.log("refresh token done")
 		})
-
 		return () => {
-			abortController.abort()
+			controller.abort()
 		}
 
-	},[])
+	}, [])
 
 	return (
 		<AppCtx.Provider value={defaultContext}>

@@ -1,13 +1,14 @@
 import React, {FC, useContext, useState} from "react";
 import {getOrCreateChat} from "react-chat-engine";
 import {Avatar, Stack, TextField} from "@mui/material";
-import {AppStyle, bold, margin, marginStart, padding, width} from "../../AppStyle";
+import {AppStyle, bold, margin, marginBottom, marginEnd, marginStart, padding, width} from "../../AppStyle";
 import Column from "../../components/Column";
 import ButtonView from "../../components/ButtonView";
 import {ArrowBack} from "@mui/icons-material";
 import {useNavigate} from "react-router-dom";
 import {AppCtx} from "../../App";
 import Text from "../../components/Text";
+import Logger from "../../api/Logger";
 
 interface CustomChatFormProps {
 	creds: any
@@ -19,11 +20,16 @@ const CustomChatForm: FC<CustomChatFormProps> = (props) => {
 	const appContext = useContext(AppCtx)
 
 	const handleCreateChat = () => {
-		getOrCreateChat(
-			creds,
-			{is_direct_chat: true, usernames: [username]},
-			() => setUsername('')
-		)
+		Logger.log('create chat', {creds, username})
+		try {
+			getOrCreateChat(
+				creds,
+				{is_direct_chat: true, usernames: [username]},
+				() => setUsername('')
+			)
+		} catch (e) {
+			Logger.error(e)
+		}
 	}
 
 	const [username, setUsername] = useState('')
@@ -43,13 +49,12 @@ const CustomChatForm: FC<CustomChatFormProps> = (props) => {
 				<ArrowBack/>
 			</ButtonView>
 
-			<Avatar alt="" src={appContext.currentUser?.avatar}/>
+			<Avatar alt="" src={appContext.currentUser?.avatar} style={marginEnd(16)}/>
 
 			<Text
 				style={
 					AppStyle(
-						bold(24),
-						marginStart(16)
+						bold(24)
 					)
 				}
 			>Messenger</Text>
@@ -67,6 +72,8 @@ const CustomChatForm: FC<CustomChatFormProps> = (props) => {
 			onChange={(e) => setUsername(e.target.value)}
 			onSubmit={handleCreateChat}
 		/>
+
+		<ButtonView onClick={handleCreateChat}>Submit</ButtonView>
 	</Column>
 }
 

@@ -44,6 +44,7 @@ import {AxiosError} from "axios";
 import AppApi, {NetworkErrorHandler} from "../../api/AppApi";
 import {BaseResponse} from "../../api/ApiJsonFormat";
 import ValidateTextInput from "../../components/ValidatorInput";
+import ApiHelper from "../../api/ApiHelper";
 
 export default function LoginScreen() {
 	const navigate = useNavigate()
@@ -73,7 +74,7 @@ export default function LoginScreen() {
 				// save pwd data in client
 				let currentUser = resData.data.user
 				currentUser.pwd = pwd
-				appContext.setCurrentUser(resData.data.user)
+				appContext.setCurrentUser(currentUser)
 				Logger.successToast()
 
 				// navigate home
@@ -84,8 +85,8 @@ export default function LoginScreen() {
 				appContext.setCurrentUser(undefined)
 			}
 		} catch (e) {
-			AppApi.handleCallApiError(e, new class implements NetworkErrorHandler {
-				onNetworkError(e: AxiosError<BaseResponse<any>>): void {
+			ApiHelper.handleCallApiError(e, new class implements NetworkErrorHandler {
+				onNetworkError(e: AxiosError): void {
 					Logger.errorToast(e.response?.data.message)
 				}
 
@@ -279,7 +280,6 @@ const PopUpSignUp = () => {
 			)
 			let resData = res.data
 			if (resData.statusCode === 200) {
-				// success
 				appApi.setToken(resData.data.token)
 				appContext.setCurrentUser(resData.data.user)
 				Logger.successToast()
