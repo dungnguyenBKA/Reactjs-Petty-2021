@@ -1,7 +1,7 @@
 import React, {FC, useContext, useEffect, useState} from "react";
 import {
 	AppStyle,
-	border,
+	border, borderColor,
 	borderWidth,
 	circleImage,
 	flexCenter, flexCenterInParent,
@@ -229,8 +229,7 @@ const ContactBox: FC<ContactBoxProp> = (props) => {
 		}
 	}, [])
 
-	return <Rows style={AppStyle(margin(16))}>
-		<ImageView src={toUser?.avatar} style={AppStyle(circleImage(36))}/>
+	return <Rows style={AppStyle(margin(12), shadow(8), padding(12),radius(8), borderWidth(1), border(Colors.color_E5E5E5))}>
 
 		{toUser?.avatar=== null && <Avatar sx={{ bgcolor: deepPurple[500] }}>{toUser.name.slice(0, 2).toUpperCase()}</Avatar>}
 		{toUser?.avatar !== null && <Avatar style={AppStyle(circleImage(36))} src={toUser?.avatar}/>}

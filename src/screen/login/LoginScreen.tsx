@@ -220,6 +220,7 @@ const PopUpSignUp = () => {
 
 	let [avatarUrl, setAvatarUrl] = useState('');
 	let [avatarFile, setAvatarFile] = useState<File>()
+	let [imgData, setImgData] = useState<string|undefined>(undefined);
 
 	let [showPassword, setShowPassword] = useState(false)
 
@@ -418,7 +419,7 @@ const PopUpSignUp = () => {
 					<label style={AppStyle(marginTop('auto'), marginBottom('auto'),
 						textColor('rgb(0, 193, 129)'),
 						borderWidth(0), height(40))}>
-						Upload Ảnh
+						Upload Avatar
 						<input
 							id="file"
 							type="file"
@@ -428,12 +429,21 @@ const PopUpSignUp = () => {
 								let files = event.target.files;
 								if (files && files[0]) {
 									setAvatarFile(files[0])
+									const reader = new FileReader()
+									reader.onloadend = () => {
+										setImgData(reader.result as string)
+									}
+									reader.readAsDataURL(files && files[0])
+
+
 								} else {
+									setImgData(undefined)
 									Logger.error("Đã có lỗi xảy ra, vui lòng thử lại")
 								}
 							}}
 						/>
 					</label>
+					<img width='42px' height='42px' style={AppStyle(marginStart(16), radius(4))} src={imgData}/>
 				</Rows>
 
 				<Rows style={AppStyle(marginTop(16), flexCenterInParent())}>
@@ -442,7 +452,7 @@ const PopUpSignUp = () => {
 							radius(8),
 							textColor('#FFFFFF'),
 							borderWidth(0), width('100%'), height(40),
-							{background: isValid ? '#00C181' : '#333333'})}
+							{background: isValid ? '#00C181' : 'grey'})}
 
 						onClick={handleRegister} disabled={!isValid}>
 						Sign Up
