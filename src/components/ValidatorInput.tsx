@@ -5,16 +5,16 @@ import {TextField} from "@mui/material";
 
 interface ValidateTextInputProps extends StandardTextFieldProps {
 	/**
-	 * @name checkValidFunctions
+	 * @name check_valid_functions
 	 * @param listValidator need an array of checking valid input (because may be more than one validate are required)
 	 */
-	checkValidFunctions: ((input: string) => [boolean, string?])[]
-	setValue: (value: string) => void
-	setValid?: (isValid: boolean) => void
+	check_valid_functions: ((input: string) => [boolean, string?])[]
+	set_value: (value: string) => void
+	set_valid?: (isValid: boolean) => void
 }
 
 const ValidateTextInput: FC<ValidateTextInputProps> = (props) => {
-	let {checkValidFunctions} = props
+	let {check_valid_functions} = props
 	let [text, setText] = useState('')
 	let [isValid, setIsValid] = useState(true)
 
@@ -22,7 +22,7 @@ const ValidateTextInput: FC<ValidateTextInputProps> = (props) => {
 	 * Return true if all checker function is true
 	 * */
 	let checkIsValid = (): boolean => {
-		return !checkValidFunctions.map(fn => {
+		return !check_valid_functions.map(fn => {
 			return fn(text)[0]
 		}).includes(false)
 	}
@@ -31,7 +31,7 @@ const ValidateTextInput: FC<ValidateTextInputProps> = (props) => {
 	 * Return an error text base on checker function (ordered)
 	 * */
 	let handleErrorText = (): string => {
-		for (const checkValidFunction of checkValidFunctions) {
+		for (const checkValidFunction of check_valid_functions) {
 			let res = checkValidFunction(text)
 			if (!res[0]) {
 				return res[1] ? res[1] : ''
@@ -44,8 +44,8 @@ const ValidateTextInput: FC<ValidateTextInputProps> = (props) => {
 		let isValid = checkIsValid()
 		setIsValid(isValid)
 
-		if(props.setValid) {
-			props.setValid(isValid)
+		if(props.set_valid) {
+			props.set_valid(isValid)
 		}
 	}, [text])
 
@@ -57,7 +57,7 @@ const ValidateTextInput: FC<ValidateTextInputProps> = (props) => {
 			(e) => {
 				let value = e.target.value
 				setText(value)
-				props.setValue(value)
+				props.set_value(value)
 			}
 		}
 

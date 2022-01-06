@@ -1,24 +1,32 @@
 import {Card} from "react-bootstrap";
 
 import {
-	AppStyle,
+	AppStyle, background,
 	circleImage,
-	cursorPointer,
+	cursorPointer, fitContain,
 	height,
 	margin,
-	marginBottom,
+	marginBottom, marginStart,
 	padding,
 	radius,
-	regular,
+	regular, semiBold, textColor,
 	width,
 } from "../../AppStyle";
 import TextView from "../../components/Text";
 import Column from "../../components/Column";
-import {ImageListItem, Paper} from "@mui/material";
+import {Avatar, Chip, ImageListItem, Paper, Typography} from "@mui/material";
 import Pet from "../../models/Pet";
-import {FC} from "react";
+import React, {FC, useContext, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import Logger from "../../api/Logger";
+import {AppCtx} from "../../App";
+import User from "../../models/User";
+import Rows from "../../components/Row";
+import {ImageView} from "../../components/ImageView";
+import maleLogo from "../../asset/ic_male.svg";
+import GpsFixedIcon from '@mui/icons-material/GpsFixed';
+import PetsIcon from '@mui/icons-material/Pets';
+import femaleLogo from "../../asset/ic_female.svg";
 
 interface PetItemProp {
 	pet: Pet
@@ -28,6 +36,8 @@ interface PetItemProp {
 const PetItem: FC<PetItemProp> = (props) => {
 	let navigate = useNavigate()
 	let pet = props.pet
+	const appApi = useContext(AppCtx).appApi
+	let [user, setUser] = useState<User>()
 
 	let listImages: string[]
 	try {
@@ -36,6 +46,40 @@ const PetItem: FC<PetItemProp> = (props) => {
 		Logger.error(e)
 		listImages = []
 	}
+
+	let genderImg;
+	if (pet.gender === "Đực") {
+		genderImg = maleLogo
+	} else {
+		genderImg = femaleLogo
+	}
+
+	useEffect(() => {
+		let controller = new AbortController()
+		const fetchUserData = async (userId: number) => {
+			try {
+				let res = await appApi.getUserById(userId, controller)
+				let resData = res.data
+				if (resData.statusCode === 200) {
+					setUser(resData.data)
+				} else {
+
+				}
+			} catch (e) {
+				Logger.error(e)
+			}
+		}
+
+		fetchUserData(pet.userId).then(
+			() => {
+
+			}
+		)
+
+		return () => {
+			controller.abort()
+		}
+	}, [])
 
 	let avatar: string
 	if (!listImages) {
@@ -50,34 +94,83 @@ const PetItem: FC<PetItemProp> = (props) => {
 
 	return (
 		<Paper style={AppStyle(
-			radius(8),
-			margin(8),
+			radius(0),
+			margin(0),
 			cursorPointer()
 		)} elevation={1} onClick={navigateToPetDetail}>
 			<ImageListItem key={pet.id} style={{
 				width: '100%',
 				height: 'auto'
 			}}>
-				<Column style={AppStyle(marginBottom(20), width('100%'))}>
-					<div>
-						<Card.Img style={AppStyle({position: 'relative'}, width('100%'))} src={avatar}/>
-						<Card.Img style={AppStyle(width(48), height(48), circleImage(48),
-							{position: 'absolute', top: 10, left: 10, borderWidth: 2, borderColor: 'white'})}
-						          src={avatar}/>
-					</div>
+				<div style={AppStyle(marginBottom(0), width('100%'))}>
+					<Card.Img style={AppStyle({position: 'relative'}, width('100%'))} src={avatar}/>
 
+					<Avatar style={AppStyle(width(40), height(40),
+						{position: 'absolute', top: 10, left: 10, borderWidth: 2, borderColor: 'white'})}
+					        src={user?.avatar}>
+
+					</Avatar>
 					<Column style={
 						AppStyle(
-							padding(20)
+							margin(6),
+							radius(8),
+							padding(20),
+							width('calc(100% - 12px)'),
+							background('rgba(0,0,0,0.56)'),
+							{position: 'absolute', bottom: 0}
 						)
 					}>
-						<TextView style={AppStyle(regular(20))}>{pet.name}</TextView>
-					</Column>
+						<Rows>
+							<Typography style={AppStyle(semiBold(16), textColor('white'))}>{pet.name}</Typography>
+							<ImageView style={AppStyle(marginStart(5), width('auto'),
+								height(16), fitContain())} src={genderImg}/>
+						</Rows>
 
-				</Column>
+						<Rows style={{
+							marginTop: 10
+						}}>
+							<CustomChip label={pet.type} icon={<PetsIcon  style={{fill: "green"}}/>}/>
+							<CustomChip label={pet.address} icon={<GpsFixedIcon  style={{fill: "white"}}/>}/>
+						</Rows>
+
+					</Column>
+				</div>
 			</ImageListItem>
 		</Paper>
 	)
+}
+
+interface CustomChipProps {
+	label: string|undefined|null
+	icon?: React.ReactNode
+}
+
+const CustomChip : FC<CustomChipProps> = (props) => {
+	const {icon} = props
+	if(!props.label) {
+		return null
+	} else {
+		return <Rows
+			style={{
+				padding: 8,
+				borderRadius: 12,
+				background: 'rgba(0,0,0,0.51)',
+				marginRight: 8
+			}}
+		>
+			{
+				icon? icon : null
+			}
+
+			<Typography style={{
+				color: 'white',
+				marginLeft: 8
+			}}>
+				{props.label}
+			</Typography>
+
+		</Rows>
+	}
 }
 
 export default PetItem

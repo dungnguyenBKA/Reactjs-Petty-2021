@@ -14,15 +14,14 @@ import {
 	weightItem
 } from "../../AppStyle"
 import bgHome from '../../asset/bg_home.png'
-import {ImageView} from "../../components/ImageView"
 import {AppCtx} from "../../App";
 import React from "react";
 import ButtonView from "../../components/ButtonView"
 import {useNavigate} from "react-router-dom"
 import Rows from "../../components/Row";
-import {Avatar, Button, IconButton} from "@mui/material";
+import {Avatar, IconButton} from "@mui/material";
 import {deepPurple} from "@mui/material/colors";
-import {Logout, Message, MessageOutlined} from "@mui/icons-material";
+import {Logout, Message} from "@mui/icons-material";
 
 export default function Header() {
 	const appContext = React.useContext(AppCtx)
@@ -43,8 +42,10 @@ export default function Header() {
 					style={AppStyle(weightItem(1))}
 				>
 					<Rows>
-						{currentUser.avatar === null && <Avatar sx={{ bgcolor: deepPurple[500] }}>{currentUser.name.slice(0, 2).toUpperCase()}</Avatar>}
-						{currentUser.avatar !== null && <Avatar style={AppStyle(circleImage(42))} src={currentUser?.avatar}/>}
+						{currentUser.avatar === null && <Avatar
+                            sx={{bgcolor: deepPurple[500]}}>{currentUser.name.slice(0, 2).toUpperCase()}</Avatar>}
+						{currentUser.avatar !== null &&
+                            <Avatar style={AppStyle(circleImage(42))} src={currentUser?.avatar}/>}
 
 						<div style={AppStyle(flexVerti(), marginStart(15))}>
 							<p style={AppStyle(margin(0), bold(17), textColor("#007B52"), {textAlign: 'left'})}>{currentUser?.name}</p>
@@ -55,22 +56,22 @@ export default function Header() {
 
 
 				<IconButton title={"Đăng xuất"} color='inherit'
-					onClick={
-						() => {
-							setCurrentUser(undefined)
-							navigate('../login')
-						}
-					}>
+				            onClick={
+					            () => {
+						            setCurrentUser(undefined)
+						            navigate('../login')
+					            }
+				            }>
 					<Logout/>
 
 				</IconButton>
 
 				<IconButton title={"Tin nhắn"} color='inherit'
-					onClick={
-						() => {
-							navigate('../messenger')
-						}
-					}>
+				            onClick={
+					            () => {
+						            navigate('../messenger')
+					            }
+				            }>
 					<Message/>
 				</IconButton>
 			</div>

@@ -26,7 +26,7 @@ export default class ChatClientApi {
 			"username": user.email,
 			"first_name": user.name,
 			"last_name": "",
-			"secret": user.pwd
+			"secret": user.email
 		}
 		const configs = ApiHelper.configWithAbortController(abortController, this.messengerAppAxiosConfig)
 		return this.appAxios.put<any>(
@@ -38,7 +38,7 @@ export default class ChatClientApi {
 		const config = {
 			headers: {
 				'user-name': me.email,
-				'user-secret': me.pwd,
+				'user-secret': me.email,
 				'public-key': Constants.MESSENGER_PROJECT_ID
 			}
 		}

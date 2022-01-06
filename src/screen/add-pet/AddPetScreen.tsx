@@ -195,11 +195,11 @@ const AddPetScreen: FC = () => {
 				<ValidateTextInput
 					label="Báo danh Boss*"
 					style={AppStyle(marginTop(24), marginBottom(24))}
-					checkValidFunctions={[checkIsLenValid]}
-					setValue={setName}
+					check_valid_functions={[checkIsLenValid]}
+					set_value={setName}
 					value={name}
 					type="text"
-					setValid={setNameValid}
+					set_valid={setNameValid}
 					placeholder=''/>
 				<AddDate
 					placeholder='Sinh thần*'
@@ -208,14 +208,14 @@ const AddPetScreen: FC = () => {
 					}}/>
 				<ValidateTextInput
 					style={AppStyle(marginTop(24))}
-					checkValidFunctions={[checkIsLenValid]} setValue={setType} value={petType}
+					check_valid_functions={[checkIsLenValid]} set_value={setType} value={petType}
 					type="text"
-					label="Loài*" setValid={setTypeValid}/>
+					label="Loài*" set_valid={setTypeValid}/>
 				<ValidateTextInput
 					style={AppStyle(marginTop(24), marginBottom(8))}
-					checkValidFunctions={[checkIsLenValid]} setValue={setClass} value={petClass}
+					check_valid_functions={[checkIsLenValid]} set_value={setClass} value={petClass}
 					type="text"
-					label="Bộ tộc*" setValid={setClassValid}/>
+					label="Bộ tộc*" set_valid={setClassValid}/>
 
 				<InfoInputDropDown
 					listOption={genderOptions}

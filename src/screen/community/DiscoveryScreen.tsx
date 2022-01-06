@@ -3,7 +3,7 @@ import {AppStyle, background, flexCenterInParent, flexHori, margin} from "../../
 import Column from "../../components/Column";
 import Search from "./Search";
 import PetItem from "./PetItem";
-import {CircularProgress, ImageList} from "@mui/material";
+import {CircularProgress, ImageList, Typography} from "@mui/material";
 import {AppCtx} from "../../App";
 import Pet from "../../models/Pet";
 import {getRandomString} from "../../models/User";
@@ -14,15 +14,14 @@ interface DiscoveryScreenProp {
 
 }
 
-const isPropsEqual = (prev: DiscoveryScreenProp, next: DiscoveryScreenProp) => {
-	console.log('equal??')
-	return false
-}
-
 const DiscoveryScreen: FC<DiscoveryScreenProp> = (props) => {
 	const onInputEditChange = (search: string) => {
-		console.log(search);
+		setQueryType(search)
+		console.log({search})
 	};
+
+	const [queryName, setQueryName] = useState('')
+	const [queryType, setQueryType] = useState('')
 
 	return (
 		<Column>
@@ -36,21 +35,20 @@ const DiscoveryScreen: FC<DiscoveryScreenProp> = (props) => {
 					background('white')
 				)
 			}/>
-			<ListPets/>
+			<ListPets queryName={queryName} queryType={queryType}/>
 		</Column>
 	)
 }
 
 export default DiscoveryScreen
 
-
-const MemoDiscoveryScreen = React.memo(DiscoveryScreen, isPropsEqual)
-
-export {
-	MemoDiscoveryScreen
+interface ListPetProps {
+	queryName: string,
+	queryType: string
 }
 
-const ListPets: FC = () => {
+const ListPets: FC<ListPetProps> = (props) => {
+	const {queryName, queryType} = props
 	const FIRST_PAGE_INDEX = 0
 	const [items, setItems] = useState<Pet[]>([]);
 	const [hasMore, setHasMore] = useState(true);
@@ -58,13 +56,15 @@ const ListPets: FC = () => {
 	const myRef = useRef<HTMLParagraphElement | null>(null)
 	const appContext = useContext(AppCtx)
 	const appApi = appContext.appApi
+	const setLoading = appContext.setLoading
 	const isVisible = useOnScreen(myRef)
 
 	useEffect(() => {
 		let controller = new AbortController()
 		const getPets = async () => {
 			try {
-				let res = await appApi.getAllPets(page, AppApi.DEFAULT_LEN_ITEMS, controller)
+				setLoading(true)
+				let res = await appApi.getAllPets(page, AppApi.DEFAULT_LEN_ITEMS,queryName, queryType, controller)
 				let resData = res.data
 				if (resData.statusCode === 200) {
 					if (resData.data.length === 0 ) {
@@ -79,10 +79,10 @@ const ListPets: FC = () => {
 				}
 			} catch (e) {
 				Logger.error(e)
-				Logger.errorToast()
 				setHasMore(false)
+			} finally {
+				setLoading(false)
 			}
-			return
 		}
 
 		getPets().then(() =>
@@ -92,10 +92,10 @@ const ListPets: FC = () => {
 		return () => {
 			controller.abort()
 		}
-	}, [isVisible])
+	}, [isVisible, queryType, queryName])
 
 	return (<Column style={AppStyle(
-			margin(8)
+			margin(0)
 		)}>
 			<ImageList variant="masonry" cols={2} gap={0}>
 				{
@@ -105,7 +105,7 @@ const ListPets: FC = () => {
 				}
 			</ImageList>
 
-			{hasMore &&
+			{hasMore ?
                 <p ref={myRef} style={
 					AppStyle(
 						flexHori(),
@@ -113,7 +113,9 @@ const ListPets: FC = () => {
 					)
 				}>
                     <CircularProgress/>
-                </p>}
+                </p> : <Typography style={{
+					alignSelf: 'center'
+				}}>Đã hết dữ liệu</Typography>}
 		</Column>
 	);
 }

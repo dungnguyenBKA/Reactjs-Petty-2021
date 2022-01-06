@@ -1,7 +1,13 @@
-import {FC, useState} from "react"
+import {FC, useContext, useEffect, useState} from "react"
 import ValidateTextInput from "../../components/ValidatorInput";
 import Column from "../../components/Column";
 import {margin} from "../../AppStyle";
+import User from "../../models/User";
+import Logger from "../../api/Logger";
+import ApiHelper from "../../api/ApiHelper";
+import {NetworkErrorHandler} from "../../api/AppApi";
+import {AppCtx} from "../../App";
+import {AxiosError} from "axios";
 
 
 interface TestScreenProp {
@@ -9,47 +15,78 @@ interface TestScreenProp {
 }
 
 const TestScreen: FC<TestScreenProp> = (props) => {
-	let checkIsLenValid = (text: string): [boolean, string?] => {
-		return [text.length >= 3, 'text is min 3 chars'];
-	}
+	let appContext = useContext(AppCtx)
+	let appApi = appContext.appApi
+	let chatAppApi = appContext.chatApi
+	const currentUser = appContext.currentUser
 
-	let checkIsContainValid = (text: string): [boolean, string?] => {
-		return [text.includes('@'), 'text should include @'];
-	}
-
-	let checkIsPwdValid = (text: string): [boolean, string?] => {
-		return [text.length >= 8, 'password should min 8 chars']
-	}
-
-	let [email, setEmail] = useState('')
-	let [pwd, setPwd] = useState('')
-
-	return <Column>
-		<ValidateTextInput
-			style={
-				margin(16)
+	useEffect(() => {
+		let controller = new AbortController()
+		const fetchAllUsers = async () : Promise<User[]> => {
+			if(!currentUser) {
+				return []
 			}
-			checkValidFunctions={[checkIsLenValid, checkIsContainValid]}
-			name={"Email"}
-			type="text"
-			placeholder={"Mail ne`"}
-			setValue={setEmail}
-		/>
+			try {
+				let res = await appApi.ensureAuthorize(currentUser.email, currentUser.pwd, () => {
+					return appApi.getAllUsers(controller)
+				})
 
-		<ValidateTextInput
-			style={
-				margin(16)
+				if(res.data.statusCode === 200) {
+					return res.data.data
+				}
+			} catch (e) {
+				return []
 			}
-			checkValidFunctions={[checkIsPwdValid]}
-			name={"Password"}
-			placeholder={"Password ne`"}
-			type="password"
-			setValue={setPwd}
-		/>
 
-		<h1>{email}</h1>
-		<h1>{pwd}</h1>
-	</Column>
+			return []
+		}
+
+		const getOrCreateChatUser = async (user: User) => {
+			try {
+				let chatRes = await chatAppApi.getOrCreateChatUser(user)
+				if (chatRes.status === 200) {
+					Logger.log('created chat users', {user})
+				}
+			} catch (e) {
+				ApiHelper.handleCallApiError(e, new class implements NetworkErrorHandler {
+					onNetworkError(e: AxiosError): void {
+						Logger.error(e)
+					}
+
+					onOtherError(e: unknown): void {
+						Logger.error(e)
+					}
+				}())
+			}
+		}
+
+		const createAllChatUser = async () => {
+			try {
+				let users = await fetchAllUsers()
+
+				Logger.log('users', {users})
+
+				await Promise.all(users.map((user) => {
+					return getOrCreateChatUser(user)
+				}))
+			} catch (e) {
+				Logger.error(e)
+			}
+		}
+
+		createAllChatUser().then(
+			() => {
+				Logger.successToast("DONE")
+			}
+		)
+
+		return () => {
+			controller.abort()
+		}
+
+	}, [])
+
+	return null
 }
 
 export default TestScreen

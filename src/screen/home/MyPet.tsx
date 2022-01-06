@@ -1,17 +1,19 @@
 import {
 	AppStyle,
-	background,
-	border, cursorPointer, fitContain,
+	border,
+	cursorPointer,
+	fitContain,
 	flexCenter,
 	flexHori,
 	flexVerti,
 	height,
 	margin,
-	marginHori,
 	marginStart,
-	marginTop, marginVertical, maxHeight, maxWidth,
+	marginTop,
+	marginVertical,
 	padding,
-	paddingEnd, paddingHori,
+	paddingEnd,
+	paddingHori,
 	paddingStart,
 	paddingVerti,
 	radius,
@@ -35,10 +37,8 @@ import {BaseHTMLProps} from '../../components/Props';
 import {ImageView} from '../../components/ImageView'
 import {AppCtx} from "../../App";
 import Logger from "../../api/Logger";
-import {Avatar, ImageList} from "@mui/material";
+import {Avatar} from "@mui/material";
 import Column from "../../components/Column";
-import ButtonView from "../../components/ButtonView";
-import DateHelper from "../../helper/DateHelper";
 import Rows from "../../components/Row";
 import ApiHelper, {NetworkErrorHandler} from "../../api/ApiHelper";
 import {AxiosError} from "axios";
@@ -58,7 +58,7 @@ export default function MyPet() {
 	useEffect(() => {
 		let controller = new AbortController()
 		const fetchMyPets = async () => {
-			if(!user) {
+			if (!user) {
 				return
 			}
 			setLoading(true)
@@ -73,7 +73,7 @@ export default function MyPet() {
 			} catch (e) {
 				ApiHelper.handleCallApiError(e, new class implements NetworkErrorHandler {
 					onNetworkError(e: AxiosError): void {
-						if(e.response?.data.message) {
+						if (e.response?.data.message) {
 							Logger.errorToast(e.response?.data.message)
 						} else {
 							Logger.errorToast()
@@ -100,21 +100,15 @@ export default function MyPet() {
 
 	return <div style={AppStyle(margin(20), padding(0))}>
 
-		<Column style={paddingHori(20)} >
+		<Column style={paddingHori(20)}>
 			<p style={AppStyle(weightItem(1), textWeight(700))}>Pet của tui ({pets.length})</p>
-
-				{
-					pets.map(function (pet) {
-						return <MyPetItem key={pet.id} pet={pet}/>
-					})
-				}
-
-
 			<CreatePetButton eventClick={addPet}/>
-
+			{
+				pets.map(function (pet) {
+					return <MyPetItem key={pet.id} pet={pet}/>
+				})
+			}
 		</Column>
-
-
 	</div>
 }
 
@@ -144,7 +138,7 @@ const MyPetItem: FC<MyPetItemProps> = (props) => {
 	return <div onClick={
 		() => navigate(`../pet-detail/${pet.id}`)
 	}
-	            style={AppStyle(flexHori(),flexCenter(),marginVertical(12), height('auto'),width('100%'), paddingVerti(16), paddingStart(16), paddingEnd(54), flexCenter(), border("#EEEFF4"),
+	            style={AppStyle(flexHori(), flexCenter(), marginVertical(12), height('auto'), width('100%'), paddingVerti(16), paddingStart(16), paddingEnd(54), flexCenter(), border("#EEEFF4"),
 		            radius(8), shadow(8), cursorPointer())}>
 
 		<Avatar src={avatar} style={AppStyle(
@@ -154,13 +148,10 @@ const MyPetItem: FC<MyPetItemProps> = (props) => {
 		</Avatar>
 
 		<Column style={AppStyle(marginStart(12))}>
-			<Rows style={AppStyle( margin(0))}>
+			<Rows style={AppStyle(margin(0))}>
 				<p style={AppStyle(margin(0), semiBold(14))}>{pet.name}</p>
-				<ImageView style={AppStyle(marginStart(5), width(12),
-					height(17), maxHeight('100%'), maxWidth('100%'), fitContain())} src={genderImg}/>
-
-
-
+				<ImageView style={AppStyle(marginStart(5), width('auto'),
+					height(16), fitContain())} src={genderImg}/>
 			</Rows>
 			<p style={AppStyle(marginTop(2), regular(12),
 				textColor('#969BAB'))}>{new Date(pet?.dob as string).toDateString()}</p>
@@ -177,7 +168,7 @@ interface CreatePetButtonProps {
 
 const CreatePetButton: FC<CreatePetButtonProps> = (props) => {
 	return <div onClick={props.eventClick}
-	            style={AppStyle(flexHori(),marginVertical(12),flexCenter(), padding(16), flexCenter(), border("#EEEFF4"), radius(8), shadow(8))}>
+	            style={AppStyle(flexHori(), marginVertical(12), flexCenter(), padding(16), flexCenter(), border("#EEEFF4"), radius(8), shadow(8))}>
 		<ImageView style={AppStyle(
 			width(42), height(42), radius(21)
 		)} src={ic_add}/>
@@ -188,5 +179,4 @@ const CreatePetButton: FC<CreatePetButtonProps> = (props) => {
 			</div>
 		</div>
 	</div>
-
 }

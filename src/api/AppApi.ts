@@ -12,6 +12,7 @@ import {
 import Pet from "../models/Pet";
 import Logger from "./Logger";
 import ApiHelper from "./ApiHelper";
+import User from "../models/User";
 
 export default class AppApi {
 	private readonly appAxios: AxiosStatic
@@ -103,12 +104,24 @@ export default class AppApi {
 		return this.appAxios.post<RegisterResponse>(Constants.BASE_URL_V1 + Constants.endPoint.REGISTER, bodyData, configs)
 	}
 
+	getAllUsers = (abortController?: AbortController) => {
+		const configs = ApiHelper.configWithAbortController(abortController, this.appAxiosConfig)
+		return this.appAxios.get<BaseResponse<User[]>>(Constants.BASE_URL_V1 + Constants.endPoint.USERS, configs)
+	}
 
-	getAllPets = (page: number, size: number = AppApi.DEFAULT_LEN_ITEMS, abortController?: AbortController) => {
+
+	getAllPets = (
+		page: number,
+		size: number = AppApi.DEFAULT_LEN_ITEMS,
+		queryName: string = '',
+		queryType: string = '',
+		abortController?: AbortController) => {
 		const configs = ApiHelper.configWithAbortController(abortController, {
 			params: {
 				'page': page,
-				'size': size
+				'size': size,
+				'name': queryName,
+				'type': queryType
 			}
 		})
 		return this.appAxios.get<AllPetsResponse>(Constants.BASE_URL_V1 + Constants.endPoint.PETS, configs)

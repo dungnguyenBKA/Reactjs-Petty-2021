@@ -41,10 +41,10 @@ import {Visibility, VisibilityOff} from "@mui/icons-material";
 import firebaseHelperInstance from "../../helper/FirebaseHelper";
 import Logger from "../../api/Logger";
 import {AxiosError} from "axios";
-import AppApi, {NetworkErrorHandler} from "../../api/AppApi";
-import {BaseResponse} from "../../api/ApiJsonFormat";
+import {NetworkErrorHandler} from "../../api/AppApi";
 import ValidateTextInput from "../../components/ValidatorInput";
 import ApiHelper from "../../api/ApiHelper";
+import User from "../../models/User";
 
 export default function LoginScreen() {
 	const navigate = useNavigate()
@@ -199,6 +199,7 @@ export default function LoginScreen() {
 const PopUpSignUp = () => {
 	let appContext = useContext(AppCtx)
 	let appApi = appContext.appApi
+	let chatAppApi = appContext.chatApi
 	let setLoading = appContext.setLoading
 	let navigate = useNavigate();
 	let [isValid, setValid] = useState(false)
@@ -220,7 +221,7 @@ const PopUpSignUp = () => {
 
 	let [avatarUrl, setAvatarUrl] = useState('');
 	let [avatarFile, setAvatarFile] = useState<File>()
-	let [imgData, setImgData] = useState<string|undefined>(undefined);
+	let [imgData, setImgData] = useState<string | undefined>(undefined);
 
 	let [showPassword, setShowPassword] = useState(false)
 
@@ -281,10 +282,18 @@ const PopUpSignUp = () => {
 			)
 			let resData = res.data
 			if (resData.statusCode === 200) {
+				let user = resData.data.user
 				appApi.setToken(resData.data.token)
-				appContext.setCurrentUser(resData.data.user)
-				Logger.successToast()
+				user.pwd = pwd
+				appContext.setCurrentUser(user)
 
+				try {
+					await getOrCreateChatUser(user)
+				} catch (e) {
+					Logger.error(e)
+				}
+
+				Logger.successToast()
 				// navigate home
 				navigate('../')
 			} else {
@@ -297,6 +306,26 @@ const PopUpSignUp = () => {
 			appContext.setCurrentUser(undefined)
 		} finally {
 			setLoading(false)
+		}
+	}
+
+	const getOrCreateChatUser = async (user: User) => {
+		try {
+			let chatRes = await chatAppApi.getOrCreateChatUser(user)
+			if (chatRes.status === 200) {
+				Logger.log('created chat users')
+			}
+		} catch (e) {
+			ApiHelper.handleCallApiError(e, new class implements NetworkErrorHandler {
+				onNetworkError(): void {
+					Logger.errorToast()
+					navigate(-1)
+				}
+
+				onOtherError(): void {
+					navigate(-1)
+				}
+			}())
 		}
 	}
 
@@ -344,21 +373,21 @@ const PopUpSignUp = () => {
 
 				<ValidateTextInput
 					style={AppStyle(weightItem(1), marginTop(16), radius(8))}
-					checkValidFunctions={[checkIsNameLenValid]}
+					check_valid_functions={[checkIsNameLenValid]}
 					type="text"
 					placeholder="Tên"
-					setValue={setName}
-					setValid={setNameValid}
+					set_value={setName}
+					set_valid={setNameValid}
 					label='Tên'
 				/>
 
 				<ValidateTextInput
 					style={AppStyle(weightItem(1), marginTop(16), radius(8))}
-					checkValidFunctions={[checkIsLenValid, checkIsContainValid]}
+					check_valid_functions={[checkIsLenValid, checkIsContainValid]}
 					type="email"
 					placeholder="Email : abc@gmail.com"
-					setValue={setUserName}
-					setValid={setUserNameValid}
+					set_value={setUserName}
+					set_valid={setUserNameValid}
 					label='Email'
 				/>
 
@@ -376,11 +405,11 @@ const PopUpSignUp = () => {
 
 				<ValidateTextInput
 					style={AppStyle(weightItem(1), radius(8), marginTop(16))}
-					checkValidFunctions={[checkIsPwdValid, isPassWordMatch]}
+					check_valid_functions={[checkIsPwdValid, isPassWordMatch]}
 					type={showPassword ? 'text' : 'password'}
 					placeholder="Password"
-					setValue={setPwd}
-					setValid={isValid => {
+					set_value={setPwd}
+					set_valid={isValid => {
 						setPwdValid(isValid)
 						setRePwdValid(isValid)
 					}}
@@ -397,11 +426,11 @@ const PopUpSignUp = () => {
 				/>
 				<ValidateTextInput
 					style={AppStyle(weightItem(1), radius(10), marginTop(16))}
-					checkValidFunctions={[checkIsPwdValid, isPassWordMatch]}
+					check_valid_functions={[checkIsPwdValid, isPassWordMatch]}
 					type={showPassword ? 'text' : 'password'}
 					placeholder="Nhập lại Password"
-					setValue={setConfirmPwd}
-					setValid={isValid => {
+					set_value={setConfirmPwd}
+					set_valid={isValid => {
 						setPwdValid(isValid)
 						setRePwdValid(isValid)
 					}}

@@ -13,7 +13,8 @@ class FirebaseHelper {
 	 * return a promise, url of image if success
 	 * */
 	uploadImageFile(image: File): Promise<string> {
-		let refImg = ref(storage, `images/${image.name}`);
+		let refImg = ref(storage, `images/${image.name}`)
+
 		let uploadTask = uploadBytesResumable(refImg, image);
 		return new Promise<string>((resolve, reject) => {
 			uploadTask.on(

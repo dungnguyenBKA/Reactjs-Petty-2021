@@ -38,6 +38,7 @@ import axios from "axios";
 import {Avatar, Typography} from "@mui/material";
 import {deepPurple} from "@mui/material/colors";
 import DateHelper from "../../helper/DateHelper";
+import SimpleImageSlider from "react-simple-image-slider";
 
 interface PetDetailProp {
 
@@ -53,10 +54,10 @@ const PetDetail: FC<PetDetailProp> = () => {
 	const setLoading = appContext.setLoading
 
 	const [avatar, setAvatar] = useState('')
+	const [listImages, setListImages] = useState<{url: string}[]>([])
 
 	useEffect(() => {
 		let controller = new AbortController()
-
 		const fetchUserData = async (userId: number) => {
 			setLoading(true)
 			try {
@@ -84,6 +85,11 @@ const PetDetail: FC<PetDetailProp> = () => {
 
 					try {
 						let images: string[] = JSON.parse(pet.images)
+						setListImages(images.map((item) => {
+							return {
+								url: item
+							}
+						}))
 						setAvatar(images[0])
 					} catch (e) {
 						setAvatar('')
@@ -117,7 +123,15 @@ const PetDetail: FC<PetDetailProp> = () => {
 
 	return <Column style={AppStyle(border(Colors.color_E5E5E5))}>
 		<Column style={AppStyle(flexCenter())}>
-			<ImageView style={AppStyle(width('100%'), height(300))} src={avatar}/>
+			{
+				listImages.length > 0 ? <SimpleImageSlider
+					width={766}
+					height={300}
+					images={listImages}
+					showNavs
+					showBullets/> : null
+			}
+
 			<Rows>
 				<Column style={AppStyle(marginTop(-100), flexCenter())}>
 					<Avatar src={avatar} style={AppStyle(circleImage(200))}/>
