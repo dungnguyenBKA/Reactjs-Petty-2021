@@ -37,6 +37,7 @@ import ApiHelper from "../../api/ApiHelper";
 import axios from "axios";
 import {Avatar} from "@mui/material";
 import {deepPurple} from "@mui/material/colors";
+import DateHelper from "../../helper/DateHelper";
 
 interface PetDetailProp {
 
@@ -139,7 +140,7 @@ const PetDetail: FC<PetDetailProp> = () => {
 			<InfoBox>
 			<Column>
 				<TextView style={AppStyle(regular(12), textColor(Colors.color_8A8A8F))}>Ngày sinh</TextView>
-				<TextView style={AppStyle(semiBold(14))}>{pet?.dob}</TextView>
+				<TextView style={AppStyle(semiBold(14))}>{new Date(pet?.dob as string).toDateString()}</TextView>
 			</Column>
 		</InfoBox>
 

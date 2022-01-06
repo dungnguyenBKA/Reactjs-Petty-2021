@@ -56,7 +56,7 @@ import {
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import {useForm} from "react-hook-form";
 import BaseValidateTextInput from "../../components/BaseValidateTextInput";
-import {DatePicker, LocalizationProvider} from "@mui/lab";
+import {DatePicker, DesktopDatePicker, LocalizationProvider} from "@mui/lab";
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import ApiHelper from "../../api/ApiHelper";
 
@@ -328,9 +328,19 @@ interface AddDateProps {
 }
 
 const AddDate: FC<AddDateProps> = (props) => {
-	const [startDate, setStartDate] = useState<Date | undefined>(undefined);
+	const [startDate, setStartDate] = useState<Date | null>(new Date());
 
-	return (
+	return ( <LocalizationProvider dateAdapter={AdapterDateFns}>
+			<DesktopDatePicker ignoreInvalidInputs={props.validCheck}
+						label= {props.placeholder}
+						value={startDate} openTo="year" views={['year', 'month', 'day']}
+						onChange={(date) => {
+							setStartDate(date)
+							props.setDate(date as Date)
+						}}
+						renderInput={(params) => <TextField {...params} />}
+			/>
+		</LocalizationProvider>
 		// <Column
 		// 	style={AppStyle(
 		// 		borderWidth(1),
@@ -354,17 +364,7 @@ const AddDate: FC<AddDateProps> = (props) => {
 		// 		<TextView style={textColor("red")}>*</TextView>
 		//
 		// 	{/*</Rows>*/}
-		<LocalizationProvider dateAdapter={AdapterDateFns}>
-		<DatePicker ignoreInvalidInputs={props.validCheck}
-			label= {props.placeholder}
-			value={startDate}
-			onChange={(date: any) => {
-							setStartDate(date)
-							props.setDate(date)
-						}}
-			renderInput={(params) => <TextField {...params} />}
-		/>
-		</LocalizationProvider>
+
 			// <DatePicker onChange={}
 			//
 			//
