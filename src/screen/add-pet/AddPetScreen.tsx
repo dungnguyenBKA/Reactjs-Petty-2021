@@ -204,7 +204,7 @@ const AddPetScreen: FC = () => {
 				<AddDate
 					placeholder='Sinh thần*'
 					setDate={(date) => {
-						setDob(DateHelper.dateToFormatString(date))
+						setDob(DateHelper.dateToStringJson(date))
 					}}/>
 				<ValidateTextInput
 					style={AppStyle(marginTop(24))}

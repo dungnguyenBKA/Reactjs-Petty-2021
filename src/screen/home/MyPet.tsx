@@ -42,6 +42,7 @@ import Column from "../../components/Column";
 import Rows from "../../components/Row";
 import ApiHelper, {NetworkErrorHandler} from "../../api/ApiHelper";
 import {AxiosError} from "axios";
+import DateHelper from "../../helper/DateHelper";
 
 export default function MyPet() {
 	const [pets, setPets] = useState<Pet[]>([]);
@@ -154,9 +155,7 @@ const MyPetItem: FC<MyPetItemProps> = (props) => {
 					height(16), fitContain())} src={genderImg}/>
 			</Rows>
 			<p style={AppStyle(marginTop(2), regular(12),
-				textColor('#969BAB'))}>{new Date(pet?.dob as string).toDateString()}</p>
-
-
+				textColor('#969BAB'))}>{DateHelper.getDob(pet?.dob)}</p>
 		</Column>
 
 	</div>

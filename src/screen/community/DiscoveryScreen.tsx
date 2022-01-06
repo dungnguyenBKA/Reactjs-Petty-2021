@@ -16,12 +16,8 @@ interface DiscoveryScreenProp {
 
 const DiscoveryScreen: FC<DiscoveryScreenProp> = (props) => {
 	const onInputEditChange = (search: string) => {
-		setQueryType(search)
-		console.log({search})
+		console.log(search);
 	};
-
-	const [queryName, setQueryName] = useState('')
-	const [queryType, setQueryType] = useState('')
 
 	return (
 		<Column>
@@ -35,20 +31,15 @@ const DiscoveryScreen: FC<DiscoveryScreenProp> = (props) => {
 					background('white')
 				)
 			}/>
-			<ListPets queryName={queryName} queryType={queryType}/>
+			<ListPets/>
 		</Column>
 	)
 }
 
 export default DiscoveryScreen
 
-interface ListPetProps {
-	queryName: string,
-	queryType: string
-}
 
-const ListPets: FC<ListPetProps> = (props) => {
-	const {queryName, queryType} = props
+const ListPets: FC = () => {
 	const FIRST_PAGE_INDEX = 0
 	const [items, setItems] = useState<Pet[]>([]);
 	const [hasMore, setHasMore] = useState(true);
@@ -56,15 +47,13 @@ const ListPets: FC<ListPetProps> = (props) => {
 	const myRef = useRef<HTMLParagraphElement | null>(null)
 	const appContext = useContext(AppCtx)
 	const appApi = appContext.appApi
-	const setLoading = appContext.setLoading
 	const isVisible = useOnScreen(myRef)
 
 	useEffect(() => {
 		let controller = new AbortController()
 		const getPets = async () => {
 			try {
-				setLoading(true)
-				let res = await appApi.getAllPets(page, AppApi.DEFAULT_LEN_ITEMS,queryName, queryType, controller)
+				let res = await appApi.getAllPets(page, AppApi.DEFAULT_LEN_ITEMS, controller)
 				let resData = res.data
 				if (resData.statusCode === 200) {
 					if (resData.data.length === 0 ) {
@@ -79,10 +68,10 @@ const ListPets: FC<ListPetProps> = (props) => {
 				}
 			} catch (e) {
 				Logger.error(e)
+				Logger.errorToast()
 				setHasMore(false)
-			} finally {
-				setLoading(false)
 			}
+			return
 		}
 
 		getPets().then(() =>
@@ -92,7 +81,7 @@ const ListPets: FC<ListPetProps> = (props) => {
 		return () => {
 			controller.abort()
 		}
-	}, [isVisible, queryType, queryName])
+	}, [isVisible])
 
 	return (<Column style={AppStyle(
 			margin(0)

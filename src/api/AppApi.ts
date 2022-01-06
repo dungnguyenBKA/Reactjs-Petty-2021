@@ -113,15 +113,11 @@ export default class AppApi {
 	getAllPets = (
 		page: number,
 		size: number = AppApi.DEFAULT_LEN_ITEMS,
-		queryName: string = '',
-		queryType: string = '',
 		abortController?: AbortController) => {
 		const configs = ApiHelper.configWithAbortController(abortController, {
 			params: {
 				'page': page,
 				'size': size,
-				'name': queryName,
-				'type': queryType
 			}
 		})
 		return this.appAxios.get<AllPetsResponse>(Constants.BASE_URL_V1 + Constants.endPoint.PETS, configs)

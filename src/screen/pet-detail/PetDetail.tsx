@@ -6,7 +6,6 @@ import {
 	borderWidth,
 	circleImage,
 	flexCenter,
-	height,
 	margin,
 	marginHori,
 	marginTop,
@@ -16,11 +15,10 @@ import {
 	semiBold,
 	shadow,
 	textColor,
-	weightItem,
-	width
+	weightItem
 } from "../../AppStyle";
 import Column from "../../components/Column";
-import {ButtonImageView, ImageView} from "../../components/ImageView";
+import {ButtonImageView} from "../../components/ImageView";
 import Rows from "../../components/Row";
 import TextView from "../../components/Text";
 
@@ -54,7 +52,7 @@ const PetDetail: FC<PetDetailProp> = () => {
 	const setLoading = appContext.setLoading
 
 	const [avatar, setAvatar] = useState('')
-	const [listImages, setListImages] = useState<{url: string}[]>([])
+	const [listImages, setListImages] = useState<{ url: string }[]>([])
 
 	useEffect(() => {
 		let controller = new AbortController()
@@ -121,6 +119,8 @@ const PetDetail: FC<PetDetailProp> = () => {
 		return null
 	}
 
+
+
 	return <Column style={AppStyle(border(Colors.color_E5E5E5))}>
 		<Column style={AppStyle(flexCenter())}>
 			{
@@ -146,7 +146,9 @@ const PetDetail: FC<PetDetailProp> = () => {
 			<InfoBox>
 				<Column>
 					<TextView style={AppStyle(regular(12), textColor(Colors.color_8A8A8F))}>Ngày sinh</TextView>
-					<TextView style={AppStyle(semiBold(14))}>{pet?.dob}</TextView>
+					<TextView style={AppStyle(semiBold(14))}>
+						{DateHelper.getDob(pet?.dob)}
+					</TextView>
 				</Column>
 			</InfoBox>
 

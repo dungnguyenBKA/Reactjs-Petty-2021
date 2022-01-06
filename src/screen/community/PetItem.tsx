@@ -79,7 +79,7 @@ const PetItem: FC<PetItemProp> = (props) => {
 		return () => {
 			controller.abort()
 		}
-	}, [])
+	}, [pet.userId, appApi])
 
 	let avatar: string
 	if (!listImages) {

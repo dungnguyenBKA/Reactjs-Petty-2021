@@ -3,7 +3,6 @@ import {useNavigate} from "react-router-dom";
 import {AppCtx} from "../../App";
 import DirectChatPage from "./DirectChatPage";
 import {NetworkErrorHandler} from "../../api/AppApi";
-import {AxiosError} from "axios";
 import Logger from "../../api/Logger";
 import ApiHelper from "../../api/ApiHelper";
 import LoadingScreen from "../util/LoadingScreen";
@@ -51,7 +50,7 @@ const PetMessengerScreen: FC = () => {
 	if (isReadyChat && currentUser) {
 		return <DirectChatPage
 			userName={currentUser.email}
-			userSecret={currentUser.pwd}
+			userSecret={currentUser.email}
 		/>
 	} else {
 		return <LoadingScreen isLoading={true}/>

@@ -32,6 +32,18 @@ class DateHelper {
 			return undefined
 		}
 	}
+
+	public static getDob = (strDateJson: string | undefined): string => {
+		if (!strDateJson) return ''
+
+		try {
+			let date = DateHelper.stringJsonToDate(strDateJson)
+			if (!date) return ''
+			return DateHelper.dateToFormatString(date)
+		} catch (e) {
+			return ''
+		}
+	}
 }
 
 export default DateHelper
