@@ -1,14 +1,15 @@
 import React, {FC, useContext, useEffect, useState} from "react";
 import {
 	AppStyle,
-	border, borderColor,
+	bold,
+	border,
 	borderWidth,
 	circleImage,
-	flexCenter, flexCenterInParent,
+	flexCenter,
+	height,
 	margin,
 	marginHori,
 	marginTop,
-	maxHeight,
 	padding,
 	radius,
 	regular,
@@ -33,23 +34,13 @@ import {AppCtx} from "../../App";
 import Logger from "../../api/Logger";
 import {useNavigate} from "react-router-dom";
 import Constants from "../../api/Constants";
-import ApiHelper from "../../api/ApiHelper";
 import axios from "axios";
-import {Avatar} from "@mui/material";
+import {Avatar, Typography} from "@mui/material";
 import {deepPurple} from "@mui/material/colors";
 
 interface PetDetailProp {
 
 }
-
-// interface HeaderProps {
-// 	pet: Pet | undefined
-// }
-
-// const Header: FC<HeaderProps> = (props) => {
-// 	return
-//
-// }
 
 const PetDetail: FC<PetDetailProp> = () => {
 	const params = useParams()
@@ -60,9 +51,7 @@ const PetDetail: FC<PetDetailProp> = () => {
 	const appApi = appContext.appApi
 	const setLoading = appContext.setLoading
 
-	if (!petId) {
-		// err
-	}
+	const [avatar, setAvatar] = useState('')
 
 	useEffect(() => {
 		let controller = new AbortController()
@@ -90,8 +79,15 @@ const PetDetail: FC<PetDetailProp> = () => {
 				let res = await appApi.getPetById(petId, controller)
 				let resData = res.data
 				if (resData.statusCode === 200) {
-					Logger.successToast("OK")
 					let pet = resData.data
+
+					try {
+						let images: string[] = JSON.parse(pet.images)
+						setAvatar(images[0])
+					} catch (e) {
+						setAvatar('')
+					}
+
 					let userId = pet.userId
 					setPet(resData.data)
 					await fetchUserData(userId)
@@ -113,22 +109,18 @@ const PetDetail: FC<PetDetailProp> = () => {
 	}, [])
 
 
+	if (!petId) {
+		Logger.errorToast()
+		return null
+	}
+
 	return <Column style={AppStyle(border(Colors.color_E5E5E5))}>
-		{/*<Column>*/}
-		{/*	<Header pet={pet}/>*/}
-
-		{/*	*/}
-
-
-		{/*</Column>*/}
-
 		<Column style={AppStyle(flexCenter())}>
-			<ImageView style={AppStyle(width('100%'), maxHeight(300), radius(8))} src={''}/>
+			<ImageView style={AppStyle(width('100%'), height(300))} src={avatar}/>
 			<Rows>
-
 				<Column style={AppStyle(marginTop(-100), flexCenter())}>
-					<ImageView style={AppStyle(circleImage(200))} src={''}/>
-					<TextView style={AppStyle(semiBold(24), flexCenter())}>{pet?.name}</TextView>
+					<Avatar src={avatar} style={AppStyle(circleImage(200))}/>
+					<Typography style={AppStyle(bold(24), flexCenter())}>{pet?.name}</Typography>
 				</Column>
 			</Rows>
 		</Column>
@@ -137,11 +129,11 @@ const PetDetail: FC<PetDetailProp> = () => {
 		<Rows>
 
 			<InfoBox>
-			<Column>
-				<TextView style={AppStyle(regular(12), textColor(Colors.color_8A8A8F))}>Ngày sinh</TextView>
-				<TextView style={AppStyle(semiBold(14))}>{pet?.dob}</TextView>
-			</Column>
-		</InfoBox>
+				<Column>
+					<TextView style={AppStyle(regular(12), textColor(Colors.color_8A8A8F))}>Ngày sinh</TextView>
+					<TextView style={AppStyle(semiBold(14))}>{pet?.dob}</TextView>
+				</Column>
+			</InfoBox>
 
 			<InfoBox>
 				<Column>
@@ -229,9 +221,11 @@ const ContactBox: FC<ContactBoxProp> = (props) => {
 		}
 	}, [])
 
-	return <Rows style={AppStyle(margin(12), shadow(8), padding(12),radius(8), borderWidth(1), border(Colors.color_E5E5E5))}>
+	return <Rows
+		style={AppStyle(margin(12), shadow(8), padding(12), radius(8), borderWidth(1), border(Colors.color_E5E5E5))}>
 
-		{toUser?.avatar=== null && <Avatar sx={{ bgcolor: deepPurple[500] }}>{toUser.name.slice(0, 2).toUpperCase()}</Avatar>}
+		{toUser?.avatar === null &&
+            <Avatar sx={{bgcolor: deepPurple[500]}}>{toUser.name.slice(0, 2).toUpperCase()}</Avatar>}
 		{toUser?.avatar !== null && <Avatar style={AppStyle(circleImage(36))} src={toUser?.avatar}/>}
 
 

@@ -1,4 +1,4 @@
-import {FC, useState} from "react";
+import {FC, useEffect, useState} from "react";
 import {Colors} from "../../AppColor";
 import {
 	AppStyle,
@@ -45,12 +45,14 @@ const AddImage: FC<AddImageProps> = (props) => {
 			let newList = [...listImage]
 			newList.push(file)
 			setListImage(newList)
-			props.setListImage(newList)
-			Logger.log('add images')
 		} else {
-			toast.error("Trùng file!!")
+			Logger.errorToast("Trùng file!!")
 		}
 	}
+
+	useEffect(() => {
+		props.setListImage(listImage)
+	}, [listImage])
 
 	return (
 		<div>

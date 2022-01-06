@@ -31,7 +31,6 @@ export default class AppApi {
 	}
 
 	setToken(token: string) {
-		console.log({token})
 		this.access_token = token
 		this.appAxiosConfig = {
 			headers: {
@@ -39,6 +38,8 @@ export default class AppApi {
 				'Content-Type': 'application/json'
 			}
 		}
+
+		console.log('set token:',{token})
 	}
 
 	/**

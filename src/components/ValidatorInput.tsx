@@ -47,7 +47,6 @@ const ValidateTextInput: FC<ValidateTextInputProps> = (props) => {
 		if(props.setValid) {
 			props.setValid(isValid)
 		}
-		console.log('text: ',text, isValid)
 	}, [text])
 
 	return <TextField

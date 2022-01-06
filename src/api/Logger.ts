@@ -52,10 +52,14 @@ export default class Logger {
 	}
 
 	public static errorToast = (msg?: string) => {
-		if (msg) {
-			toast.error(msg, this.toastOpts)
-		} else {
-			toast.error('Đã có lỗi xảy ra, vui lòng thử lại', this.toastOpts)
+		try {
+			if (msg) {
+				toast.error(msg, this.toastOpts)
+			} else {
+				toast.error('Đã có lỗi xảy ra, vui lòng thử lại', this.toastOpts)
+			}
+		} catch (e) {
+			this.error(e)
 		}
 	}
 

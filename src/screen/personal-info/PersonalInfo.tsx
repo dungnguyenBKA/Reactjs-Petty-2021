@@ -9,13 +9,13 @@ import {
 	flexVerti,
 	height,
 	margin,
-	marginEnd,
-	marginStart,
+	marginEnd, marginHori,
+	marginStart, marginTop, marginVertical,
 	padding,
 	paddingBottom,
 	paddingHori,
 	radius,
-	regular,
+	regular, semiBold,
 	textColor,
 	weightItem,
 	width,
@@ -38,7 +38,7 @@ import {AxiosError} from "axios";
 import {BaseResponse} from "../../api/ApiJsonFormat";
 import {getDownloadURL, ref, uploadBytesResumable} from "@firebase/storage";
 import {storage} from "../../components/firebase/FirebaseApp";
-import {Avatar} from "@mui/material";
+import {Avatar, Typography} from "@mui/material";
 import {deepPurple} from "@mui/material/colors";
 
 interface PersonalInfoProps {
@@ -192,8 +192,8 @@ export default function PersonalInfo (props: PersonalInfoProps) {
 							paddingBottom(20)
 						)}
 					>
-						<div style={AppStyle(flexHori(), marginStart(40))}>
-							<ButtonView style={{padding: 0}}
+						<div style={AppStyle(flexHori(), padding(40))}>
+							<ButtonView style={{padding: 0, marginRight: 20}}
 										onClick={() => {
 											navigate(-1);
 										}}
@@ -201,7 +201,7 @@ export default function PersonalInfo (props: PersonalInfoProps) {
 								<BackIcon/>
 							</ButtonView>
 
-							<TextView style={AppStyle(weightItem(7), margin(40))}>
+							<TextView style={AppStyle(weightItem(7), semiBold(20))}>
 								Cá nhân
 							</TextView>
 
@@ -212,53 +212,32 @@ export default function PersonalInfo (props: PersonalInfoProps) {
 							style={AppStyle(
 								flexHori(),
 								flexCenter(),
+								marginTop(20),
 								marginStart(40),
 								marginEnd(40)
 							)}
 						>
 
-							{/*<ImageView*/}
-							{/*	style={AppStyle(width(42), height(42), radius(21), padding(0))}*/}
-							{/*	src="https://lh3.googleusercontent.com/proxy/ZOwrvNtJI1G9uq96CA7_kfOqgHAXdC-g_-bcu6pEePUmx6ZJzIZT8lHv5vGJzp1qvfZ1Kp1w4mH3E7UMzvYYR0B56g5E7Gw9WKu_z8nn8NvmBZMWXDvt0UJSkgU"*/}
-							{/*/>*/}
 
 							{user?.avatar=== null && <Avatar sx={{ bgcolor: deepPurple[500] }}>{user.name.slice(0, 2).toUpperCase()}</Avatar>}
 							{user?.avatar !== null && <Avatar style={AppStyle(circleImage(42))} src={user?.avatar}/>}
 							<Column style={AppStyle(flexVerti(), marginStart(15))}>
-								<TextView style={AppStyle(margin(0), width("auto"), bold(15))}>
-									{name}
+								<TextView style={AppStyle(bold(17))}>
+									{`Xin chào "Sen" ${name} !!`}
 								</TextView>
-								{/*<ButtonView*/}
-								{/*	style={AppStyle(margin(0), padding(0), width("auto"), regular(13), textColor('rgb(0, 193, 129)'))}>*/}
-								{/*	Đổi ảnh đại diện*/}
-								{/*</ButtonView>*/}
-								<label style={AppStyle(textColor('rgb(0, 193, 129)'))}> Đổi ảnh đại diện
-									<input
 
-										id="file"
-										type="file"
-										accept="image/*"
-										hidden
-
-										onChange={(event) => {
-											let files = event.target.files;
-											if (files && files[0]) {
-												setAvatarFile(files[0])
-											} else {
-												Logger.error("Đã có lỗi xảy ra, vui lòng thử lại")
-											}
-											event.target.value = ''
-										}}
-									/>
-								</label>
 							</Column>
-							{/* <ButtonView>Lưu</ButtonView> */}
 						</div>
 					</header>
-					<Column style={AppStyle(margin(20))}>
+					<Column style={AppStyle(marginHori(40), marginVertical(20))}>
+
+						<Typography>
+							Tên đầy đủ
+						</Typography>
+
 						<input
 							style={AppStyle(
-								margin(20),
+								marginVertical(20),
 								width("auto"),
 								height(50),
 								radius(15),
@@ -268,7 +247,6 @@ export default function PersonalInfo (props: PersonalInfoProps) {
 								background("#f4f4f8")
 							)}
 							type="text"
-							// placeholder="Tên hiển thị"
 							disabled={disabled}
 							value={name}
 							onChange={e=>{setName(e.target.value)}}
@@ -276,24 +254,22 @@ export default function PersonalInfo (props: PersonalInfoProps) {
 						/>
 						<input
 							style={AppStyle(
-								margin(20),
+								marginVertical(20),
 								width("auto"),
 								height(50),
 								radius(15),
 								paddingHori(15),
-
 								borderWidth(0),
 								background("#f4f4f8")
 							)}
 							type="email"
-							// placeholder="Email"
-							disabled={disabled}
+							disabled
 							value={email}
 							onChange={e=>setEmail(e.target.value)}
 						/>
 						<input
 							style={AppStyle(
-								margin(20),
+								marginVertical(20),
 								width("auto"),
 								height(50),
 								radius(15),
@@ -303,28 +279,10 @@ export default function PersonalInfo (props: PersonalInfoProps) {
 								background("#f4f4f8")
 							)}
 							type="text"
-							// placeholder="Số điện thoại"
 							disabled={disabled}
 							value={phone}
 							onChange={e=>setPhone(e.target.value)}
 						/>
-
-						{/*<input*/}
-						{/*	style={AppStyle(*/}
-						{/*		margin(20),*/}
-						{/*		width("auto"),*/}
-						{/*		height(50),*/}
-						{/*		radius(15),*/}
-						{/*		paddingHori(15),*/}
-
-						{/*		borderWidth(0),*/}
-						{/*		background("#f4f4f8")*/}
-						{/*	)}*/}
-						{/*	type="text"*/}
-						{/*	// placeholder="Địa chỉ"*/}
-						{/*	disabled={disabled}*/}
-
-						{/*/>*/}
 					</Column>
 				</div>
 			</BaseMobileScreen>

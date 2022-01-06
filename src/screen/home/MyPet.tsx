@@ -35,17 +35,20 @@ import {BaseHTMLProps} from '../../components/Props';
 import {ImageView} from '../../components/ImageView'
 import {AppCtx} from "../../App";
 import Logger from "../../api/Logger";
-import {ImageList} from "@mui/material";
+import {Avatar, ImageList} from "@mui/material";
 import Column from "../../components/Column";
 import ButtonView from "../../components/ButtonView";
 import DateHelper from "../../helper/DateHelper";
 import Rows from "../../components/Row";
+import ApiHelper, {NetworkErrorHandler} from "../../api/ApiHelper";
+import {AxiosError} from "axios";
 
 export default function MyPet() {
 	const [pets, setPets] = useState<Pet[]>([]);
 	let appContext = useContext(AppCtx);
 	let appApi = appContext.appApi;
-
+	let user = appContext.currentUser
+	const setLoading = appContext.setLoading
 
 	let navigate = useNavigate()
 	const addPet = () => {
@@ -55,14 +58,34 @@ export default function MyPet() {
 	useEffect(() => {
 		let controller = new AbortController()
 		const fetchMyPets = async () => {
+			if(!user) {
+				return
+			}
+			setLoading(true)
 			try {
-				let res = await appApi.getMyPets(controller);
+				let res = await appApi.ensureAuthorize(user.email, user.pwd, () => {
+					return appApi.getMyPets(controller)
+				});
 				let resData = res.data;
 				if (resData.statusCode === 200) {
 					setPets(resData.data);
 				}
 			} catch (e) {
-				//
+				ApiHelper.handleCallApiError(e, new class implements NetworkErrorHandler {
+					onNetworkError(e: AxiosError): void {
+						if(e.response?.data.message) {
+							Logger.errorToast(e.response?.data.message)
+						} else {
+							Logger.errorToast()
+						}
+					}
+
+					onOtherError(e: unknown): void {
+						Logger.errorToast()
+					}
+				}())
+			} finally {
+				setLoading(false)
 			}
 		}
 
@@ -123,9 +146,12 @@ const MyPetItem: FC<MyPetItemProps> = (props) => {
 	}
 	            style={AppStyle(flexHori(),flexCenter(),marginVertical(12), height('auto'),width('100%'), paddingVerti(16), paddingStart(16), paddingEnd(54), flexCenter(), border("#EEEFF4"),
 		            radius(8), shadow(8), cursorPointer())}>
-		<ImageView style={AppStyle(
-			width(42), height(42), radius(21), background('#000000')
-		)} src={avatar}/>
+
+		<Avatar src={avatar} style={AppStyle(
+			width(42), height(42),
+		)}>
+
+		</Avatar>
 
 		<Column style={AppStyle(marginStart(12))}>
 			<Rows style={AppStyle( margin(0))}>

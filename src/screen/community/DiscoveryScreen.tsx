@@ -67,7 +67,6 @@ const ListPets: FC = () => {
 				let res = await appApi.getAllPets(page, AppApi.DEFAULT_LEN_ITEMS, controller)
 				let resData = res.data
 				if (resData.statusCode === 200) {
-					console.log(resData.data, 'wtf', !resData.data)
 					if (resData.data.length === 0 ) {
 						setHasMore(false)
 					} else {

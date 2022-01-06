@@ -41,14 +41,6 @@ const CustomChatForm: FC<CustomChatFormProps> = (props) => {
 			)
 		} direction="row" spacing={2} justifyContent="flex-start"
 		       alignItems="center">
-			<ButtonView
-				onClick={() => {
-					navigate(-1)
-				}
-				}>
-				<ArrowBack/>
-			</ButtonView>
-
 			<Avatar alt="" src={appContext.currentUser?.avatar} style={marginEnd(16)}/>
 
 			<Text
@@ -57,7 +49,7 @@ const CustomChatForm: FC<CustomChatFormProps> = (props) => {
 						bold(24)
 					)
 				}
-			>Messenger</Text>
+			>Chat</Text>
 		</Stack>
 
 		<TextField

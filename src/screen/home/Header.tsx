@@ -27,20 +27,7 @@ import {Logout, Message, MessageOutlined} from "@mui/icons-material";
 export default function Header() {
 	const appContext = React.useContext(AppCtx)
 	let [currentUser, setCurrentUser] = [appContext.currentUser, appContext.setCurrentUser]
-
-	// const avatarHandler = () => {
-	// 	if(currentUser?.avatar === 'null'){
-	// 		return <Avatar sx={{ bgcolor: deepPurple[500] }}>OP</Avatar>
-	// 	}else return
-	// }
-
 	const navigate = useNavigate()
-
-	if (currentUser) {
-		console.log({currentUser})
-	} else {
-		console.log('no user')
-	}
 
 	if (currentUser) {
 		return <div style={
@@ -56,8 +43,6 @@ export default function Header() {
 					style={AppStyle(weightItem(1))}
 				>
 					<Rows>
-
-						{/*<ImageView style={AppStyle(circleImage(42))} src={currentUser?.avatar}/>*/}
 						{currentUser.avatar === null && <Avatar sx={{ bgcolor: deepPurple[500] }}>{currentUser.name.slice(0, 2).toUpperCase()}</Avatar>}
 						{currentUser.avatar !== null && <Avatar style={AppStyle(circleImage(42))} src={currentUser?.avatar}/>}
 
@@ -69,7 +54,7 @@ export default function Header() {
 				</ButtonView>
 
 
-				<IconButton color='inherit'
+				<IconButton title={"Đăng xuất"} color='inherit'
 					onClick={
 						() => {
 							setCurrentUser(undefined)
@@ -80,7 +65,7 @@ export default function Header() {
 
 				</IconButton>
 
-				<IconButton color='inherit'
+				<IconButton title={"Tin nhắn"} color='inherit'
 					onClick={
 						() => {
 							navigate('../messenger')
