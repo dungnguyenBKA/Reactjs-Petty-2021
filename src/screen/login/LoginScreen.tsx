@@ -43,6 +43,8 @@ import {AxiosError} from "axios";
 import AppApi, {NetworkErrorHandler} from "../../api/AppApi";
 import {BaseResponse} from "../../api/ApiJsonFormat";
 import ApiHelper from "../../api/ApiHelper";
+import {addDoc, collection, doc, setDoc} from "firebase/firestore";
+import {database} from "../../components/firebase/FirebaseApp";
 
 export default function LoginScreen() {
 	const navigate = useNavigate()
@@ -72,9 +74,15 @@ export default function LoginScreen() {
 				// save pwd data in client
 				let currentUser = resData.data.user
 				currentUser.pwd = pwd
+
+				try {
+					await setDoc(doc(database, `users/${currentUser.id}`), currentUser)
+				}catch (e) {
+					Logger.error(e)
+				}
+
 				appContext.setCurrentUser(currentUser)
 				Logger.successToast()
-
 				// navigate home
 				navigate('../')
 			} else {
@@ -260,7 +268,16 @@ const PopUpSignUp = () => {
 			let resData = res.data
 			if (resData.statusCode === 200) {
 				appApi.setToken(resData.data.token)
-				appContext.setCurrentUser(resData.data.user)
+				let user = resData.data.user
+
+				// add user to database
+				try {
+					await setDoc(doc(database, `users/${user.id}`), user)
+				}catch (e) {
+					Logger.error(e)
+				}
+
+				appContext.setCurrentUser(user)
 				Logger.successToast()
 
 				// navigate home

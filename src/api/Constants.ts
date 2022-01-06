@@ -1,5 +1,5 @@
 export default class Constants {
-	public static BASE_URL_V1 = 'http://localhost:8080/api/v1/'
+	public static BASE_URL_V1 = 'https://petty-server.herokuapp.com/api/v1/'
 
 	public static endPoint = {
 		// user

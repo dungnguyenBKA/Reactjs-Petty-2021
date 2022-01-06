@@ -1,7 +1,9 @@
-import {FC, useState} from "react"
-import ValidateTextInput from "../../components/ValidatorInput";
+import {collection, doc, getDocs, onSnapshot, setDoc,} from "firebase/firestore"
+import {FC, useContext, useEffect, useState} from "react"
+import {database} from "../../components/firebase/FirebaseApp";
+import {AppCtx} from "../../App";
 import Column from "../../components/Column";
-import {margin} from "../../AppStyle";
+import Messenger from "../petchat/Messenger";
 
 
 interface TestScreenProp {
@@ -9,47 +11,39 @@ interface TestScreenProp {
 }
 
 const TestScreen: FC<TestScreenProp> = (props) => {
-	let checkIsLenValid = (text: string): [boolean, string?] => {
-		return [text.length >= 3, 'text is min 3 chars'];
+	const testUser = doc(database, 'users/1')
+	const usersCollectionRef = collection(database, 'users')
+	const user = useContext(AppCtx).currentUser
+
+	const setTestUser = async () => {
+		await setDoc(testUser, user)
 	}
 
-	let checkIsContainValid = (text: string): [boolean, string?] => {
-		return [text.includes('@'), 'text should include @'];
+	const [docs, setDocs] = useState<any[]>([])
+
+	const getUsers = async () => {
+		const querySnapshot = await getDocs(usersCollectionRef)
+		querySnapshot.forEach((doc) => {
+			console.log(doc.id, '=>', doc.data())
+		})
 	}
 
-	let checkIsPwdValid = (text: string): [boolean, string?] => {
-		return [text.length >= 8, 'password should min 8 chars']
-	}
+	useEffect(() => {
+		let unsub = onSnapshot(usersCollectionRef, (snapshot) => {
+			setDocs(
+				snapshot.docs.map((doc) => {
+						return doc.data()
+					}
+				)
+			)
+		})
 
-	let [email, setEmail] = useState('')
-	let [pwd, setPwd] = useState('')
+		return () => {
+			unsub()
+		}
+	}, [])
 
-	return <Column>
-		<ValidateTextInput
-			style={
-				margin(16)
-			}
-			checkValidFunctions={[checkIsLenValid, checkIsContainValid]}
-			name={"Email"}
-			type="text"
-			placeholder={"Mail ne`"}
-			setValue={setEmail}
-		/>
-
-		<ValidateTextInput
-			style={
-				margin(16)
-			}
-			checkValidFunctions={[checkIsPwdValid]}
-			name={"Password"}
-			placeholder={"Password ne`"}
-			type="password"
-			setValue={setPwd}
-		/>
-
-		<h1>{email}</h1>
-		<h1>{pwd}</h1>
-	</Column>
+	return <Messenger/>
 }
 
 export default TestScreen
