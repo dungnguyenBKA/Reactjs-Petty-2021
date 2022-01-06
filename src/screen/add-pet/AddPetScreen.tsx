@@ -39,8 +39,6 @@ import ApiHelper from "../../api/ApiHelper";
 import DatePicker from '@mui/lab/DatePicker';
 
 let genderOptions = ["Đực", "Cái", "Chưa xác định"];
-// let typeOptions = ["Dog", "Cat", "Fish"];
-// let botocOptions = ["SNSD", "BTS", "BIGBANG"];
 let fromOptions = ["Việt Nam", "Ngoại nhập"];
 let statusOptions = ["Triệt sản", "Chưa Triệt sản"];
 
@@ -48,7 +46,6 @@ let statusOptions = ["Triệt sản", "Chưa Triệt sản"];
 const AddPetScreen: FC = () => {
 	let navigate = useNavigate()
 	let [listImage, setListImage] = useState<File[]>([])
-	let [listImageJson, setListImageJson] = useState('')
 	let [name, setName] = useState('')
 	let [isNameValid, setNameValid] = useState(false)
 	let [dob, setDob] = useState('')

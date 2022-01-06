@@ -125,7 +125,7 @@ interface MyPetItemProps extends BaseHTMLProps {
 const MyPetItem: FC<MyPetItemProps> = (props) => {
 	let genderImg;
 	let pet = props.pet
-	if (pet.gender === "Male") {
+	if (pet.gender === "Đực") {
 		genderImg = maleLogo
 	} else {
 		genderImg = femaleLogo
@@ -163,7 +163,7 @@ const MyPetItem: FC<MyPetItemProps> = (props) => {
 
 			</Rows>
 			<p style={AppStyle(marginTop(2), regular(12),
-				textColor('#969BAB'))}>{DateHelper.formatStringToDate(pet.dob)?.toDateString()}</p>
+				textColor('#969BAB'))}>{new Date(pet?.dob as string).toDateString()}</p>
 
 
 		</Column>
