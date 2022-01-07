@@ -47,13 +47,13 @@ const PetMessengerScreen: FC = () => {
 		})
 	}, [])
 
-	if (isReadyChat && currentUser) {
-		return <DirectChatPage
-			userName={currentUser.email}
-			userSecret={currentUser.email}
-		/>
-	} else {
+	if(!currentUser){
 		return <LoadingScreen isLoading={true}/>
 	}
+
+	return <DirectChatPage
+		userName={currentUser.email}
+		userSecret={currentUser.email}
+	/>
 }
 export default PetMessengerScreen

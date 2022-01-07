@@ -37,6 +37,7 @@ import {Avatar, Typography} from "@mui/material";
 import {deepPurple} from "@mui/material/colors";
 import DateHelper from "../../helper/DateHelper";
 import SimpleImageSlider from "react-simple-image-slider";
+import user from "../../models/User";
 
 interface PetDetailProp {
 
@@ -244,9 +245,6 @@ const ContactBox: FC<ContactBoxProp> = (props) => {
 		{toUser?.avatar === null &&
             <Avatar sx={{bgcolor: deepPurple[500]}}>{toUser.name.slice(0, 2).toUpperCase()}</Avatar>}
 		{toUser?.avatar !== null && <Avatar style={AppStyle(circleImage(36))} src={toUser?.avatar}/>}
-
-
-		{/*<ImageView src={user?.avatar} style={AppStyle(circleImage(36))}/>*/}
 		<Column style={AppStyle(weightItem(1), marginHori(16))}>
 			<TextView style={regular(13)}>Liên hệ với Chủ</TextView>
 			<TextView style={semiBold(15)}>{toUser?.name}</TextView>
@@ -255,11 +253,23 @@ const ContactBox: FC<ContactBoxProp> = (props) => {
 			src={icMessageToOwner}
 			onClick={
 				() => {
-					getOrCreateChatWithThisUser().then(() => {
-						Logger.log('getOrCreateChatWithThisUser done')
-					}).catch(e => {
-						Logger.error(e)
-					})
+					if(!toUser || !me) {
+						return
+					}
+
+					if(toUser.email === me.email) {
+						Logger.normalToast("Chat với chính mình!!!")
+						return
+					}
+
+					navigator.clipboard.writeText(toUser.email).then(
+						() => {
+							Logger.normalToast("Paste vào ô User để bắt đầu chat nhé")
+							setTimeout(() => {
+								navigate('../../messenger')
+							}, 1000)
+						}
+					)
 				}
 			}
 		/>
