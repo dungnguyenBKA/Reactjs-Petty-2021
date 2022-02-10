@@ -8,7 +8,9 @@ import {ImageView} from "../../components/ImageView";
 
 export const BaseMobileScreen: FC<Props<HTMLDivElement>> = (props) => {
 	return <Rows>
-		<ImageAds urlImage={'https://vcdn-vnexpress.vnecdn.net/2020/08/04/VinFast-President-1-9915-1596526753.jpg'}/>
+		<ImageAds
+			linkTo={'https://www.petmart.vn/danh-muc/cho/thuc-an-cho'}
+			urlImage={'https://preview.redd.it/3diggq4pi0x11.jpg?auto=webp&s=261c7127bef6bde57a23ab7a0b6f1d9ac74b8866'}/>
 
 		<BaseScreen
 			{...props}
@@ -17,7 +19,7 @@ export const BaseMobileScreen: FC<Props<HTMLDivElement>> = (props) => {
 				AppStyle(
 					{...props.style},
 					borderWidth(1),
-					{width: '50%', margin: 'auto', minHeight: "100vh", background: Colors.color_white}
+					{width: '50%', minHeight: "100vh", background: Colors.color_white}
 				)
 			}
 
@@ -27,21 +29,31 @@ export const BaseMobileScreen: FC<Props<HTMLDivElement>> = (props) => {
 			}
 		</BaseScreen>
 
-		<ImageAds urlImage={'https://cellphones.com.vn/sforum/wp-content/uploads/2022/01/Samsung-Galaxy-S22-Ultra-S-Pen.jpg'}/>
+		<ImageAds
+			linkTo={'https://www.facebook.com/hanoipetrescue.cpapsvn.org/'}
+			urlImage={'https://www.cesarsway.com/wp-content/uploads/2015/06/AdobeStock_111135014-1024x683.jpeg'}/>
 	</Rows>
 }
 
 interface ImageAdsProps {
-	urlImage: string
+	urlImage: string,
+	linkTo?: string
 }
 
-const ImageAds : FC<ImageAdsProps> = ({urlImage}) => {
-	return <ImageView
-		src={urlImage}
+const ImageAds: FC<ImageAdsProps> = ({urlImage, linkTo}) => {
+	return <a
 		style={{
-		height: '100vh',
+			height: '100vh',
 			width: '25%'
-	}}/>
+		}}
+		target="_blank"
+		href={linkTo || ''}>
+		<ImageView
+			style={{
+				height: '100vh',
+			}}
+			src={urlImage}
+		/></a>
 }
 
 export const BaseFullScreen: FC<Props<HTMLDivElement>> = (props) => {
